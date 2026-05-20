@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 // Logo
                 Image.asset(
-                  "assets/images/logo_principal.png",
+                  "assets/images/logo_minimalista.png",
                   width: 100,
                   height: 95,
                   fit: BoxFit.contain,
