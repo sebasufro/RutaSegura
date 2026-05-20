@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/login_page.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/register_role_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -43,7 +44,10 @@ class WelcomePage extends StatelessWidget {
                   label: 'Crear Cuenta',
                   backgroundColor: const Color(0xFF002045), // color-azure-14
                   onPressed: () {
-                    // TODO: Navegar a RegisterPage
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RegisterRolePage()),
+                    );
                   },
                 ),
                 const SizedBox(height: 16),
