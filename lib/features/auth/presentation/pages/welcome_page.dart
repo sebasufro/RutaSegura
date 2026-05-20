@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/login_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -53,7 +54,10 @@ class WelcomePage extends StatelessWidget {
                   label: 'Iniciar Sesión',
                   backgroundColor: const Color(0xFF1E40AF), // color-blue-40
                   onPressed: () {
-                    // TODO: Navegar a LoginPage
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                    );
                   },
                 ),
               ],
