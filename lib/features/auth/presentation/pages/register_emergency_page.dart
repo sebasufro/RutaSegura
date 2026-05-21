@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Página final del registro donde el usuario ingresa un contacto para alertas SOS.
+/// Tiene una estética visual roja para enfatizar la importancia de la seguridad.
 class RegisterEmergencyPage extends StatefulWidget {
   const RegisterEmergencyPage({super.key});
 
@@ -8,6 +10,7 @@ class RegisterEmergencyPage extends StatefulWidget {
 }
 
 class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
+  // Controladores de texto para los datos de emergencia
   final _emergencyNameController = TextEditingController();
   final _emergencyPhoneController = TextEditingController();
 
@@ -25,7 +28,7 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header: Back Button and Logo
+            // --- Cabecera: Navegación y Logo ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
@@ -41,12 +44,12 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
                     height: 75,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(width: 48),
+                  const SizedBox(width: 48), // Espaciador para centrado de logo
                 ],
               ),
             ),
 
-            // Titles
+            // --- Títulos de la Sección ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
@@ -78,14 +81,14 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
 
             const SizedBox(height: 24),
 
-            // Emergency Card (with specific reddish styling for alert)
+            // --- Tarjeta SOS (Estilo Rojizo de Alerta) ---
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Container(
                   padding: const EdgeInsets.all(32),
                   decoration: ShapeDecoration(
-                    color: const Color(0x0C73000C), // Very light red background
+                    color: const Color(0x0C73000C), // Fondo rojo muy tenue (8% opacidad)
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(32),
                     ),
@@ -110,7 +113,7 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Nombre del Contacto
+                      // Input: Nombre de Contacto
                       _buildLabel('NOMBRE DEL CONTACTO', color: const Color(0x9973000C)),
                       _buildTextField(
                         controller: _emergencyNameController,
@@ -119,7 +122,7 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Teléfono Directo
+                      // Input: Teléfono de Contacto (Unificado con Prefijo)
                       _buildLabel('TELÉFONO DIRECTO', color: const Color(0x9973000C)),
                       Container(
                         decoration: BoxDecoration(
@@ -169,14 +172,14 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
               ),
             ),
 
-            // Buttons Area
+            // --- Sección de Botones de Cierre ---
             Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
                 children: [
                   TextButton(
                     onPressed: () {
-                      // TODO: Action for skip
+                      // TODO: Implementar lógica de omitir registro opcional
                     },
                     child: const Text(
                       'Omitir este paso',
@@ -193,7 +196,7 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        // TODO: Finalize registration
+                        // TODO: Finalizar proceso de registro y enviar datos al backend
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1E40AF),
@@ -221,6 +224,7 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
     );
   }
 
+  /// Crea etiquetas de texto personalizadas
   Widget _buildLabel(String text, {required Color color}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -236,6 +240,7 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
     );
   }
 
+  /// Crea campos de texto con el estilo de la tarjeta SOS
   Widget _buildTextField({
     required TextEditingController controller,
     required String hintText,

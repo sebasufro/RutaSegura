@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_person_page.dart';
 
+/// Página para capturar los datos legales de la organización.
+/// Solo se muestra en el flujo de registro de 'Supervisor'.
 class RegisterOrgPage extends StatefulWidget {
   const RegisterOrgPage({super.key});
 
@@ -9,12 +11,15 @@ class RegisterOrgPage extends StatefulWidget {
 }
 
 class _RegisterOrgPageState extends State<RegisterOrgPage> {
+  // Controladores de texto para capturar los inputs del usuario
   final _orgNameController = TextEditingController();
   final _pjNumberController = TextEditingController();
   final _addressController = TextEditingController();
 
   @override
   void dispose() {
+    // Es una buena práctica liberar los controladores al cerrar la pantalla
+    // para evitar fugas de memoria (memory leaks).
     _orgNameController.dispose();
     _pjNumberController.dispose();
     _addressController.dispose();
@@ -28,7 +33,7 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header: Back Button and Logo
+            // --- Cabecera: Botón Volver y Logo ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
@@ -44,12 +49,12 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
                     height: 75,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(width: 48),
+                  const SizedBox(width: 48), // Espaciador para centrado perfecto
                 ],
               ),
             ),
 
-            // Titles
+            // --- Títulos de la Sección ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
@@ -81,7 +86,7 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
 
             const SizedBox(height: 24),
 
-            // Form Card
+            // --- Formulario dentro de una Tarjeta Blanca ---
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -113,15 +118,15 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Nombre de Organización
+                      // Campo: Nombre
                       _buildLabel('NOMBRE DE ORGANIZACIÓN'),
                       _buildTextField(
                         controller: _orgNameController,
-                        hintText: 'Organización',
+                        hintText: 'Ej: Ruta Segura ONG',
                       ),
                       const SizedBox(height: 20),
 
-                      // Número Persona Jurídica
+                      // Campo: Persona Jurídica
                       _buildLabel('NÚMERO PERSONA JURÍDICA'),
                       _buildTextField(
                         controller: _pjNumberController,
@@ -129,13 +134,13 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Certificado de Vigencia
+                      // Botón: Selector de Documento
                       _buildLabel('CERTIFICADO DE VIGENCIA'),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           onPressed: () {
-                            // TODO: Implement file picker
+                            // TODO: Integrar lógica de file picker
                           },
                           icon: const Icon(Icons.upload_file, color: Colors.white),
                           label: const Text(
@@ -153,11 +158,11 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Dirección
+                      // Campo: Dirección
                       _buildLabel('DIRECCIÓN DOMICILIO ORGANIZACIÓN'),
                       _buildTextField(
                         controller: _addressController,
-                        hintText: 'Dirección',
+                        hintText: 'Dirección completa',
                         prefixIcon: Icons.location_on_outlined,
                       ),
                     ],
@@ -166,7 +171,7 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
               ),
             ),
 
-            // Next Button
+            // --- Botón de Navegación ---
             Padding(
               padding: const EdgeInsets.all(24),
               child: SizedBox(
@@ -174,6 +179,7 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
+                    // Navega al siguiente paso: Datos Personales
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -212,6 +218,7 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
     );
   }
 
+  /// Crea etiquetas de texto estandarizadas para los inputs
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -227,6 +234,7 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
     );
   }
 
+  /// Construye campos de texto con el estilo visual del proyecto
   Widget _buildTextField({
     required TextEditingController controller,
     required String hintText,

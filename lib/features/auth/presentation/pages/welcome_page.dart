@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/login_page.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_role_page.dart';
 
+/// Página de bienvenida y entrada principal a la aplicación.
+/// Ofrece las opciones iniciales de Iniciar Sesión o Crear una Cuenta.
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Obtenemos las dimensiones de la pantalla para asegurar la responsividad
+    // Obtenemos las dimensiones de la pantalla para asegurar la responsividad en diferentes dispositivos
     final screenSize = MediaQuery.of(context).size;
 
+
     return Scaffold(
-      // Definimos el color de fondo pastel que venía desde Figma
+      // Fondo pastel definido en el diseño de marca
       backgroundColor: const Color(0xFFDBEAFE),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
-            // Forzamos a que el contenedor ocupe al menos el alto disponible del dispositivo
+            // Asegura que el contenido ocupe al menos el alto disponible de la pantalla
             constraints: BoxConstraints(
               minHeight: screenSize.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom,
             ),
@@ -26,9 +29,10 @@ class WelcomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // Ilustración principal / Logo de la aplicación
                 Container(
                   width: double.infinity,
-                  height: screenSize.height * 0.35, // 35% del alto de la pantalla
+                  height: screenSize.height * 0.35, // Ocupa el 35% del alto de pantalla
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/images/logo_principal.png"),
@@ -38,11 +42,11 @@ class WelcomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
 
-                // Botón: Sign Up (Crear Cuenta)
+                // Botón: Crear Cuenta (Inicia el flujo de registro)
                 _buildActionButton(
                   context: context,
                   label: 'Crear Cuenta',
-                  backgroundColor: const Color(0xFF002045), // color-azure-14
+                  backgroundColor: const Color(0xFF002045), 
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -52,7 +56,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Botón: Sign In (Iniciar Sesión)
+                // Botón:  Iniciar Sesión (Acceso para usuarios existentes)
                 _buildActionButton(
                   context: context,
                   label: 'Iniciar Sesión',
@@ -72,7 +76,12 @@ class WelcomePage extends StatelessWidget {
     );
   }
 
-  // Componente interno reutilizable para evitar duplicar código de botones
+  /// Construye un botón de acción estandarizado para la pantalla de bienvenida.
+  /// 
+  /// [context] Contexto de construcción para la navegación.
+  /// [label] Texto descriptivo del botón.
+  /// [backgroundColor] Color de fondo del botón.
+  /// [onPressed] Callback que se ejecuta al presionar el botón.
   Widget _buildActionButton({
     required BuildContext context,
     required String label,
@@ -80,9 +89,9 @@ class WelcomePage extends StatelessWidget {
     required VoidCallback onPressed,
   }) {
     return Container(
-      width: double.infinity, // El botón se adapta al ancho de la pantalla
-      constraints: const BoxConstraints(maxWidth: 320), // Evita que en pantallas grandes se deforme
-      height: 56,             // Altura estándar ergonómica para interacción móvil
+      width: double.infinity,
+      constraints: const BoxConstraints(maxWidth: 320), // Limita el ancho en pantallas grandes (tablets)
+      height: 56, // Altura estándar ergonómica
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(16),

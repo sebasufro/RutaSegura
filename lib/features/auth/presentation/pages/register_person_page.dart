@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_emergency_page.dart';
 
+/// Página para capturar los datos personales del usuario (Nombre, RUT, Teléfono, Dirección).
+/// Es un paso común tanto para Voluntarios como para Supervisores.
 class RegisterPersonPage extends StatefulWidget {
   const RegisterPersonPage({super.key});
 
@@ -9,6 +11,7 @@ class RegisterPersonPage extends StatefulWidget {
 }
 
 class _RegisterPersonPageState extends State<RegisterPersonPage> {
+  // Controladores para gestionar el texto ingresado en los campos
   final _fullNameController = TextEditingController();
   final _rutController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -16,6 +19,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
 
   @override
   void dispose() {
+    // Liberación de recursos al destruir el widget
     _fullNameController.dispose();
     _rutController.dispose();
     _phoneController.dispose();
@@ -30,7 +34,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header: Back Button and Logo
+            // --- Cabecera con Logo Centrado ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
@@ -46,12 +50,12 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
                     height: 75,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(width: 48),
+                  const SizedBox(width: 48), // Balance visual para el botón volver
                 ],
               ),
             ),
 
-            // Titles
+            // --- Títulos Informativos ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
@@ -83,7 +87,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
 
             const SizedBox(height: 24),
 
-            // Form Card
+            // --- Contenedor del Formulario ---
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -115,7 +119,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Nombre Completo
+                      // Input: Nombre
                       _buildLabel('NOMBRE COMPLETO'),
                       _buildTextField(
                         controller: _fullNameController,
@@ -124,7 +128,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // RUT
+                      // Input: RUT (Formato Chileno)
                       _buildLabel('RUT'),
                       _buildTextField(
                         controller: _rutController,
@@ -133,7 +137,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Número de Teléfono
+                      // Input: Teléfono con Prefijo +56
                       _buildLabel('NÚMERO DE TELÉFONO'),
                       Container(
                         decoration: BoxDecoration(
@@ -179,7 +183,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Dirección
+                      // Input: Dirección Domiciliaria
                       _buildLabel('DIRECCIÓN DOMICILIO'),
                       _buildTextField(
                         controller: _addressController,
@@ -192,7 +196,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
               ),
             ),
 
-            // Next Button
+            // --- Botón de Acción ---
             Padding(
               padding: const EdgeInsets.all(24),
               child: SizedBox(
@@ -200,6 +204,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
+                    // Navega al paso de contacto de emergencia
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -238,6 +243,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
     );
   }
 
+  /// Etiquetas de campo consistentes
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -253,6 +259,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
     );
   }
 
+  /// TextField personalizado para el diseño del proyecto
   Widget _buildTextField({
     required TextEditingController controller,
     required String hintText,

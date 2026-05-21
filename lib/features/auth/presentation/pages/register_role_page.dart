@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_org_page.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_person_page.dart';
 
+/// Página de selección de rol durante el proceso de registro.
+/// Permite al usuario elegir entre ser 'Voluntario' o 'Supervisor'.
 class RegisterRolePage extends StatefulWidget {
   const RegisterRolePage({super.key});
 
@@ -10,7 +12,8 @@ class RegisterRolePage extends StatefulWidget {
 }
 
 class _RegisterRolePageState extends State<RegisterRolePage> {
-  String _selectedRole = 'voluntario'; //
+  // Estado local para almacenar el rol seleccionado (por defecto 'voluntario')
+  String _selectedRole = 'voluntario';
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +38,17 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                     height: 75,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(width: 48), // Espaciador para centrar el logo
+                  const SizedBox(width: 48), // Espaciador técnico para equilibrar el botón volver y centrar el logo
                 ],
               ),
             ),
+            
+            // --- Cuerpo Principal ---
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Títulos de la sección
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                     child: Column(
@@ -70,6 +76,8 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                       ],
                     ),
                   ),
+                  
+                  // Contenedor de opciones con scroll
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(24.0),
@@ -98,6 +106,7 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                               ),
                             ),
                             const SizedBox(height: 24),
+                            // Opción: Voluntario
                             _buildRoleOption(
                               id: 'voluntario',
                               title: 'Voluntario',
@@ -105,6 +114,7 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                               icon: Icons.person_outline,
                             ),
                             const SizedBox(height: 16),
+                            // Opción: Supervisor
                             _buildRoleOption(
                               id: 'supervisor',
                               title: 'Supervisor',
@@ -119,6 +129,8 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                 ],
               ),
             ),
+            
+            // --- Botón de Acción Inferior ---
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: SizedBox(
@@ -126,6 +138,7 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
+                    // Lógica de navegación basada en el rol seleccionado
                     if (_selectedRole == 'supervisor') {
                       Navigator.push(
                         context,
@@ -160,8 +173,8 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(width: 8),
-                      Icon(Icons.arrow_forward, color: Colors.white),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.arrow_forward, color: Colors.white),
                     ],
                   ),
                 ),
@@ -173,6 +186,11 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
     );
   }
 
+  /// Helper widget para construir las tarjetas de selección de rol.
+  /// [id] identificador único del rol.
+  /// [title] nombre visible del rol.
+  /// [description] texto explicativo.
+  /// [icon] icono representativo.
   Widget _buildRoleOption({
     required String id,
     required String title,
@@ -221,6 +239,7 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                 ],
               ),
             ),
+            // Indicador visual de selección (Checkmark)
             Container(
               width: 24,
               height: 24,
