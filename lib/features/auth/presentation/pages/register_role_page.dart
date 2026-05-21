@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/register_org_page.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/register_person_page.dart';
 
 class RegisterRolePage extends StatefulWidget {
   const RegisterRolePage({super.key});
@@ -8,112 +10,115 @@ class RegisterRolePage extends StatefulWidget {
 }
 
 class _RegisterRolePageState extends State<RegisterRolePage> {
-  String _selectedRole = 'voluntario'; // 'voluntario' o 'supervisor'
+  String _selectedRole = 'voluntario'; //
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Image.asset(
-              "assets/images/logo_minimalista.png",
-              width: 40,
-              height: 40,
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Cabecera: Botón Volver y Logo Centrado
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  Image.asset(
+                    "assets/images/logo_minimalista.png",
+                    width: 80,
+                    height: 75,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(width: 48), // Espaciador para centrar el logo
+                ],
+              ),
+            ),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Registro',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.35,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Registro',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.35,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Selección de Rol',
+                          style: TextStyle(
+                            color: const Color(0xFF1E3A8A),
+                            fontSize: 14,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Selección de Rol',
-                    style: TextStyle(
-                      color: const Color(0xFF1E3A8A),
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w700,
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(24.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(32),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '¿Eres organizador o voluntario?',
+                              style: TextStyle(
+                                color: Color(0xFF43474E),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            _buildRoleOption(
+                              id: 'voluntario',
+                              title: 'Voluntario',
+                              description: 'Gestión de equipos y monitoreo de seguridad de voluntarios.',
+                              icon: Icons.person_outline,
+                            ),
+                            const SizedBox(height: 16),
+                            _buildRoleOption(
+                              id: 'supervisor',
+                              title: 'Supervisor',
+                              description: 'Coordinación general y supervisión de rutas y seguridad.',
+                              icon: Icons.admin_panel_settings_outlined,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24.0),
-                child: Container(
-                  padding: const EdgeInsets.all(24.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(32),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      )
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '¿Eres organizador o voluntario?',
-                        style: TextStyle(
-                          color: Color(0xFF43474E),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      
-                      _buildRoleOption(
-                        id: 'voluntario',
-                        title: 'Voluntario',
-                        description: 'Gestión de equipos y monitoreo de seguridad de voluntarios.',
-                        icon: Icons.person_outline,
-                      ),
-                      
-                      const SizedBox(height: 16),
-                      
-                      _buildRoleOption(
-                        id: 'supervisor',
-                        title: 'Supervisor',
-                        description: 'Coordinación general y supervisión de rutas y seguridad.',
-                        icon: Icons.admin_panel_settings_outlined,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: SizedBox(
@@ -121,7 +126,21 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Navegar a la siguiente parte del registro
+                    if (_selectedRole == 'supervisor') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterOrgPage(),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPersonPage(),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1E40AF),
