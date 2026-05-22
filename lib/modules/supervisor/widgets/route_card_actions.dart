@@ -4,9 +4,9 @@ class RouteCardActions extends StatelessWidget {
   final VoidCallback onViewPressed;
 
   const RouteCardActions({
-    Key? key,
+    super.key,
     required this.onViewPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

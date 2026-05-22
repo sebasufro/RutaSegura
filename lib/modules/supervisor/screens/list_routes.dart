@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ruta_segura/modules/supervisor/models/route_model.dart';
-import 'package:ruta_segura/modules/supervisor/widgets/supervisor_topbar.dart';
-import 'package:ruta_segura/modules/supervisor/widgets/routes_control_panel.dart';
-import 'package:ruta_segura/modules/supervisor/widgets/supervisor_bottom_nav.dart';
-import 'package:ruta_segura/modules/supervisor/widgets/route_card.dart';
+import '/modules/supervisor/models/route_model.dart';
+import '/modules/supervisor/widgets/supervisor_topbar.dart';
+import '/modules/supervisor/widgets/routes_control_panel.dart';
+import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
+import '/modules/supervisor/widgets/route_card.dart';
 
 class ListRoutesScreen extends StatefulWidget {
   const ListRoutesScreen({super.key});
@@ -13,7 +13,6 @@ class ListRoutesScreen extends StatefulWidget {
 }
 
 class _ListRoutesScreenState extends State<ListRoutesScreen> {
-  // Sample route data
   final List<RouteModel> allRoutes = List.generate(
     10,
     (index) => RouteModel(

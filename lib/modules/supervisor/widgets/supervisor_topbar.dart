@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListRoutesTopbar extends StatelessWidget {
-  const ListRoutesTopbar({Key? key}) : super(key: key);
+  const ListRoutesTopbar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,12 +12,15 @@ class ListRoutesTopbar extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
+            // ignore: deprecated_member_use
             Colors.grey[50]!.withOpacity(0.95),
+            // ignore: deprecated_member_use
             Colors.grey[50]!.withOpacity(0.8),
           ],
         ),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.05),
             blurRadius: 2,
             offset: const Offset(0, 1),

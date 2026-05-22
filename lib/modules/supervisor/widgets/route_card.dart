@@ -6,10 +6,10 @@ class RouteCard extends StatelessWidget {
   final VoidCallback onViewPressed;
 
   const RouteCard({
-    Key? key,
+    super.key,
     required this.route,
     required this.onViewPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +19,7 @@ class RouteCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.05),
             blurRadius: 1,
             offset: const Offset(0, 1),

@@ -5,25 +5,28 @@ class ListRoutesBottomNav extends StatelessWidget {
   final Function(int) onNavigate;
 
   const ListRoutesBottomNav({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.onNavigate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 88,
       decoration: BoxDecoration(
+        // ignore: deprecated_member_use
         color: Colors.white.withOpacity(0.92),
         border: Border(
           top: BorderSide(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.05),
             width: 1,
           ),
         ),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: const Color.fromARGB(22, 16, 24, 76).withOpacity(0.08),
             blurRadius: 18,
             offset: const Offset(0, -4),

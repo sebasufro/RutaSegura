@@ -4,9 +4,9 @@ class RoutesControlPanel extends StatefulWidget {
   final Function(int) onQuantityChanged;
 
   const RoutesControlPanel({
-    Key? key,
+    super.key,
     required this.onQuantityChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<RoutesControlPanel> createState() => _RoutesControlPanelState();
@@ -25,6 +25,7 @@ class _RoutesControlPanelState extends State<RoutesControlPanel> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.05),
             blurRadius: 2,
             offset: const Offset(0, 1),
