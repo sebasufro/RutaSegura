@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'modules/supervisor/screens/list_routes.dart';
 import 'modules/supervisor/screens/route_details.dart';
+import 'modules/supervisor/screens/create_route.dart';
 
 
 void main() {
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const RouteDetailsScreen(),
+      home: const CreateRouteScreen(),
     );
   }
 }
