@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:ruta_segura/modules/supervisor/widgets/interactive_map_widget.dart';
 
 class EditRoutePage2 extends StatefulWidget {
   final Map<String, dynamic> formData;
@@ -19,6 +21,7 @@ class EditRoutePage2 extends StatefulWidget {
 class _EditRoutePage2State extends State<EditRoutePage2> {
   late TextEditingController _direccionInicioController;
   late TextEditingController _direccionFinalController;
+  List<LatLng> _rutaPoints = [];
 
   @override
   void initState() {
@@ -27,6 +30,10 @@ class _EditRoutePage2State extends State<EditRoutePage2> {
         TextEditingController(text: widget.formData['direccionInicio'] ?? '');
     _direccionFinalController =
         TextEditingController(text: widget.formData['direccionFinal'] ?? '');
+    // Load saved route if exists
+    if (widget.formData['rutaPoints'] != null) {
+      _rutaPoints = widget.formData['rutaPoints'];
+    }
   }
 
   @override
@@ -39,6 +46,7 @@ class _EditRoutePage2State extends State<EditRoutePage2> {
   void _saveData() {
     widget.formData['direccionInicio'] = _direccionInicioController.text;
     widget.formData['direccionFinal'] = _direccionFinalController.text;
+    widget.formData['rutaPoints'] = _rutaPoints;
   }
 
   @override
@@ -103,156 +111,15 @@ class _EditRoutePage2State extends State<EditRoutePage2> {
                     ),
                   ),
 
-                  // Map Container (Blank Rectangle)
-                  Container(
+                  // Map Container with Interactive Map
+                  SizedBox(
                     width: double.infinity,
                     height: 252,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                          Color(0xFFE7ECFB),
-                          Color(0xFFDBEAFE),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Stack(
-                      children: [
-                        // Map placeholder text
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            spacing: 10,
-                            children: [
-                              const Text(
-                                'Mapa interactivo',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xFF666666),
-                                ),
-                              ),
-                              Text(
-                                'Se integrará con tu proveedor de mapas',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Map Controls
-                        Positioned(
-                          bottom: 24,
-                          right: 24,
-                          child: Column(
-                            spacing: 8,
-                            children: [
-                              // Zoom In
-                              GestureDetector(
-                                onTap: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Zoom In')),
-                                  );
-                                },
-                                child: Container(
-                                  width: 48,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white.withOpacity(0.8),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 6,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '+',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF333333),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              // Zoom Out
-                              GestureDetector(
-                                onTap: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Zoom Out')),
-                                  );
-                                },
-                                child: Container(
-                                  width: 48,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white.withOpacity(0.8),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 6,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '−',
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF333333),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              // Center Location
-                              GestureDetector(
-                                onTap: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Center Location')),
-                                  );
-                                },
-                                child: Container(
-                                  width: 48,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: const Color(0xFF002045),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 6,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.my_location,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    child: InteractiveMapWidget(
+                      initialPoints: _rutaPoints.isNotEmpty ? _rutaPoints : null,
+                      onRouteSaved: (points) {
+                        setState(() => _rutaPoints = points);
+                      },
                     ),
                   ),
 
