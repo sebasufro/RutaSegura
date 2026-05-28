@@ -3,6 +3,7 @@ import 'modules/supervisor/screens/list_routes.dart';
 import 'modules/supervisor/screens/route_details.dart';
 import 'modules/supervisor/screens/create_route.dart';
 import 'modules/supervisor/screens/edit_route.dart';
+import 'modules/supervisor/screens/map_view.dart';
 import 'modules/supervisor/models/map_loader.dart';
 
 
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyApp(),
+      home: const MapViewScreen(),
 
     );
   }
