@@ -109,72 +109,71 @@ class _EditRouteScreenState extends State<EditRouteScreen>
           height: double.infinity,
           color: const Color(0xFFF8FAFC),
           child: Stack(
-              children: [
-                // Main Content
-                Column(
-                  children: [
-                    // Topbar
-                    const ListRoutesTopbar(),
+            children: [
+              // Main Content
+              Column(
+                children: [
+                  // Topbar
+                  const ListRoutesTopbar(),
 
-                    // Page Content
-                    Expanded(
-                      child: PageView(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        onPageChanged: (page) {
-                          setState(() => _currentPage = page);
-                        },
-                        children: [
-                          // Page 1
-                          EditRoutePage1(
-                            formData: _formData,
-                            onNext: _nextPage,
-                            onBack: _previousPage,
-                          ),
-
-                          // Page 2
-                          EditRoutePage2(
-                            formData: _formData,
-                            onNext: _nextPage,
-                            onBack: _previousPage,
-                          ),
-
-                          // Page 3
-                          EditRoutePage3(
-                            formData: _formData,
-                            onNext: _nextPage,
-                            onBack: _previousPage,
-                          ),
-
-                          // Page 4
-                          EditRoutePage4(
-                            onFinish: _finishForm,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                // Bottom Navigation (only show if not on success page)
-                if (_currentPage < 3)
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: ListRoutesBottomNav(
-                      currentIndex: _currentNavIndex,
-                      onNavigate: (index) {
-                        setState(() => _currentNavIndex = index);
-                        final sections = ['rutas', 'mapa', 'perfil'];
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Ir a ${sections[index]}')),
-                        );
+                  // Page Content
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      onPageChanged: (page) {
+                        setState(() => _currentPage = page);
                       },
+                      children: [
+                        // Page 1
+                        EditRoutePage1(
+                          formData: _formData,
+                          onNext: _nextPage,
+                          onBack: _previousPage,
+                        ),
+
+                        // Page 2
+                        EditRoutePage2(
+                          formData: _formData,
+                          onNext: _nextPage,
+                          onBack: _previousPage,
+                        ),
+
+                        // Page 3
+                        EditRoutePage3(
+                          formData: _formData,
+                          onNext: _nextPage,
+                          onBack: _previousPage,
+                        ),
+
+                        // Page 4
+                        EditRoutePage4(
+                          onFinish: _finishForm,
+                        ),
+                      ],
                     ),
                   ),
-              ],
-            ),
+                ],
+              ),
+
+              // Bottom Navigation (only show if not on success page)
+              if (_currentPage < 3)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: ListRoutesBottomNav(
+                    currentIndex: _currentNavIndex,
+                    onNavigate: (index) {
+                      setState(() => _currentNavIndex = index);
+                      final sections = ['rutas', 'mapa', 'perfil'];
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Ir a ${sections[index]}')),
+                      );
+                    },
+                  ),
+                ),
+            ],
           ),
         ),
       ),
