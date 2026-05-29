@@ -79,12 +79,11 @@ class _ListVolunteersScreenState extends State<ListVolunteersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Container(
-            width: 412,
-            height: 917,
-            color: const Color(0xFFF5F7FA),
-            child: Stack(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: const Color(0xFFF5F7FA),
+          child: Stack(
               children: [
                 // Main Content
                 Column(
@@ -172,7 +171,6 @@ class _ListVolunteersScreenState extends State<ListVolunteersScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
-}

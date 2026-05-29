@@ -32,12 +32,11 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Container(
-            width: 412,
-            height: 917,
-            color: const Color(0xFFF8FAFC),
-            child: Stack(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: const Color(0xFFF8FAFC),
+          child: Stack(
               children: [
                 // Main Content
                 Column(
@@ -138,7 +137,6 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
