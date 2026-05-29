@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
+import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
+import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_org_page.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_person_page.dart';
 
@@ -22,39 +25,19 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Cabecera: Botón Volver y Logo Centrado
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  Image.asset(
-                    "assets/images/logo_minimalista.png",
-                    width: 80,
-                    height: 75,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(width: 48), // Espaciador técnico para equilibrar el botón volver y centrar el logo
-                ],
-              ),
-            ),
+            const AuthHeader(), // Widget reutilizable para la cabecera
             
-            // --- Cuerpo Principal ---
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Títulos de la sección
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Registro',
                           style: TextStyle(
                             color: Colors.black,
@@ -63,11 +46,11 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                             letterSpacing: 0.35,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Text(
                           'Selección de Rol',
                           style: TextStyle(
-                            color: const Color(0xFF1E3A8A),
+                            color: Color(0xFF1E3A8A),
                             fontSize: 14,
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w700,
@@ -77,23 +60,11 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                     ),
                   ),
                   
-                  // Contenedor de opciones con scroll
+                  // Contenedor de opciones
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Container(
-                        padding: const EdgeInsets.all(24.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(32),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            )
-                          ],
-                        ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: AuthCard( // Widget reutilizable para la tarjeta
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -106,7 +77,6 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                               ),
                             ),
                             const SizedBox(height: 24),
-                            // Opción: Voluntario
                             _buildRoleOption(
                               id: 'voluntario',
                               title: 'Voluntario',
@@ -114,7 +84,6 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                               icon: Icons.person_outline,
                             ),
                             const SizedBox(height: 16),
-                            // Opción: Supervisor
                             _buildRoleOption(
                               id: 'supervisor',
                               title: 'Supervisor',
@@ -130,54 +99,24 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
               ),
             ),
             
-            // --- Botón de Acción Inferior ---
+            // Botón Siguiente reutilizable
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Lógica de navegación basada en el rol seleccionado
-                    if (_selectedRole == 'supervisor') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterOrgPage(),
-                        ),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterPersonPage(),
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1E40AF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 4,
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Siguiente',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Icon(Icons.arrow_forward, color: Colors.white),
-                    ],
-                  ),
-                ),
+              child: PrimaryButton(
+                label: 'Siguiente',
+                onPressed: () {
+                  if (_selectedRole == 'supervisor') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RegisterOrgPage()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RegisterPersonPage()),
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -187,10 +126,6 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
   }
 
   /// Helper widget para construir las tarjetas de selección de rol.
-  /// [id] identificador único del rol.
-  /// [title] nombre visible del rol.
-  /// [description] texto explicativo.
-  /// [icon] icono representativo.
   Widget _buildRoleOption({
     required String id,
     required String title,
@@ -239,7 +174,6 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                 ],
               ),
             ),
-            // Indicador visual de selección (Checkmark)
             Container(
               width: 24,
               height: 24,
