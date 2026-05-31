@@ -291,7 +291,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
 
                                     // Info Card
                                     Positioned(
-                                      bottom: 110,
+                                      bottom: 20,
                                       left: 20,
                                       right: 20,
                                       child: MapInfoCard(
@@ -303,7 +303,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
 
                                     // Recenter button (Google Maps style)
                                     Positioned(
-                                      bottom: 270,
+                                      bottom: 190,
                                       right: 20,
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -345,23 +345,6 @@ class _MapViewScreenState extends State<MapViewScreen> {
                                 ),
                     ),
                   ],
-                ),
-
-                // Bottom Navigation
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: ListRoutesBottomNav(
-                    currentIndex: _currentNavIndex,
-                    onNavigate: (index) {
-                      setState(() => _currentNavIndex = index);
-                      final sections = ['rutas', 'mapa', 'perfil'];
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Ir a ${sections[index]}')),
-                      );
-                    },
-                  ),
                 ),
               ],
             ),

@@ -150,23 +150,6 @@ class _ListVolunteersScreenState extends State<ListVolunteersScreen> {
                     ),
                   ],
                 ),
-
-                // Bottom Navigation
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: ListRoutesBottomNav(
-                    currentIndex: _currentNavIndex,
-                    onNavigate: (index) {
-                      setState(() => _currentNavIndex = index);
-                      final sections = ['rutas', 'mapa', 'perfil'];
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Ir a ${sections[index]}')),
-                      );
-                    },
-                  ),
-                ),
               ],
             ),
           ),

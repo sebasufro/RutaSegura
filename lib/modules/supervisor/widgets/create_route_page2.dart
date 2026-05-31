@@ -195,7 +195,7 @@ class _CreateRoutePage2State extends State<CreateRoutePage2> {
 
         // Buttons
         Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 110, left: 20, right: 20),
+          padding: const EdgeInsets.only(top: 20, bottom: 45, left: 20, right: 20),
           child: Column(
             spacing: 15,
             children: [
