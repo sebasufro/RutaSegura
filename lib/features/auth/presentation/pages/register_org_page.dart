@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
 import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
 import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
@@ -19,6 +20,7 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
   final _orgNameController = TextEditingController();
   final _pjNumberController = TextEditingController();
   final _addressController = TextEditingController();
+  String? _fileName;
 
   @override
   void dispose() {
@@ -103,11 +105,29 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.upload_file, color: Colors.white),
-                          label: const Text('Subir Certificado', style: TextStyle(color: Colors.white)),
+                          onPressed: () async {
+                            FilePickerResult? result = await FilePicker.platform.pickFiles(
+                              type: FileType.custom,
+                              allowedExtensions: ['pdf', 'jpg', 'png'],
+                            );
+
+                            if (result != null) {
+                              setState(() {
+                                _fileName = result.files.single.name;
+                              });
+                            }
+                          },
+                          icon: Icon(
+                            _fileName == null ? Icons.upload_file : Icons.check_circle_outline,
+                            color: Colors.white,
+                          ),
+                          label: Text(
+                            _fileName ?? 'Subir Certificado',
+                            style: const TextStyle(color: Colors.white),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E40AF),
+                            backgroundColor: _fileName == null ? const Color(0xFF1E40AF) : Colors.green,
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
