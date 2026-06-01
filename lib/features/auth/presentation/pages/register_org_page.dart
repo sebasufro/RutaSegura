@@ -17,9 +17,10 @@ class RegisterOrgPage extends StatefulWidget {
 }
 
 class _RegisterOrgPageState extends State<RegisterOrgPage> {
-  final _orgNameController = TextEditingController();
-  final _pjNumberController = TextEditingController();
-  final _addressController = TextEditingController();
+  // Controladores con datos de prueba
+  final _orgNameController = TextEditingController(text: 'Ruta Segura ONG');
+  final _pjNumberController = TextEditingController(text: '12.345.674-0');
+  final _addressController = TextEditingController(text: 'Av. Libertador Bernardo O\'Higgins 1315, Santiago');
   String? _fileName;
 
   @override

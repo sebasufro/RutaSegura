@@ -17,10 +17,10 @@ class RegisterAccountPage extends StatefulWidget {
 }
 
 class _RegisterAccountPageState extends State<RegisterAccountPage> {
-  // Controladores para los campos de texto
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  // Controladores con datos de prueba (Hardcoded)
+  final _emailController = TextEditingController(text: 'jhon.doe@example.com');
+  final _passwordController = TextEditingController(text: 'Password123!');
+  final _confirmPasswordController = TextEditingController(text: 'Password123!');
 
   // Estados para visibilidad de contraseñas
   bool _obscurePassword = true;

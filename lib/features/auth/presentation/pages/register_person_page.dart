@@ -15,10 +15,11 @@ class RegisterPersonPage extends StatefulWidget {
 }
 
 class _RegisterPersonPageState extends State<RegisterPersonPage> {
-  final _fullNameController = TextEditingController();
-  final _rutController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _addressController = TextEditingController();
+  // Controladores con datos de prueba (Hardcoded)
+  final _fullNameController = TextEditingController(text: 'Jhon Doe');
+  final _rutController = TextEditingController(text: '12.345.678-K');
+  final _phoneController = TextEditingController(text: '9 1234 5678');
+  final _addressController = TextEditingController(text: 'Av. Providencia 1208, Providencia');
 
   @override
   void dispose() {

@@ -14,8 +14,9 @@ class RegisterEmergencyPage extends StatefulWidget {
 }
 
 class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
-  final _emergencyNameController = TextEditingController();
-  final _emergencyPhoneController = TextEditingController();
+  // Controladores con datos de prueba (Hardcoded)
+  final _emergencyNameController = TextEditingController(text: 'Jane Doe');
+  final _emergencyPhoneController = TextEditingController(text: '9 8765 4321');
 
   @override
   void dispose() {
