@@ -1,0 +1,372 @@
+import 'package:flutter/material.dart';
+import '../vol_screens/vol_route_details_screen.dart';
+
+// Componente visual que representa una ruta a la que el usuario está inscrito.
+// Incluye información general, un menú de opciones para desinscribirse
+// y botones para unirse a la actividad o ver sus detalles.
+class MyRoutesCard extends StatelessWidget {
+  final String titulo;
+  final String zona;
+  final String horario;
+  final int voluntariosActivos;
+  final String imagenUrl;
+  final VoidCallback onDesinscribir;
+
+  const MyRoutesCard({
+    super.key,
+    required this.titulo,
+    required this.zona,
+    required this.horario,
+    required this.voluntariosActivos,
+    required this.imagenUrl,
+    required this.onDesinscribir,
+  });
+
+  // Cuadro de diálogo para confirmar la desinscripción de la ruta.
+  void _mostrarPopupDesinscribir(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+              SizedBox(width: 10),
+              Text('Confirmar', style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+          content: Text(
+            '¿Estás seguro de que deseas desinscribirte de "$titulo"? Ya no aparecerás en la lista de asistencia de esta actividad.',
+            style: const TextStyle(fontSize: 15),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                onDesinscribir();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Te has desinscrito de la ruta correctamente.',
+                    ),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red[800],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Sí, desinscribir',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  imagenUrl,
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      titulo,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E1E1E),
+                        height: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        _buildTag(
+                          Icons.location_on,
+                          zona,
+                          const Color(0xFFE8F5E9),
+                          const Color(0xFF2E7D32),
+                        ),
+                        _buildTag(
+                          Icons.access_time,
+                          horario,
+                          const Color(0xFFE3F2FD),
+                          const Color(0xFF1565C0),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'desinscribir') {
+                    _mostrarPopupDesinscribir(context);
+                  }
+                },
+                icon: const Icon(Icons.more_vert, color: Colors.grey),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                itemBuilder: (BuildContext context) => [
+                  const PopupMenuItem<String>(
+                    value: 'desinscribir',
+                    child: Row(
+                      children: [
+                        Icon(Icons.person_remove, color: Colors.red, size: 20),
+                        SizedBox(width: 10),
+                        Text(
+                          'Desinscribir',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              _buildStackedAvatars(),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Voluntarios inscritos: $voluntariosActivos',
+                  style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.grey,
+                    fontSize: 13,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Divider(color: Color(0xFFEEEEEE), thickness: 1),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Botón de unión inhabilitado hasta que falten 15 minutos.
+              ElevatedButton.icon(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Row(
+                        children: [
+                          Icon(Icons.info_outline, color: Colors.white, size: 20),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              'Actividad aún no disponible. Puedes ingresar a la actividad desde 15 minutos antes de la hora establecida.',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                      backgroundColor: Colors.grey[800],
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.schedule, size: 18),
+                label: const Text(
+                  'Unirse',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[200],
+                  foregroundColor: Colors.grey[500],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  elevation: 0,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VolRouteDetailsScreen(
+                        rutaDatos: {
+                          "route_name": titulo,
+                          "capacidad_maxima": voluntariosActivos + 5,
+                          "distancia_metros": 1250.0,
+                          "geometria_calle": [],
+                          "puntos_base": []
+                        },
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1E3A8A),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  elevation: 0,
+                ),
+                child: const Row(
+                  children: [
+                    Text(
+                      'Detalles',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Icon(Icons.arrow_forward, size: 16, color: Colors.white),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTag(
+      IconData icon, String text, Color bgColor, Color textColor) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: textColor),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              color: textColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStackedAvatars() {
+    return SizedBox(
+      width: 75,
+      height: 28,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            child: CircleAvatar(
+              radius: 14,
+              backgroundImage: const NetworkImage(
+                'https://i.pravatar.cc/100?img=1',
+              ),
+              backgroundColor: Colors.grey[200],
+            ),
+          ),
+          Positioned(
+            left: 18,
+            child: CircleAvatar(
+              radius: 14,
+              backgroundImage: const NetworkImage(
+                'https://i.pravatar.cc/100?img=33',
+              ),
+              backgroundColor: Colors.grey[300],
+            ),
+          ),
+          Positioned(
+            left: 36,
+            child: CircleAvatar(
+              radius: 14,
+              backgroundColor: Colors.grey[300],
+              child: Text(
+                '+${voluntariosActivos > 2 ? voluntariosActivos - 2 : 0}',
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
