@@ -20,8 +20,6 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
       title: 'Ruta Agrupación ${index + 1}',
       sector: 'SECTOR DESIGNADO',
       schedule: 'HORARIO DESIGNADO',
-      activeVolunteers: 7 + index,
-      volunteerEmojis: ['👩', '👨'],
     ),
   );
 
