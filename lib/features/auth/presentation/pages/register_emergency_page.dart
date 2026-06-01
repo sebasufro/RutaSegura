@@ -117,7 +117,19 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
                   const SizedBox(height: 8),
                   PrimaryButton(
                     label: 'Finalizar Registro',
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_emergencyNameController.text.isEmpty ||
+                          _emergencyPhoneController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Por favor, completa los datos de contacto o presiona "Omitir"'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+                      // Lógica de finalización
+                    },
                   ),
                 ],
               ),

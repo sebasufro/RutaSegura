@@ -3,6 +3,8 @@ import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/login_page.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_role_page.dart';
 
+import 'package:ruta_segura/features/auth/presentation/pages/register_account_page.dart';
+
 /// Página de bienvenida y entrada principal a la aplicación.
 /// Ofrece las opciones iniciales de Iniciar Sesión o Crear una Cuenta.
 class WelcomePage extends StatelessWidget {
@@ -51,7 +53,7 @@ class WelcomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const RegisterRolePage()),
+                        MaterialPageRoute(builder: (context) => const RegisterAccountPage()),
                       );
                     },
                   ),

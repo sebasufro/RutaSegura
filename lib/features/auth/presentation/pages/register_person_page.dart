@@ -133,6 +133,18 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
               child: PrimaryButton(
                 label: 'Siguiente',
                 onPressed: () {
+                  if (_fullNameController.text.isEmpty ||
+                      _rutController.text.isEmpty ||
+                      _phoneController.text.isEmpty ||
+                      _addressController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Por favor, completa todos tus datos personales'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const RegisterEmergencyPage()),

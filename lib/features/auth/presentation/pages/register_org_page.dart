@@ -132,6 +132,17 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
               child: PrimaryButton(
                 label: 'Siguiente',
                 onPressed: () {
+                  if (_orgNameController.text.isEmpty ||
+                      _pjNumberController.text.isEmpty ||
+                      _addressController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Por favor, completa todos los campos obligatorios'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const RegisterPersonPage()),
