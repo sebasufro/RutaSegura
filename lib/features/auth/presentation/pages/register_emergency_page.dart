@@ -4,6 +4,7 @@ import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
 import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
 import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
 import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/under_construction_page.dart';
 
 /// Página final del registro para contacto de emergencia.
 class RegisterEmergencyPage extends StatefulWidget {
@@ -112,7 +113,12 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
               child: Column(
                 children: [
                   TextButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
+                      );
+                    },
                     child: const Text('Omitir este paso', style: TextStyle(color: Color(0xFF7A869C), fontWeight: FontWeight.bold)),
                   ),
                   const SizedBox(height: 8),
@@ -129,7 +135,10 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
                         );
                         return;
                       }
-                      // Lógica de finalización
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
+                      );
                     },
                   ),
                 ],

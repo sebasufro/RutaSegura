@@ -4,6 +4,8 @@ import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
 import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
 import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
 import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/register_account_page.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/under_construction_page.dart';
 
 /// Página de Iniciar Sesión.
 /// Permite a los usuarios registrados acceder a su cuenta mediante correo y contraseña.
@@ -139,7 +141,10 @@ class _LoginPageState extends State<LoginPage> {
                           label: 'Iniciar Sesión',
                           backgroundColor: const Color(0xFF002045),
                           onPressed: () {
-                            // Lógica de login
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
+                            );
                           },
                         ),
                         const SizedBox(height: 32),
@@ -147,7 +152,12 @@ class _LoginPageState extends State<LoginPage> {
                         // Enlace de Registro
                         Center(
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const RegisterAccountPage()),
+                              );
+                            },
                             child: RichText(
                               textAlign: TextAlign.center,
                               text: const TextSpan(
