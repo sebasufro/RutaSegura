@@ -15,9 +15,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Controladores y estados
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  // Controladores con datos de prueba (Hardcoded)
+  final _emailController = TextEditingController(text: 'jhon.doe@example.com');
+  final _passwordController = TextEditingController(text: 'Password123!');
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
