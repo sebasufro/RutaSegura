@@ -3,7 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
-import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/supervisor/widgets/volunteer_marker_widget.dart';
 import '/modules/supervisor/widgets/map_info_card.dart';
 
@@ -15,7 +14,6 @@ class MapViewScreen extends StatefulWidget {
 }
 
 class _MapViewScreenState extends State<MapViewScreen> {
-  int _currentNavIndex = 1;
   late MapController _mapController;
   LatLng? _userLocation;
   bool _loading = true;
@@ -155,22 +153,6 @@ class _MapViewScreenState extends State<MapViewScreen> {
     }
   }
 
-  Widget _buildUserLocationMarker() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Pulsing outer ring
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color(0xFF4285F4).withOpacity(0.1),
-          ),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +168,7 @@ class _MapViewScreenState extends State<MapViewScreen> {
               Column(
                 children: [
                   // Topbar
-                  const ListRoutesTopbar(),
+                  const SupTopbar(),
 
                   // Map Content
                   Expanded(

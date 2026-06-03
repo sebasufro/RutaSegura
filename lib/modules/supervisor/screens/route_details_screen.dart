@@ -48,7 +48,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 Column(
                   children: [
                     // Topbar
-                    const ListRoutesTopbar(),
+                    const SupTopbar(),
 
                     // Content
                     Expanded(
@@ -113,16 +113,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  child: ListRoutesBottomNav(
-                    currentIndex: _currentNavIndex,
-                    onNavigate: (index) {
-                      setState(() => _currentNavIndex = index);
-                      final sections = ['rutas', 'mapa', 'perfil'];
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Ir a ${sections[index]}')),
-                      );
-                    },
-                  ),
+                  child: SupNavbar(),
                 ),
               ],
             ),

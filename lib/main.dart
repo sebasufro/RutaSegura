@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'modules/supervisor/screens/list_routes.dart';
-import 'modules/supervisor/screens/route_details.dart';
-import 'modules/supervisor/screens/create_route.dart';
-import 'modules/supervisor/screens/edit_route.dart';
-import 'modules/supervisor/screens/map_view.dart';
-import 'modules/supervisor/screens/list_volunteers.dart';
+import 'modules/supervisor/screens/list_routes_screen.dart';
+import 'modules/supervisor/screens/route_details_screen.dart';
+import 'modules/supervisor/screens/create_route_screen.dart';
+import 'modules/supervisor/screens/edit_routes_screen.dart';
+import 'modules/supervisor/screens/map_view_screen.dart';
+import 'modules/supervisor/screens/list_volunteers_screen.dart';
 
 
 void main() {

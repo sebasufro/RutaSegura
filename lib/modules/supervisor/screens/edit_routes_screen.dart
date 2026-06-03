@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
-import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
-import '/modules/supervisor/widgets/create_route_page1.dart';
-import '/modules/supervisor/widgets/create_route_page2.dart';
-import '/modules/supervisor/widgets/create_route_page3.dart';
-import '/modules/supervisor/widgets/create_route_page4.dart';
+import '/modules/supervisor/widgets/edit_route_page1.dart';
+import '/modules/supervisor/widgets/edit_route_page2.dart';
+import '/modules/supervisor/widgets/edit_route_page3.dart';
+import '/modules/supervisor/widgets/edit_route_page4.dart';
 
-class CreateRouteScreen extends StatefulWidget {
-  const CreateRouteScreen({super.key});
+class EditRouteScreen extends StatefulWidget {
+  const EditRouteScreen({super.key});
 
   @override
-  State<CreateRouteScreen> createState() => _CreateRouteScreenState();
+  State<EditRouteScreen> createState() => _EditRouteScreenState();
 }
 
-class _CreateRouteScreenState extends State<CreateRouteScreen>
+class _EditRouteScreenState extends State<EditRouteScreen>
     with SingleTickerProviderStateMixin {
   int _currentPage = 0;
-  int _currentNavIndex = 0;
 
   // Form data storage
   final Map<String, dynamic> _formData = {
@@ -73,7 +71,7 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Abandonar formulario'),
-        content: const Text('¿Deseas abandonar el formulario?'),
+        content: const Text('¿Deseas abandonar la edición?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -96,7 +94,7 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
     _formData.clear();
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Ruta creada exitosamente')),
+      const SnackBar(content: Text('Ruta editada exitosamente')),
     );
   }
 
@@ -114,7 +112,7 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
               Column(
                 children: [
                   // Topbar
-                  const ListRoutesTopbar(),
+                  const SupTopbar(),
 
                   // Page Content
                   Expanded(
@@ -126,28 +124,28 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
                       },
                       children: [
                         // Page 1
-                        CreateRoutePage1(
+                        EditRoutePage1(
                           formData: _formData,
                           onNext: _nextPage,
                           onBack: _previousPage,
                         ),
 
                         // Page 2
-                        CreateRoutePage2(
+                        EditRoutePage2(
                           formData: _formData,
                           onNext: _nextPage,
                           onBack: _previousPage,
                         ),
 
                         // Page 3
-                        CreateRoutePage3(
+                        EditRoutePage3(
                           formData: _formData,
                           onNext: _nextPage,
                           onBack: _previousPage,
                         ),
 
                         // Page 4
-                        CreateRoutePage4(
+                        EditRoutePage4(
                           onFinish: _finishForm,
                         ),
                       ],

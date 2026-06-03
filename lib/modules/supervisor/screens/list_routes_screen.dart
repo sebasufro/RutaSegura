@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/models/route_model.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
-import '/modules/supervisor/widgets/routes_control_panel.dart';
 import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
+import '/modules/supervisor/widgets/routes_control_panel.dart';
 import '/modules/supervisor/widgets/route_card.dart';
 
 class ListRoutesScreen extends StatefulWidget {
@@ -24,7 +24,6 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
   );
 
   int _displayedRouteCount = 3;
-  int _currentNavIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
                 Column(
                   children: [
                     // Topbar
-                    const ListRoutesTopbar(),
+                    const SupTopbar(),
 
                     // Content Wrapper
                     Expanded(
@@ -120,16 +119,7 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  child: ListRoutesBottomNav(
-                    currentIndex: _currentNavIndex,
-                    onNavigate: (index) {
-                      setState(() => _currentNavIndex = index);
-                      final sections = ['rutas', 'mapa', 'perfil'];
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Ir a ${sections[index]}')),
-                      );
-                    },
-                  ),
+                  child: SupNavbar(),
                 ),
               ],
             ),

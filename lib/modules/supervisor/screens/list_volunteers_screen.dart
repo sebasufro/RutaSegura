@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/widgets/volunteers_list_header.dart';
-import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/supervisor/widgets/volunteer_card.dart';
 
 class Volunteer {
@@ -29,7 +28,6 @@ class ListVolunteersScreen extends StatefulWidget {
 }
 
 class _ListVolunteersScreenState extends State<ListVolunteersScreen> {
-  int _currentNavIndex = 0;
 
   // Sample volunteer data
   final List<Volunteer> volunteers = [
