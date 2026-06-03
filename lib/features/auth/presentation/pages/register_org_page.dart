@@ -20,7 +20,7 @@ class _RegisterOrgPageState extends State<RegisterOrgPage> {
   // Controladores con datos de prueba
   final _orgNameController = TextEditingController(text: 'Ruta Segura ONG');
   final _pjNumberController = TextEditingController(text: '12.345.674-0');
-  final _addressController = TextEditingController(text: 'Av. Libertador Bernardo O\'Higgins 1315, Santiago');
+  final _addressController = TextEditingController(text: 'Portal Temuco - Av. Alemania 671');
   String? _fileName;
 
   @override
