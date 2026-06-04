@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:ruta_segura/modules/supervisor/widgets/interactive_map_widget.dart';
+import 'package:ruta_segura/modules/supervisor/widgets/interactive_map.dart';
 
 class CreateRoutePage2 extends StatefulWidget {
   final Map<String, dynamic> formData;

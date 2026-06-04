@@ -26,7 +26,6 @@ class _NavbarContainerState extends State<SupNavbar> {
   final List<Widget> _pantallas = [
     const ListRoutesScreen(),
     const CreateRouteScreen(),
-    const p,
   ];
 
   @override
