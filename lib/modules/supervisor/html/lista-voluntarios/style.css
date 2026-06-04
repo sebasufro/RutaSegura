@@ -1,0 +1,238 @@
+/* Lista Voluntarios - Supervisor Styles */
+
+.mobile-container {
+    width: 412px;
+    height: 917px;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 0 auto;
+}
+
+/* Header */
+.header {
+    height: 60px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E8EAED;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    justify-content: space-between;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    height: 32px;
+    width: 32px;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 14px;
+    color: #1E3A8A;
+    letter-spacing: 0.5px;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1A1A1A;
+    transition: all 0.2s ease;
+}
+
+.back-btn:active {
+    background-color: #F5F7FA;
+    border-radius: 8px;
+}
+
+.back-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Main Content */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 80px;
+    background-color: #F5F7FA;
+}
+
+/* Route Header */
+.route-header {
+    padding: 24px 20px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E8EAED;
+}
+
+.route-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1A1A1A;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Volunteers List */
+.volunteers-list {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.volunteer-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #E8EAED;
+    transition: all 0.2s ease;
+}
+
+.volunteer-card:active {
+    background-color: #F5F7FA;
+}
+
+.volunteer-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+.volunteer-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.volunteer-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin: 0;
+}
+
+.volunteer-desc {
+    font-size: 13px;
+    color: #7A869C;
+    margin: 0;
+}
+
+.volunteer-status {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #7A869C;
+}
+
+.status-icon {
+    color: #666666;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 412px;
+    height: 80px;
+    background-color: #FFFFFF;
+    border-top: 1px solid #E8EAED;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #7A869C;
+    transition: all 0.2s ease;
+    flex: 1;
+}
+
+.nav-item:active {
+    background-color: #F5F7FA;
+}
+
+.nav-item.active {
+    color: #1E40AF;
+}
+
+.nav-item.active .nav-icon {
+    background-color: #DBEAFE;
+    border-radius: 12px;
+    padding: 4px;
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Scrollbar styling */
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: #D0D5DD;
+    border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: #A0A7B0;
+}

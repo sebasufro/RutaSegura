@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Ruta</title>
+    <link rel="stylesheet" href="../../global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-container">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="topbar-content">
+                <div class="logo-container">
+                    <svg class="logo" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="14" cy="13" r="12" stroke="#1e3a8a" stroke-width="2" fill="none"/>
+                        <path d="M10 13L12 15L18 9" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                    <h2 class="brand-name">RUTA SEGURA</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Container -->
+        <div class="map-wrapper">
+            <!-- Map Background with SVG visualization -->
+            <svg class="map-background" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <!-- Map streets network pattern -->
+                <defs>
+                    <pattern id="street-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M0,20 L40,20" stroke="#4a90a4" stroke-width="1.5" opacity="0.6" fill="none"/>
+                        <path d="M20,0 L20,40" stroke="#4a90a4" stroke-width="1.5" opacity="0.6" fill="none"/>
+                        <path d="M0,10 L40,10" stroke="#3a7a94" stroke-width="0.8" opacity="0.4" fill="none"/>
+                        <path d="M10,0 L10,40" stroke="#3a7a94" stroke-width="0.8" opacity="0.4" fill="none"/>
+                        <path d="M0,30 L40,30" stroke="#3a7a94" stroke-width="0.8" opacity="0.4" fill="none"/>
+                        <path d="M30,0 L30,40" stroke="#3a7a94" stroke-width="0.8" opacity="0.4" fill="none"/>
+                    </pattern>
+                </defs>
+
+                <!-- Background -->
+                <rect width="400" height="600" fill="#546e7a"/>
+                
+                <!-- Street pattern -->
+                <rect width="400" height="600" fill="url(#street-pattern)"/>
+
+                <!-- Cyan accent lines (main routes) -->
+                <path d="M0,150 Q100,180 200,200 T400,200" stroke="#00bcd4" stroke-width="3" fill="none" opacity="0.8"/>
+                <path d="M150,0 L150,600" stroke="#00bcd4" stroke-width="2.5" fill="none" opacity="0.6"/>
+                <path d="M250,0 Q280,200 250,600" stroke="#00bcd4" stroke-width="2" fill="none" opacity="0.5"/>
+                
+                <!-- Additional street lines -->
+                <path d="M0,350 L400,380" stroke="#4a90a4" stroke-width="1.5" fill="none" opacity="0.7"/>
+                <path d="M50,0 L80,600" stroke="#4a90a4" stroke-width="1.5" fill="none" opacity="0.5"/>
+                <path d="M300,0 L320,600" stroke="#4a90a4" stroke-width="1.2" fill="none" opacity="0.5"/>
+
+                <!-- User Location (center) -->
+                <g id="user-location" data-volunteer-id="self">
+                    <circle cx="200" cy="300" r="10" fill="rgba(0,32,69,0.2)" stroke="none"/>
+                    <circle cx="200" cy="300" r="14" fill="none" stroke="#002045" stroke-width="2.5" opacity="0.5"/>
+                    <circle cx="200" cy="300" r="28" fill="none" stroke="#002045" stroke-width="1" stroke-dasharray="2,3" opacity="0.3"/>
+                </g>
+            </svg>
+
+            <!-- Volunteer Markers (positioned absolutely over map) -->
+            <button class="volunteer-marker volunteer-1" data-volunteer-id="1" onclick="showVolunteerInfo(1)" title="Voluntario 1 - MJ">
+                <span class="marker-avatar marker-orange">MJ</span>
+            </button>
+
+            <button class="volunteer-marker volunteer-2" data-volunteer-id="2" onclick="showVolunteerInfo(2)" title="Voluntario 2 - SK">
+                <span class="marker-avatar marker-indigo">SK</span>
+            </button>
+
+            <button class="volunteer-marker volunteer-3" data-volunteer-id="3" onclick="showVolunteerInfo(3)" title="Voluntario 3 - RL">
+                <span class="marker-avatar marker-green">RL</span>
+            </button>
+
+            <!-- Bottom Info Card -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <h3 class="info-card-title">Cerca de ti: 2 compañeros</h3>
+                    <p class="info-card-subtitle">Zona Segura - Sector Noreste</p>
+                </div>
+                <div class="info-card-avatars">
+                    <span class="avatar-small marker-orange">MJ</span>
+                    <span class="avatar-small marker-indigo">SK</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Volunteer Info Modals -->
+        <!-- Voluntario 1 (MJ - Orange) -->
+        <div class="modal-overlay" id="volunteerModal1" onclick="closeVolunteerInfo(1, event)">
+            <div class="modal-card" onclick="event.stopPropagation()">
+                <div class="volunteer-header">
+                    <span class="marker-avatar marker-orange">MJ</span>
+                    <h2 class="volunteer-name">Voluntario 1</h2>
+                </div>
+
+                <p class="volunteer-description">Descripción</p>
+
+                <div class="volunteer-details">
+                    <div class="detail-item">
+                        <div class="detail-icon-bg">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <line x1="12" y1="6" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="12" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="detail-text">Ultima actualización: 20s</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon-bg">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="8" width="12" height="13" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="8" y="4" width="8" height="3" rx="0.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="7" y="10" width="10" height="8" fill="currentColor" opacity="0.8"/>
+                            </svg>
+                        </div>
+                        <span class="detail-text">Batería: 92%</span>
+                    </div>
+                </div>
+
+                <a href="../../supervisor/lista-voluntarios/index.html" class="btn-modal">
+                    Ver Voluntarios Activos
+                </a>
+            </div>
+        </div>
+
+        <!-- Voluntario 2 (SK - Indigo) -->
+        <div class="modal-overlay" id="volunteerModal2" onclick="closeVolunteerInfo(2, event)">
+            <div class="modal-card" onclick="event.stopPropagation()">
+                <div class="volunteer-header">
+                    <span class="marker-avatar marker-indigo">SK</span>
+                    <h2 class="volunteer-name">Voluntario 2</h2>
+                </div>
+
+                <p class="volunteer-description">Descripción</p>
+
+                <div class="volunteer-details">
+                    <div class="detail-item">
+                        <div class="detail-icon-bg">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <line x1="12" y1="6" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="12" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="detail-text">Ultima actualización: 35s</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon-bg">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="8" width="12" height="13" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="8" y="4" width="8" height="3" rx="0.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="7" y="10" width="6" height="8" fill="currentColor" opacity="0.8"/>
+                            </svg>
+                        </div>
+                        <span class="detail-text">Batería: 65%</span>
+                    </div>
+                </div>
+
+                <a href="../../supervisor/lista-voluntarios/index.html" class="btn-modal">
+                    Ver Voluntarios Activos
+                </a>
+            </div>
+        </div>
+
+        <!-- Voluntario 3 (RL - Green) -->
+        <div class="modal-overlay" id="volunteerModal3" onclick="closeVolunteerInfo(3, event)">
+            <div class="modal-card" onclick="event.stopPropagation()">
+                <div class="volunteer-header">
+                    <span class="marker-avatar marker-green">RL</span>
+                    <h2 class="volunteer-name">Voluntario 3</h2>
+                </div>
+
+                <p class="volunteer-description">Descripción</p>
+
+                <div class="volunteer-details">
+                    <div class="detail-item">
+                        <div class="detail-icon-bg">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <line x1="12" y1="6" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="12" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="detail-text">Ultima actualización: 15s</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-icon-bg">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="8" width="12" height="13" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="8" y="4" width="8" height="3" rx="0.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="7" y="13" width="3" height="5" fill="currentColor" opacity="0.8"/>
+                            </svg>
+                        </div>
+                        <span class="detail-text">Batería: 26%</span>
+                    </div>
+                </div>
+
+                <a href="../../supervisor/lista-voluntarios/index.html" class="btn-modal">
+                    Ver Voluntarios Activos
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="../listar-rutas/index.html" class="nav-item">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L15.09 10.26H24L17.55 15.82L20.64 24L12 18.44L3.36 24L6.45 15.82L0 10.26H8.91L12 2Z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">RUTAS</span>
+            </a>
+            <a href="../mapa-ruta/index.html" class="nav-item">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">MAPA</span>
+            </a>
+            <a href="../perfil/index.html" class="nav-item active">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="4" fill="currentColor"/>
+                    <path d="M12 14c-6 0-8 3-8 3v7h16v-7s-2-3-8-3z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">PERFIL</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        /**
+         * Show volunteer information modal
+         * @param {number} volunteerId - ID of the volunteer (1-3)
+         */
+        function showVolunteerInfo(volunteerId) {
+            const modal = document.getElementById(`volunteerModal${volunteerId}`);
+            if (modal) {
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        /**
+         * Close volunteer information modal
+         * @param {number} volunteerId - ID of the volunteer (1-3)
+         * @param {Event} event - Click event
+         */
+        function closeVolunteerInfo(volunteerId, event) {
+            // Only close if clicking the overlay itself
+            if (event && event.target.id !== `volunteerModal${volunteerId}`) {
+                return;
+            }
+            const modal = document.getElementById(`volunteerModal${volunteerId}`);
+            if (modal) {
+                modal.classList.remove('open');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        /**
+         * Navigate to different sections
+         * @param {string} section - Section name (rutas, mapa, perfil)
+         */
+        function navigateTo(section) {
+            switch(section) {
+                case 'rutas':
+                    window.location.href = '../detalles-ruta/index.html';
+                    break;
+                case 'mapa':
+                    // Already on mapa page
+                    break;
+                case 'perfil':
+                    console.log('Navigate to PERFIL');
+                    break;
+                default:
+                    console.log('Navigate to:', section);
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.open').forEach(modal => {
+                    const volunteerId = modal.id.replace('volunteerModal', '');
+                    closeVolunteerInfo(volunteerId);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

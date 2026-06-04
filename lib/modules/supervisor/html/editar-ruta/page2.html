@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Ruta Social - Paso 2</title>
+    <link rel="stylesheet" href="../../global.css">
+    <link rel="stylesheet" href="../../supervisor/crear-ruta/global-crear-ruta.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-container">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="topbar-content">
+                <div class="logo-container">
+                    <svg class="logo" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="14" cy="13" r="12" stroke="#1e3a8a" stroke-width="2" fill="none"/>
+                        <path d="M10 13L12 15L18 9" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                    <h2 class="brand-name">RUTA SEGURA</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>Editar Ruta Social</h1>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">Paso 2 de 3</div>
+
+        <!-- Main Card Section with Map -->
+        <div class="card-section">
+            <h3 class="section-title">Ingresa Recorrido</h3>
+
+            <div class="map-container">
+                <!-- Placeholder map image - replace with actual map integration -->
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #E7ECFB 0%, #DBEAFE 100%); border-radius: 12px;">
+                    <div style="text-align: center; color: #666;">
+                        <p style="font-size: 14px; margin-bottom: 10px;">Mapa interactivo</p>
+                        <p style="font-size: 12px; color: #999;">Se integrará con tu proveedor de mapas</p>
+                    </div>
+                </div>
+                
+                <!-- Map Controls -->
+                <div class="map-controls">
+                    <button class="map-btn" title="Zoom In">
+                        <span style="font-size: 20px; font-weight: bold; color: #333;">+</span>
+                    </button>
+                    <button class="map-btn" title="Zoom Out">
+                        <span style="font-size: 24px; font-weight: bold; color: #333;">−</span>
+                    </button>
+                    <button class="map-btn center" title="Center Location">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m4.24-4.24l4.24-4.24"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Address Fields -->
+            <div class="map-address-section">
+                <div class="address-group">
+                    <label class="form-label">Inicio</label>
+                    <input type="text" class="form-input" placeholder="Dirección" id="direccionInicio">
+                </div>
+                <div class="address-group">
+                    <label class="form-label">Final</label>
+                    <input type="text" class="form-input" placeholder="Dirección" id="direccionFinal">
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons-container">
+            <button class="btn btn-primary" onclick="goToPage(3)">
+                <span>Siguiente</span>
+                <span class="btn-icon">→</span>
+            </button>
+            <button class="btn btn-secondary" onclick="goToPage(1)">
+                <span class="btn-icon">←</span>
+                <span>Volver</span>
+            </button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="../listar-rutas/index.html" class="nav-item">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L15.09 10.26H24L17.55 15.82L20.64 24L12 18.44L3.36 24L6.45 15.82L0 10.26H8.91L12 2Z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">RUTAS</span>
+            </a>
+            <a href="../mapa-ruta/index.html" class="nav-item">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">MAPA</span>
+            </a>
+            <a href="../perfil/index.html" class="nav-item active">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="4" fill="currentColor"/>
+                    <path d="M12 14c-6 0-8 3-8 3v7h16v-7s-2-3-8-3z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">PERFIL</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // Store form data in sessionStorage
+        function saveFormData() {
+            const data = JSON.parse(sessionStorage.getItem('rutaEditData') || '{}');
+            data.direccionInicio = document.getElementById('direccionInicio').value;
+            data.direccionFinal = document.getElementById('direccionFinal').value;
+            sessionStorage.setItem('rutaEditData', JSON.stringify(data));
+        }
+
+        function goToPage(pageNum) {
+            saveFormData();
+            window.location.href = `page${pageNum}.html`;
+        }
+
+        function navigateTo(section) {
+            // Placeholder for navigation
+            console.log('Navigate to:', section);
+        }
+
+        // Load saved data if returning to this page
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedData = sessionStorage.getItem('rutaEditData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                if (data.direccionInicio) document.getElementById('direccionInicio').value = data.direccionInicio;
+                if (data.direccionFinal) document.getElementById('direccionFinal').value = data.direccionFinal;
+            }
+        });
+    </script>
+</body>
+</html>
+    
+</body>
+</html>
