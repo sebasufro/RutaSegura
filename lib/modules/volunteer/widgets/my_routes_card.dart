@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../vol_screens/vol_route_details_screen.dart';
+import '../screens/vol_route_details_screen.dart';
 
 // Componente visual que representa una ruta a la que el usuario está inscrito.
 // Incluye información general, un menú de opciones para desinscribirse

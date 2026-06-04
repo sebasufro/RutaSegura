@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../vol_screens/vol_search_routes_screen.dart';
-import '../vol_screens/vol_my_routes_screen.dart';
-import '../vol_screens/vol_profile_screen.dart';
+import '../screens/vol_search_routes_screen.dart';
+import '../screens/vol_my_routes_screen.dart';
+import '../screens/vol_profile_screen.dart';
 
 // Contenedor principal de la interfaz del voluntario.
 // Implementa una barra de navegación inferior (BottomNavigationBar)

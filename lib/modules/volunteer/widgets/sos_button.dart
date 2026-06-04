@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../vol_screens/protocolo_sos_screen.dart';
+import '../screens/protocolo_sos_screen.dart';
 
 // Botón flotante dedicado a activar el protocolo de emergencia (SOS).
 class SosButton extends StatelessWidget {

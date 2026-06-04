@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import '../vol_widgets/route_details_map.dart';
-import '../vol_widgets/route_details_label.dart';
-import '../vol_widgets/vol_topbar.dart';
+import '../widgets/route_details_map.dart';
+import '../widgets/route_details_label.dart';
+import '../widgets/vol_topbar.dart';
 
 // Pantalla que muestra los detalles completos de una ruta.
 // Incluye información sobre el supervisor, horario, mapa del trazado

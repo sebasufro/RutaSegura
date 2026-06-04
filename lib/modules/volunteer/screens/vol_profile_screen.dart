@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../vol_widgets/vol_topbar.dart';
-import '../vol_widgets/profile_info_card.dart';
-import '../vol_widgets/profile_main_info.dart';
+import '../widgets/vol_topbar.dart';
+import '../widgets/profile_info_card.dart';
+import '../widgets/profile_main_info.dart';
 
 class VolProfileScreen extends StatelessWidget {
   const VolProfileScreen({super.key});

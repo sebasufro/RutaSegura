@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../vol_widgets/sos_temporizador.dart';
-import '../vol_widgets/sos_tarjeta.dart';
+import '../widgets/sos_temporizador.dart';
+import '../widgets/sos_tarjeta.dart';
 
 // Pantalla encargada de gestionar el protocolo de emergencia (SOS).
 // Muestra un temporizador regresivo que, al finalizar, simula una llamada

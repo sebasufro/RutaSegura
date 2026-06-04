@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../vol_screens/vol_map_screen.dart';
+import '../screens/vol_map_screen.dart';
 
 /// Botón flotante animado que indica que hay una ruta actualmente activa.
 /// Al pulsarlo, redirige al usuario al mapa en tiempo real de la ruta.

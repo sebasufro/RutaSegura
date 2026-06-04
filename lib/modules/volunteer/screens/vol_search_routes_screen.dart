@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../vol_screens/test_routes.dart';
-import '../vol_widgets/route_card.dart';
-import '../vol_widgets/button_active_route.dart';
+import 'test_routes.dart';
+import '../widgets/route_card.dart';
+import '../widgets/button_active_route.dart';
 
 // Pantalla principal de exploración de rutas.
 // Permite al voluntario visualizar las rutas disponibles, realizar búsquedas,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../vol_screens/vol_route_details_screen.dart';
+import '../screens/vol_route_details_screen.dart';
 
 // Componente visual que representa una ruta disponible en la plataforma.
 // Muestra información clave como el nombre, descripción, capacidad,

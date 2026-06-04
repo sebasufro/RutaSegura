@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'vol_widgets/vol_navbar.dart';
+import 'modules/volunteer/widgets/vol_navbar.dart';
 
 void main() => runApp(const RutaSeguraApp());
 

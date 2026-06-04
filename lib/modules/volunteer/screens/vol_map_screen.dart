@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import '../vol_widgets/map_bottom_panel.dart';
-import '../vol_widgets/sos_button.dart';
-import '../vol_widgets/vol_topbar.dart';
+import '../widgets/map_bottom_panel.dart';
+import '../widgets/sos_button.dart';
+import '../widgets/vol_topbar.dart';
 
 // Pantalla principal del voluntario durante una ruta activa.
 // Muestra un mapa con la ubicación en tiempo real del usuario
