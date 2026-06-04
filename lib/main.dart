@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'modules/volunteer/widgets/vol_navbar.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/welcome_page.dart';
 
 void main() => runApp(const RutaSeguraApp());
 
@@ -15,7 +15,7 @@ class RutaSeguraApp extends StatelessWidget {
         primaryColor: const Color(0xFF1E3A8A),
         scaffoldBackgroundColor: Colors.grey[50],
       ),
-      home: const VolNavbar(),
+      home: const WelcomePage(),
     );
   }
 }
