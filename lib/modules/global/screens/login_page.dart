@@ -4,8 +4,8 @@ import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
 import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
 import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
 import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
-import 'package:ruta_segura/features/auth/presentation/pages/register_account_page.dart';
-import 'package:ruta_segura/features/auth/presentation/pages/under_construction_page.dart';
+import 'package:ruta_segura/modules/global/screens/register_account_page.dart';
+import 'package:ruta_segura/modules/global/screens/under_construction_page.dart';
 
 /// Página de Iniciar Sesión.
 /// Permite a los usuarios registrados acceder a su cuenta mediante correo y contraseña.

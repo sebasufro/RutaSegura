@@ -5,7 +5,7 @@ import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
 import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
 import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
 import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
-import 'package:ruta_segura/features/auth/presentation/pages/register_person_page.dart';
+import 'package:ruta_segura/modules/global/screens/register_person_page.dart';
 
 /// Página para capturar los datos legales de la organización.
 /// Solo se muestra en el flujo de registro de 'Supervisor'.
