@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import '/modules/supervisor/screens/list_volunteers_screen.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
 import '/modules/supervisor/widgets/volunteer_marker_widget.dart';
 import '/modules/supervisor/widgets/map_info_card.dart';
@@ -18,7 +19,6 @@ class _MapViewScreenState extends State<MapViewScreen> {
   LatLng? _userLocation;
   bool _loading = true;
 
-  // Fake volunteer locations (hardcoded around Valdivia, Chile)
   static const List<Map<String, dynamic>> _volunteers = [
     {
       'id': '1',
@@ -419,7 +419,7 @@ class VolunteerInfoDialog extends StatelessWidget {
 
             // Action Button
             GestureDetector(
-              onTap: () => Navigator.pop(context),
+              onTap: () => const ListVolunteersScreen(),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 10),

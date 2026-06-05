@@ -1,0 +1,242 @@
+/* Editar Perfil - Configuración Supervisor Styles */
+
+.mobile-container {
+    width: 412px;
+    height: 917px;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 0 auto;
+}
+
+/* Header */
+.header {
+    height: 60px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E8EAED;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    gap: 16px;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1A1A1A;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.back-btn:active {
+    background-color: #F5F7FA;
+    border-radius: 8px;
+}
+
+.back-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin: 0;
+    flex: 1;
+}
+
+.header-spacer {
+    width: 40px;
+    flex-shrink: 0;
+}
+
+/* Main Content */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 80px;
+    background-color: #F5F7FA;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Configuration Menu */
+.config-menu {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.config-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #E8EAED;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.config-item:active {
+    background-color: #F5F7FA;
+    transform: translateY(2px);
+}
+
+.config-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.config-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.config-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.config-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin: 0;
+}
+
+.config-desc {
+    font-size: 13px;
+    color: #7A869C;
+    margin: 0;
+}
+
+.config-arrow {
+    color: #7A869C;
+    flex-shrink: 0;
+}
+
+/* Logout Section */
+.logout-section {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.logout-btn {
+    width: 100%;
+    max-width: 340px;
+    height: 52px;
+    background-color: #FFFFFF;
+    border: 2px solid #BA1A1A;
+    border-radius: 20px;
+    color: #BA1A1A;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    font-family: var(--font-main);
+}
+
+.logout-btn:active {
+    background-color: #FFEBEE;
+    transform: scale(0.98);
+}
+
+.logout-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 412px;
+    height: 80px;
+    background-color: #FFFFFF;
+    border-top: 1px solid #E8EAED;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #7A869C;
+    transition: all 0.2s ease;
+    flex: 1;
+}
+
+.nav-item:active {
+    background-color: #F5F7FA;
+}
+
+.nav-item.active {
+    color: #1E40AF;
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Scrollbar styling */
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: #D0D5DD;
+    border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: #A0A7B0;
+}

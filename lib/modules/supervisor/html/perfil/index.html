@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Ruta Segura</title>
+    <link rel="stylesheet" href="../../global.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <svg class="logo" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="15" stroke="#1E3A8A" stroke-width="2"/>
+                    <path d="M16 8C14.9 8 14 8.9 14 10C14 11.1 14.9 12 16 12C17.1 12 18 11.1 18 10C18 8.9 17.1 8 16 8Z" fill="#1E3A8A"/>
+                    <path d="M16 13C13.5 13 11 14.5 11 17C11 20 16 24 16 24C16 24 21 20 21 17C21 14.5 18.5 13 16 13Z" fill="#1E3A8A"/>
+                </svg>
+                <span class="logo-text">RUTA SEGURA</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Profile Section -->
+            <section class="profile-section">
+                <div class="profile-avatar">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="40" r="40" fill="#E7ECFB"/>
+                        <circle cx="40" cy="28" r="12" fill="#1E3A8A"/>
+                        <path d="M52 52C52 48.13 46.63 45 40 45C33.37 45 28 48.13 28 52V56H52V52Z" fill="#1E3A8A"/>
+                    </svg>
+                </div>
+                <h1 class="profile-name">Juan Perez</h1>
+                <p class="profile-email">juanperez@ejemplo.com</p>
+            </section>
+
+            <!-- Information Fields -->
+            <section class="info-section">
+                <!-- Full Name -->
+                <div class="info-field">
+                    <label class="info-label">NOMBRE COMPLETO</label>
+                    <div class="info-input-wrapper">
+                        <input type="text" class="info-input" value="Juan Ignacio Perez Olivares" readonly>
+                    </div>
+                </div>
+
+                <!-- RUT -->
+                <div class="info-field">
+                    <label class="info-label">RUT</label>
+                    <div class="info-input-wrapper">
+                        <input type="text" class="info-input" value="19.640.973-4" readonly>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="info-field">
+                    <label class="info-label">TELÉFONO</label>
+                    <div class="info-input-wrapper">
+                        <input type="tel" class="info-input" value="+56 9 3310 9203" readonly>
+                        <button class="edit-btn" onclick="editField('phone')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L21 3z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="info-field">
+                    <label class="info-label">CORREO ELECTRÓNICO</label>
+                    <div class="info-input-wrapper">
+                        <input type="email" class="info-input" value="juanperez@ejemplo.com" readonly>
+                        <button class="edit-btn" onclick="editField('email')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L21 3z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Configuration Button -->
+            <div class="button-container">
+                <a href="../editar-perfil/index.html" class="config-button">Configuración</a>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="../listar-rutas/index.html" class="nav-item">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L15.09 10.26H24L17.55 15.82L20.64 24L12 18.44L3.36 24L6.45 15.82L0 10.26H8.91L12 2Z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">RUTAS</span>
+            </a>
+            <a href="../mapa-ruta/index.html" class="nav-item">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">MAPA</span>
+            </a>
+            <a href="../perfil/index.html" class="nav-item active">
+                <svg class="nav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="4" fill="currentColor"/>
+                    <path d="M12 14c-6 0-8 3-8 3v7h16v-7s-2-3-8-3z" fill="currentColor"/>
+                </svg>
+                <span class="nav-label">PERFIL</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        function editField(fieldName) {
+            alert('Editar campo: ' + fieldName);
+        }
+    </script>
+</body>
+</html>

@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import '../screens/list_routes_screen.dart';
-import '../screens/create_route_screen.dart';
-import '../screens/profile_supervisor_screen.dart';
-
-// Contenedor principal de la interfaz del voluntario.
-// Implementa una barra de navegación inferior (BottomNavigationBar)
-// que permite alternar entre las vistas de Explorar, Mis Rutas y Perfil
-// manteniendo el estado de cada una mediante un IndexedStack.
+import '/modules/supervisor/screens/list_routes_screen.dart';
+import '/modules/supervisor/screens/create_route_screen.dart';
+import '/modules/supervisor/screens/profile_supervisor_screen.dart';
 
 class SupNavbar extends StatefulWidget {
   const SupNavbar({super.key});
@@ -24,6 +19,7 @@ class _NavbarContainerState extends State<SupNavbar> {
   final List<Widget> _pantallas = [
     const ListRoutesScreen(),
     const CreateRouteScreen(),
+    const ProfileSupervisorScreen(),
   ];
 
   @override

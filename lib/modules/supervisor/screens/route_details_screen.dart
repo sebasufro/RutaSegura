@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/modules/supervisor/screens/edit_routes_screen.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
 import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/supervisor/widgets/route_header_card.dart';
@@ -92,8 +93,9 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                               RouteActionButtons(
                                 onEndRoute: _showEndRouteModal,
                                 onEditRoute: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Ir a Editar Ruta')),
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const EditRouteScreen()),
                                   );
                                 },
                               ),
