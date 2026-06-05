@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
 import '/modules/supervisor/widgets/supervisor_config_card.dart';
 import '/modules/supervisor/screens/supervisor_my_directions_screen.dart';
+import '/modules/global/screens/login_page.dart';
+import '/modules/global/screens/global_settings_page.dart';
 
 class SupervisorConfigScreen extends StatelessWidget {
   const SupervisorConfigScreen({super.key});
@@ -57,7 +59,10 @@ class SupervisorConfigScreen extends StatelessWidget {
                     colorFondoIcono: const Color(0xFFE0E7FF), 
                     colorIcono: const Color(0xFF4F46E5),
                     onTap: () {
-                      // Navegar a direcciones
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const GlobalSettingsPage()),
+                      );
                     },
                   ),
                   
@@ -68,7 +73,10 @@ class SupervisorConfigScreen extends StatelessWidget {
                     height: 55,
                     child: OutlinedButton.icon(
                       onPressed: () {
-                        // Lógica para cerrar sesión futura
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                        );
                       },
                       icon: const Icon(Icons.logout, color: Color(0xFFB91C1C)),
                       label: const Text(
