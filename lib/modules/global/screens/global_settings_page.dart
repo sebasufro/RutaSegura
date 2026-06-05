@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../volunteer/widgets/vol_topbar.dart';
 
 /// Página de Preferencias Globales (Accesibilidad, Notificaciones, Privacidad).
 class GlobalSettingsPage extends StatefulWidget {
@@ -19,59 +20,18 @@ class _GlobalSettingsPageState extends State<GlobalSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FB),
+      appBar: const VolTopbar(),
       body: SafeArea(
-        child: Column(
-          children: [
-            // AppBar Personalizado
-            Container(
-              width: double.infinity,
-              height: 64,
-              decoration: BoxDecoration(
-                color: Colors.white.withAlpha(235), // 92% approx
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x0C000000),
-                    blurRadius: 2,
-                    offset: Offset(0, 1),
-                  )
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  children: [
-                    Image.network("https://placehold.co/28x26", width: 28, height: 26),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'RUTA SEGURA',
-                      style: TextStyle(
-                        color: Color(0xFF1E3A8A),
-                        fontSize: 20,
-                        fontFamily: 'Manrope',
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 100),
-                  child: Column(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 100),
+            child: Column(
                     children: [
                       // Título con botón de retroceso
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Row(
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF002045), size: 24),
-                              onPressed: () => Navigator.pop(context),
-                            ),
                             const Expanded(
                               child: Text(
                                 'Preferencias',
@@ -200,12 +160,8 @@ class _GlobalSettingsPageState extends State<GlobalSettingsPage> {
                     ],
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+    )
     );
   }
 
@@ -397,302 +353,4 @@ class _GlobalSettingsPageState extends State<GlobalSettingsPage> {
       ),
     );
   }
-
-  Widget _buildBottomNav() {
-    return Container(
-      height: 83,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white.withAlpha(235),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(22),
-          topRight: Radius.circular(22),
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1416244C),
-            blurRadius: 18,
-            offset: Offset(0, -4),
-          )
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _buildNavItem(Icons.directions_run, 'RUTAS', false),
-          const SizedBox(width: 36),
-          _buildNavItem(Icons.map_outlined, 'MAPA', false),
-          const SizedBox(width: 36),
-          _buildNavItem(Icons.person, 'PERFIL', true),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFFE7ECFB) : Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF7A869C)),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF7A869C),
-              fontSize: 12,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.24,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
-
-
-  Widget _buildSectionCard({
-    required IconData icon, 
-    required Color iconColor,
-    required Color iconBgColor,
-    required String title, 
-    required List<Widget> children,
-  }) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 14),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A191C1D),
-            blurRadius: 32,
-            offset: Offset(0, 8),
-          )
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: iconBgColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, color: iconColor, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Color(0xFF191C1D),
-                  fontSize: 18,
-                  fontFamily: 'Manrope',
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          ...children,
-        ],
-      ),
-    );
-  }
-
-  Widget _buildToggleTile({required String title, required String subtitle, required bool value}) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFB),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Color(0xFF191C1D),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: const TextStyle(
-                  color: Color(0xFF444652),
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-          Container(
-            width: 48,
-            height: 24,
-            decoration: BoxDecoration(
-              color: value ? const Color(0xFF1B3A92) : const Color(0xFFE1E3E4),
-              borderRadius: BorderRadius.circular(9999),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: value ? 24 : 0,
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFFECEEEF), width: 4),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFontSizeSelector() {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: const Color(0xFFE1E3E4),
-        borderRadius: BorderRadius.circular(9999),
-      ),
-      child: Row(
-        children: [
-          _buildFontSizeOption('A-', false),
-          _buildFontSizeOption('A', true),
-          _buildFontSizeOption('A+', false),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFontSizeOption(String label, bool isSelected) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(9999),
-          boxShadow: isSelected ? [
-            const BoxShadow(
-              color: Color(0x0C000000),
-              blurRadius: 2,
-              offset: Offset(0, 1),
-            )
-          ] : null,
-        ),
-        child: Text(
-          label,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: isSelected ? const Color(0xFF002373) : const Color(0xFF444652),
-            fontSize: 14,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionTile({required String title, Color? titleColor, required Widget trailing}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: titleColor ?? const Color(0xFF191C1D),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        trailing,
-      ],
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      height: 83,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white.withAlpha(235),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(22),
-          topRight: Radius.circular(22),
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1416244C),
-            blurRadius: 18,
-            offset: Offset(0, -4),
-          )
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _buildNavItem(Icons.directions_run, 'RUTAS', false),
-          const SizedBox(width: 36),
-          _buildNavItem(Icons.map_outlined, 'MAPA', false),
-          const SizedBox(width: 36),
-          _buildNavItem(Icons.person, 'PERFIL', true),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFFE7ECFB) : Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF7A869C)),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF7A869C),
-              fontSize: 12,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.24,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
