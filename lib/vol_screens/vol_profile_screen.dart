@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../vol_widgets/vol_topbar.dart';
 import '../vol_widgets/profile_info_card.dart';
 import '../vol_widgets/profile_main_info.dart';
+import '../vol_screens/vol_config_screen.dart'; 
 
 class VolProfileScreen extends StatelessWidget {
   const VolProfileScreen({super.key});
@@ -62,8 +63,11 @@ class VolProfileScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Vista de configuración en desarrollo...')),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const VolConfigScreen(),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
