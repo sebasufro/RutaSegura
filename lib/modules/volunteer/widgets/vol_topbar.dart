@@ -13,7 +13,10 @@ class VolTopbar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
-          Icon(Icons.hub_outlined, color: colorPrincipal),
+          Image.asset(
+            "assets/images/logo_minimalista.png",
+            height: 28,
+          ),
           const SizedBox(width: 8),
           Text(
             'RUTA SEGURA',

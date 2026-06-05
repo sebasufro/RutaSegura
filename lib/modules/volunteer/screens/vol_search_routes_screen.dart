@@ -32,7 +32,10 @@ class _VolSearchRoutesScreenState extends State<VolSearchRoutesScreen> {
          elevation: 0,
          title: Row(
           children: [
-            Icon(Icons.hub_outlined, color: Theme.of(context).primaryColor),
+            Image.asset(
+            "assets/images/logo_minimalista.png",
+            height: 28,
+          ),
             const SizedBox(width: 8),
             Text('RUTA SEGURA', style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold, letterSpacing: 1.2)),
           ],
