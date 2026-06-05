@@ -4,6 +4,7 @@ import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
 import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
 import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
 import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/verify_code_page.dart';
 
 /// Página para que el usuario solicite la recuperación de su contraseña.
 class ForgotPasswordPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  final _emailController = TextEditingController();
+  final _emailController = TextEditingController(text: 'jhon.doe@example.com');
 
   @override
   void dispose() {
@@ -104,12 +105,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 );
                                 return;
                               }
-                              // Aquí iría la lógica para enviar el código
+                              // Simulación de envío de código y navegación
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Código enviado satisfactoriamente'),
                                   backgroundColor: Colors.green,
                                 ),
+                              );
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const VerifyCodePage()),
                               );
                             },
                           ),
