@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/models/route_model.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
-import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/supervisor/widgets/routes_control_panel.dart';
 import '/modules/supervisor/widgets/route_card.dart';
 
@@ -112,14 +111,6 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
                       ],
                     ),
                   ),
-                ),
-
-                // Bottom Navigation
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: SupNavbar(),
                 ),
               ],
             ),

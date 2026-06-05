@@ -17,7 +17,7 @@ class SupNavbar extends StatefulWidget {
 
 class _NavbarContainerState extends State<SupNavbar> {
   // Índice de la pestañas.
-  // (0 = EXPLORAR, 1 = MIS RUTAS, 2 = PERFIL)
+  // (0 = MIS RUTAS, 1 = NUEVA RUTA, 2 = PERFIL)
   int _indiceActivo = 0;
 
   // Lista de pantallas.
@@ -60,12 +60,12 @@ class _NavbarContainerState extends State<SupNavbar> {
           type: BottomNavigationBarType.fixed, 
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'EXPLORAR',
+              icon: Icon(Icons.route),
+              label: 'MIS RUTAS',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.route), 
-              label: 'MIS RUTAS',
+              icon: Icon(Icons.add), 
+              label: 'CREAR RUTA',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),

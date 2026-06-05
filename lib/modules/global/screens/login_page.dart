@@ -5,9 +5,8 @@ import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
 import '/modules/global/screens/register_account_page.dart';
-import '/modules/global/screens/under_construction_page.dart';
-import '/modules/volunteer/screens/vol_my_routes_screen.dart';
-import '/modules/supervisor/screens/list_routes_screen.dart';
+import '/modules/volunteer/widgets/vol_navbar.dart';
+import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 
 /// Página de Iniciar Sesión.
 /// Permite a los usuarios registrados acceder a su cuenta mediante correo y contraseña.
@@ -156,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                             if (email == volunteerEmail && password == volunteerPassword) {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const VolMyRoutesScreen()),
+                                MaterialPageRoute(builder: (context) => const VolNavbar()),
                               );
                               return;
                             }
@@ -165,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                             if (email == supervisorEmail && password == supervisorPassword) {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const ListRoutesScreen()),
+                                MaterialPageRoute(builder: (context) => const SupNavbar()),
                               );
                               return;
                             }

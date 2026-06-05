@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'modules/global/screens/welcome_page.dart';
-import 'modules/supervisor/screens/list_routes_screen.dart';
 
 void main() => runApp(const RutaSeguraApp());
 
@@ -16,7 +15,7 @@ class RutaSeguraApp extends StatelessWidget {
         primaryColor: const Color(0xFF1E3A8A),
         scaffoldBackgroundColor: Colors.grey[50],
       ),
-      home: const ListRoutesScreen(),
+      home: const WelcomePage(),
     );
   }
 }
