@@ -4,6 +4,7 @@ import '../widgets/vol_config_card.dart';
 import '../screens/vol_my_contacts_screen.dart';
 import '../screens/vol_my_directions_screen.dart';
 import '/modules/global/screens/global_settings_page.dart';
+import '/modules/global/screens/login_page.dart';
 
 class VolConfigScreen extends StatelessWidget {
   const VolConfigScreen({super.key});
@@ -88,7 +89,10 @@ class VolConfigScreen extends StatelessWidget {
                     height: 55,
                     child: OutlinedButton.icon(
                       onPressed: () {
-                        // Lógica para cerrar sesión futura
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                      );
                       },
                       icon: const Icon(Icons.logout, color: Color(0xFFB91C1C)),
                       label: const Text(
