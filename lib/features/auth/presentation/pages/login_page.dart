@@ -4,6 +4,7 @@ import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
 import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
 import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
 import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
+import 'package:ruta_segura/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/register_account_page.dart';
 import 'package:ruta_segura/features/auth/presentation/pages/under_construction_page.dart';
 
@@ -92,7 +93,12 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             const InputLabel(text: 'Contraseña'),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                                );
+                              },
                               child: const Text(
                                 '¿Olvidaste tu contraseña?',
                                 style: TextStyle(
