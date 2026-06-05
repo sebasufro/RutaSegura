@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/modules/supervisor/screens/map_view_screen.dart';
 import '/modules/supervisor/screens/edit_routes_screen.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
 import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
@@ -24,8 +25,9 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       builder: (context) => EndRouteModal(
         onConfirm: () {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Ruta finalizada')),
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const SupNavbar()),
           );
         },
         onCancel: () {
@@ -74,18 +76,13 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                               // Map Section
                               RouteMapSection(
                                 onTrackingMapPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Ir a Mapa de Seguimiento'),
-                                    ),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const MapViewScreen()),
                                   );
                                 },
                                 onControlPointPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Plaza Mayor - 400m'),
-                                    ),
-                                  );
+                                  //nada
                                 },
                               ),
 

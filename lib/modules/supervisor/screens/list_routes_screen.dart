@@ -67,7 +67,7 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
                                     return RouteCard(
                                       route: route,
                                       onViewPressed: () {
-                                        Navigator.pushReplacement(
+                                        Navigator.push(
                                           context,
                                           MaterialPageRoute(builder: (context) => const RouteDetailsScreen()),
                                         );
