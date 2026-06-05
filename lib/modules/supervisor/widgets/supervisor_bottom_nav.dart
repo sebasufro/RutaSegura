@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/screens/list_routes_screen.dart';
 import '/modules/supervisor/screens/create_route_screen.dart';
-import '/modules/supervisor/screens/profile_supervisor_screen.dart';
+import '/modules/supervisor/screens/supervisor_profile_screen.dart';
 
 class SupNavbar extends StatefulWidget {
   const SupNavbar({super.key});
@@ -19,7 +19,7 @@ class _NavbarContainerState extends State<SupNavbar> {
   final List<Widget> _pantallas = [
     const ListRoutesScreen(),
     const CreateRouteScreen(),
-    const ProfileSupervisorScreen(),
+    const SupervisorProfileScreen(),
   ];
 
   @override
