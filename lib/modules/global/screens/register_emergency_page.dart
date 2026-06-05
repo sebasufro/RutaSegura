@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
+import '/modules/volunteer/widgets/vol_navbar.dart';
 import '/modules/global/widgets/auth_header.dart';
 import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
-import '/modules/volunteer/screens/vol_my_routes_screen.dart';
-import '/modules/supervisor/screens/list_routes_screen.dart';
 
 /// Página final del registro para contacto de emergencia.
 class RegisterEmergencyPage extends StatefulWidget {
@@ -32,9 +32,9 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
   void _navigateToLandingPage() {
     Widget landingPage;
     if (widget.role == 'supervisor') {
-      landingPage = const ListRoutesScreen();
+      landingPage = const SupNavbar();
     } else {
-      landingPage = const VolMyRoutesScreen();
+      landingPage = const VolNavbar();
     }
     Navigator.push(
       context,
