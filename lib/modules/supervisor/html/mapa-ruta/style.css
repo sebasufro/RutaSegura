@@ -1,0 +1,610 @@
+/* Map Page Styles */
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+    background-color: var(--bg-color);
+    position: relative;
+}
+
+/* Topbar */
+.topbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.8));
+    backdrop-filter: blur(12px);
+    padding: 12px 24px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+    height: 64px;
+    flex-shrink: 0;
+    z-index: 50;
+}
+
+.topbar-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 1280px;
+    width: 100%;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 28px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e3a8a;
+    letter-spacing: -1px;
+    margin: 0;
+    line-height: 28px;
+}
+
+/* Map Wrapper */
+.map-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: #546e7a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Map Background SVG */
+.map-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 10;
+}
+
+/* Volunteer Markers */
+.volunteer-marker {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+    z-index: 30;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.volunteer-marker:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.volunteer-marker:active {
+    transform: scale(0.95);
+}
+
+/* Individual marker positions */
+.volunteer-1 {
+    top: 35%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+}
+
+.volunteer-2 {
+    top: 55%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+}
+
+.volunteer-3 {
+    top: 70%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+}
+
+/* Marker Avatar */
+.marker-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid white;
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    position: relative;
+    box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.marker-orange {
+    background-color: #f59e0b;
+}
+
+.marker-indigo {
+    background-color: #6366f1;
+}
+
+.marker-green {
+    background-color: #10b981;
+}
+
+/* Info Card (bottom) */
+.info-card {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 24px;
+    padding: 24px;
+    width: calc(100% - 48px);
+    max-width: 360px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.info-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-card-title {
+    font-family: var(--font-main);
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.info-card-subtitle {
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 400;
+    color: #7a869c;
+    margin: 0;
+}
+
+.info-card-avatars {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.avatar-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-card {
+    background-color: #1a365d;
+    border-radius: 24px;
+    padding: 25px;
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 20px;
+    box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    animation: slideUpCard 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes slideUpCard {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Texture overlay effect */
+.modal-card::before {
+    content: '';
+    position: absolute;
+    top: -64px;
+    right: -64px;
+    width: 128px;
+    height: 128px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    filter: blur(32px);
+    pointer-events: none;
+}
+
+/* Volunteer Header */
+.volunteer-header {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.volunteer-header .marker-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.volunteer-name {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+    line-height: 48px;
+    letter-spacing: -2.4px;
+}
+
+/* Volunteer Description */
+.volunteer-description {
+    font-family: var(--font-main);
+    font-size: 16px;
+    font-weight: 500;
+    color: #adc7f7;
+    margin: 0;
+    line-height: 24px;
+}
+
+/* Volunteer Details */
+.volunteer-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detail-item {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.detail-icon-bg {
+    width: 40px;
+    height: 40px;
+    background-color: #334155;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.detail-icon {
+    width: 20px;
+    height: 20px;
+    color: white;
+}
+
+.detail-text {
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.35px;
+}
+
+/* Modal Button */
+.btn-modal {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 13px 16px;
+    border-radius: 12px;
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    letter-spacing: 0.35px;
+    line-height: 20px;
+}
+
+.btn-modal:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-modal:active {
+    transform: translateY(0);
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 88px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(7px);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    padding: 12px 14px;
+    box-shadow: 0px -4px 18px rgba(22, 36, 76, 0.08);
+    z-index: 100;
+}
+
+.nav-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6.5px 26.42px;
+    border-radius: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.nav-button.active {
+    background-color: #dbeafe;
+}
+
+.nav-icon {
+    width: 23.02px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: inherit;
+}
+
+.nav-icon svg {
+    width: 100%;
+    height: 100%;
+    transform: scaleY(-1);
+}
+
+.nav-label {
+    font-family: var(--font-main);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.24px;
+    text-align: center;
+    margin: 0;
+    line-height: 1;
+}
+
+.nav-button.active .nav-label {
+    color: #1e3a8a;
+}
+
+.nav-button:not(.active) .nav-label {
+    color: #7a869c;
+}
+
+/* Accessibility */
+.nav-button:focus,
+.volunteer-marker:focus,
+.btn-modal:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .topbar {
+        padding: 8px 16px;
+        height: 56px;
+    }
+
+    .brand-name {
+        font-size: 18px;
+    }
+
+    .info-card {
+        bottom: 110px;
+        width: calc(100% - 32px);
+        padding: 16px;
+    }
+
+    .volunteer-1 {
+        top: 30%;
+        left: 32%;
+    }
+
+    .volunteer-2 {
+        top: 50%;
+        left: 46%;
+    }
+
+    .volunteer-3 {
+        top: 68%;
+        left: 54%;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        padding: 8px 12px;
+        height: 48px;
+    }
+
+    .brand-name {
+        font-size: 16px;
+    }
+
+    .logo {
+        width: 24px;
+        height: 22px;
+    }
+
+    .info-card {
+        bottom: 100px;
+        width: calc(100% - 24px);
+        margin-left: 12px;
+        margin-right: 12px;
+        padding: 16px;
+        border-radius: 20px;
+    }
+
+    .info-card-title {
+        font-size: 14px;
+    }
+
+    .info-card-subtitle {
+        font-size: 12px;
+    }
+
+    .modal-card {
+        max-width: calc(100% - 24px);
+        padding: 20px;
+        margin-bottom: 16px;
+        border-radius: 20px;
+    }
+
+    .volunteer-name {
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    .volunteer-description {
+        font-size: 14px;
+    }
+
+    .volunteer-header .marker-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .detail-icon-bg {
+        width: 36px;
+        height: 36px;
+    }
+
+    .detail-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .detail-text {
+        font-size: 13px;
+    }
+
+    .btn-modal {
+        font-size: 13px;
+        padding: 10px 14px;
+        border-radius: 10px;
+    }
+
+    .bottom-nav {
+        height: 72px;
+        gap: 16px;
+        padding: 8px;
+    }
+
+    .nav-button {
+        padding: 4px 12px;
+    }
+
+    .nav-icon {
+        width: 20px;
+        height: 24px;
+    }
+
+    .nav-label {
+        font-size: 10px;
+    }
+
+    .volunteer-1 {
+        top: 28%;
+        left: 30%;
+    }
+
+    .volunteer-2 {
+        top: 48%;
+        left: 45%;
+    }
+
+    .volunteer-3 {
+        top: 65%;
+        left: 55%;
+    }
+
+    .marker-avatar {
+        font-size: 9px;
+    }
+
+    .avatar-small {
+        width: 36px;
+        height: 36px;
+        font-size: 9px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .topbar,
+    .bottom-nav,
+    .info-card,
+    .modal-overlay {
+        display: none;
+    }
+}
