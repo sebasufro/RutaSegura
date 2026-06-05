@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
+import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/supervisor/widgets/create_route_page1.dart';
 import '/modules/supervisor/widgets/create_route_page2.dart';
 import '/modules/supervisor/widgets/create_route_page3.dart';
@@ -79,8 +80,11 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const SupNavbar()),
+                (route) => false,
+              );
             },
             child: const Text('Sí, abandonar'),
           ),
@@ -101,6 +105,7 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           width: double.infinity,

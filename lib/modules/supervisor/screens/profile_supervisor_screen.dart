@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
-import '/modules/supervisor/widgets/profile_header.dart';
 import '/modules/supervisor/widgets/profile_avatar_section.dart';
 import '/modules/supervisor/widgets/info_field.dart';
 
@@ -25,16 +24,16 @@ class _ProfileSupervisorScreenState extends State<ProfileSupervisorScreen> {
       body: SafeArea(
         child: Center(
           child: Container(
-            width: 412,
-            height: 917,
+          width: double.infinity,
+          height: double.infinity,
             color: Colors.white,
             child: Stack(
               children: [
                 // Main Content
                 Column(
                   children: [
-                    // Header
-                    const ProfileHeader(),
+                    // Topbar
+                    const SupTopbar(),
 
                     // Scrollable Content
                     Expanded(
