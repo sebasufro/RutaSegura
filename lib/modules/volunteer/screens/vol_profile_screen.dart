@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 import '../widgets/vol_topbar.dart';
 import '../widgets/profile_info_card.dart';
 import '../widgets/profile_main_info.dart';
+import '../screens/vol_config_screen.dart'; 
+import '../widgets/profile_edit_dialog.dart';
 
-class VolProfileScreen extends StatelessWidget {
+class VolProfileScreen extends StatefulWidget {
   const VolProfileScreen({super.key});
+
+  @override
+  State<VolProfileScreen> createState() => _VolProfileScreenState();
+}
+
+class _VolProfileScreenState extends State<VolProfileScreen> {
+  String _telefono = '+56 9 3310 9203';
+  String _correo = 'juanperez@ejemplo.com';
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +29,7 @@ class VolProfileScreen extends StatelessWidget {
           children: [
             ProfileMainInfo(
               nombre: 'Juan Perez',
-              correo: 'juanperez@ejemplo.com',
+              correo: _correo,
               colorPrincipal: colorPrincipal,
             ),
             const SizedBox(height: 40),
@@ -40,20 +50,42 @@ class VolProfileScreen extends StatelessWidget {
 
             ProfileInfoCard(
               etiqueta: 'TELÉFONO',
-              valor: '+56 9 3310 9203',
+              valor: _telefono,
               esEditable: true,
               onEditar: () {
-                // TODO: Implementar lógica de edición de teléfono
+                mostrarPopupEditarPerfil(
+                  context,
+                  titulo: 'Editar Teléfono',
+                  labelCampo: 'NÚMERO DE TELÉFONO',
+                  valorInicial: _telefono,
+                  hintText: '+56 9 XXXX XXXX',
+                  keyboardType: TextInputType.phone,
+                  onGuardar: (nuevoValor) {
+                    setState(() => _telefono = nuevoValor);
+                    // TODO: llamar API PATCH
+                  },
+                );
               },
             ),
             const SizedBox(height: 15),
 
             ProfileInfoCard(
               etiqueta: 'CORREO ELECTRÓNICO',
-              valor: 'juanperez@ejemplo.com',
+              valor: _correo,
               esEditable: true,
               onEditar: () {
-                // TODO: Implementar lógica de edición de correo
+                mostrarPopupEditarPerfil(
+                  context,
+                  titulo: 'Editar Correo',
+                  labelCampo: 'CORREO ELECTRÓNICO',
+                  valorInicial: _correo,
+                  hintText: 'ejemplo@correo.com',
+                  keyboardType: TextInputType.emailAddress,
+                  onGuardar: (nuevoValor) {
+                    setState(() => _correo = nuevoValor);
+                    // TODO: llamar API PATCH
+                  },
+                );
               },
             ),
             const SizedBox(height: 40),
@@ -62,8 +94,11 @@ class VolProfileScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Vista de configuración en desarrollo...')),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const VolConfigScreen(),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
