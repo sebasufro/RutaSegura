@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../vol_widgets/vol_topbar.dart';
 import '../vol_widgets/vol_config_card.dart';
+import '../vol_screens/vol_my_contacts_screen.dart';
+import '../vol_screens/vol_my_directions_screen.dart';
 
 class VolConfigScreen extends StatelessWidget {
   const VolConfigScreen({super.key});
@@ -41,7 +43,10 @@ class VolConfigScreen extends StatelessWidget {
                     colorFondoIcono: const Color(0xFFE0E7FF),
                     colorIcono: const Color(0xFF3730A3),
                     onTap: () {
-                      // Navegar a direcciones
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const VolMyDirectionsScreen()),
+                      );
                     },
                   ),
                   const SizedBox(height: 15),
@@ -53,7 +58,10 @@ class VolConfigScreen extends StatelessWidget {
                     colorFondoIcono: const Color(0xFFFFE4E6), 
                     colorIcono: const Color(0xFFE11D48),
                     onTap: () {
-                      // Navegar a direcciones
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const VolMyContactsScreen()),
+                      );
                     },
                   ),
                   const SizedBox(height: 15),
