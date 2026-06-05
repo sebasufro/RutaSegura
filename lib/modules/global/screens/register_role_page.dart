@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
-import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
-import 'package:ruta_segura/modules/global/screens/register_org_page.dart';
-import 'package:ruta_segura/modules/global/screens/register_person_page.dart';
-
+import '/modules/global/widgets/auth_header.dart';
+import '/modules/global/widgets/primary_button.dart';
+import '/modules/global/widgets/auth_card.dart';
+import '/modules/global/screens/register_org_page.dart';
+import '/modules/global/screens/register_person_page.dart';
 /// Página de selección de rol durante el proceso de registro.
 /// Permite al usuario elegir entre ser 'Voluntario' o 'Supervisor'.
 class RegisterRolePage extends StatefulWidget {
@@ -108,12 +107,12 @@ class _RegisterRolePageState extends State<RegisterRolePage> {
                   if (_selectedRole == 'supervisor') {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const RegisterOrgPage()),
+                      MaterialPageRoute(builder: (context) => RegisterOrgPage(role: _selectedRole)),
                     );
                   } else {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const RegisterPersonPage()),
+                      MaterialPageRoute(builder: (context) => RegisterPersonPage(role: _selectedRole)),
                     );
                   }
                 },

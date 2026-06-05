@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
+import '/modules/global/widgets/auth_header.dart';
 
 /// Página temporal para mostrar que una funcionalidad está en desarrollo.
 class UnderConstructionPage extends StatelessWidget {

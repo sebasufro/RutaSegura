@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm_shared/lib/null_patch.dart';
-
 import 'package:flutter/material.dart';
 import '../screens/list_routes_screen.dart';
 import '../screens/create_route_screen.dart';

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
-import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
-import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
-import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
-import 'package:ruta_segura/modules/global/screens/under_construction_page.dart';
+import '/modules/global/widgets/auth_header.dart';
+import '/modules/global/widgets/primary_button.dart';
+import '/modules/global/widgets/auth_card.dart';
+import '/modules/global/widgets/custom_text_field.dart';
+import '/modules/global/widgets/input_label.dart';
+import '/modules/volunteer/screens/vol_my_routes_screen.dart';
+import '/modules/supervisor/screens/list_routes_screen.dart';
 
 /// Página final del registro para contacto de emergencia.
 class RegisterEmergencyPage extends StatefulWidget {
-  const RegisterEmergencyPage({super.key});
+  final String role;
+  
+  const RegisterEmergencyPage({super.key, required this.role});
 
   @override
   State<RegisterEmergencyPage> createState() => _RegisterEmergencyPageState();
@@ -24,6 +27,19 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
     _emergencyNameController.dispose();
     _emergencyPhoneController.dispose();
     super.dispose();
+  }
+
+  void _navigateToLandingPage() {
+    Widget landingPage;
+    if (widget.role == 'supervisor') {
+      landingPage = const ListRoutesScreen();
+    } else {
+      landingPage = const VolMyRoutesScreen();
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => landingPage),
+    );
   }
 
   @override
@@ -114,10 +130,7 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
-                      );
+                      _navigateToLandingPage();
                     },
                     child: const Text('Omitir este paso', style: TextStyle(color: Color(0xFF7A869C), fontWeight: FontWeight.bold)),
                   ),
@@ -135,10 +148,7 @@ class _RegisterEmergencyPageState extends State<RegisterEmergencyPage> {
                         );
                         return;
                       }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
-                      );
+                      _navigateToLandingPage();
                     },
                   ),
                 ],

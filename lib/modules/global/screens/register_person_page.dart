@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
-import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
-import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
-import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
-import 'package:ruta_segura/modules/global/screens/register_emergency_page.dart';
+import '/modules/global/widgets/auth_header.dart';
+import '/modules/global/widgets/primary_button.dart';
+import '/modules/global/widgets/auth_card.dart';
+import '/modules/global/widgets/custom_text_field.dart';
+import '/modules/global/widgets/input_label.dart';
+import '/modules/global/screens/register_emergency_page.dart';
 
 /// Página para capturar los datos personales del usuario.
 class RegisterPersonPage extends StatefulWidget {
-  const RegisterPersonPage({super.key});
+  final String role;
+  
+  const RegisterPersonPage({super.key, required this.role});
 
   @override
   State<RegisterPersonPage> createState() => _RegisterPersonPageState();
@@ -148,7 +150,7 @@ class _RegisterPersonPageState extends State<RegisterPersonPage> {
                   }
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const RegisterEmergencyPage()),
+                    MaterialPageRoute(builder: (context) => RegisterEmergencyPage(role: widget.role)),
                   );
                 },
               ),

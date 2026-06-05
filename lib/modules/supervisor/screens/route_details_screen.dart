@@ -14,7 +14,7 @@ class RouteDetailsScreen extends StatefulWidget {
 }
 
 class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
-  int _currentNavIndex = 1; // Mapa tab
+// Mapa tab
 
   void _showEndRouteModal() {
     showDialog(

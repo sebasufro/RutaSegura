@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
-import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
-import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
-import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
-import 'package:ruta_segura/modules/global/screens/login_page.dart';
-import 'package:ruta_segura/modules/global/screens/register_role_page.dart';
+import '/modules/global/widgets/auth_header.dart';
+import '/modules/global/widgets/primary_button.dart';
+import '/modules/global/widgets/auth_card.dart';
+import '/modules/global/widgets/custom_text_field.dart';
+import '/modules/global/widgets/input_label.dart';
+import '/modules/global/screens/login_page.dart';
+import '/modules/global/screens/register_role_page.dart';
 
 /// Primera página del flujo de registro.
 /// Captura las credenciales básicas: Correo, Contraseña y Confirmación.

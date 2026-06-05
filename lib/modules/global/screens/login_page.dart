@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
-import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
-import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
-import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
-import 'package:ruta_segura/modules/global/screens/register_account_page.dart';
-import 'package:ruta_segura/modules/global/screens/under_construction_page.dart';
+import '/modules/global/widgets/auth_header.dart';
+import '/modules/global/widgets/primary_button.dart';
+import '/modules/global/widgets/auth_card.dart';
+import '/modules/global/widgets/custom_text_field.dart';
+import '/modules/global/widgets/input_label.dart';
+import '/modules/global/screens/register_account_page.dart';
+import '/modules/global/screens/under_construction_page.dart';
+import '/modules/volunteer/screens/vol_my_routes_screen.dart';
+import '/modules/supervisor/screens/list_routes_screen.dart';
 
 /// Página de Iniciar Sesión.
 /// Permite a los usuarios registrados acceder a su cuenta mediante correo y contraseña.
@@ -17,9 +19,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // Hardcoded test accounts
+  static const String volunteerEmail = 'volunteer@example.com';
+  static const String volunteerPassword = '1234';
+  static const String supervisorEmail = 'supervisor@example.com';
+  static const String supervisorPassword = '1234';
+
   // Controladores con datos de prueba (Hardcoded)
-  final _emailController = TextEditingController(text: 'jhon.doe@example.com');
-  final _passwordController = TextEditingController(text: 'Password123!');
+  final _emailController = TextEditingController(text: 'volunteer@example.com');
+  final _passwordController = TextEditingController(text: '1234');
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
@@ -141,9 +149,30 @@ class _LoginPageState extends State<LoginPage> {
                           label: 'Iniciar Sesión',
                           backgroundColor: const Color(0xFF002045),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const UnderConstructionPage()),
+                            final email = _emailController.text.trim();
+                            final password = _passwordController.text.trim();
+
+                            // Validate volunteer account
+                            if (email == volunteerEmail && password == volunteerPassword) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const VolMyRoutesScreen()),
+                              );
+                              return;
+                            }
+
+                            // Validate supervisor account
+                            if (email == supervisorEmail && password == supervisorPassword) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const ListRoutesScreen()),
+                              );
+                              return;
+                            }
+
+                            // Invalid credentials
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Correo o contraseña inválidos')),
                             );
                           },
                         ),
