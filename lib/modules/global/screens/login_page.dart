@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/modules/global/screens/forgot_password_page.dart';
 import '/modules/global/widgets/auth_header.dart';
 import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/widgets/auth_card.dart';
@@ -99,7 +100,12 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             const InputLabel(text: 'Contraseña'),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                                );
+                              },
                               child: const Text(
                                 '¿Olvidaste tu contraseña?',
                                 style: TextStyle(
