@@ -153,18 +153,20 @@ class _LoginPageState extends State<LoginPage> {
 
                             // Validate volunteer account
                             if (email == volunteerEmail && password == volunteerPassword) {
-                              Navigator.push(
+                              Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(builder: (context) => const VolNavbar()),
+                                (route) => false,
                               );
                               return;
                             }
 
                             // Validate supervisor account
                             if (email == supervisorEmail && password == supervisorPassword) {
-                              Navigator.push(
+                              Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(builder: (context) => const SupNavbar()),
+                                (route) => false,
                               );
                               return;
                             }

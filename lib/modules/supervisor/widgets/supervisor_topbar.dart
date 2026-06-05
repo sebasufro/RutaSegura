@@ -10,6 +10,7 @@ class SupTopbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
+      automaticallyImplyLeading: false,
       title: Row(
         children: [
           Icon(Icons.hub_outlined, color: colorPrincipal),
