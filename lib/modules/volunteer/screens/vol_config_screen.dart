@@ -3,6 +3,7 @@ import '../widgets/vol_topbar.dart';
 import '../widgets/vol_config_card.dart';
 import '../screens/vol_my_contacts_screen.dart';
 import '../screens/vol_my_directions_screen.dart';
+import '/modules/global/screens/global_settings_page.dart';
 
 class VolConfigScreen extends StatelessWidget {
   const VolConfigScreen({super.key});
@@ -73,7 +74,10 @@ class VolConfigScreen extends StatelessWidget {
                     colorFondoIcono: const Color(0xFFE0E7FF), 
                     colorIcono: const Color(0xFF4F46E5),
                     onTap: () {
-                      // Navegar a direcciones
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const GlobalSettingsPage()),
+                      );
                     },
                   ),
                   
