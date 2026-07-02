@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
+import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/supervisor/widgets/create_route_page1.dart';
 import '/modules/supervisor/widgets/create_route_page2.dart';
 import '/modules/supervisor/widgets/create_route_page3.dart';
@@ -79,8 +80,11 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const SupNavbar()),
+                (route) => false,
+              );
             },
             child: const Text('Sí, abandonar'),
           ),
@@ -93,67 +97,81 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
     // Clear the form data
     _formData.clear();
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Ruta creada exitosamente')),
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const SupNavbar()),
+      (route) => false,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: const Color(0xFFF8FAFC),
-          child: Stack(
-            children: [
-              // Main Content
-              Column(
-                children: [
-                  // Topbar
-                  const SupTopbar(),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        // Handle back button: go to previous page or show exit dialog
+        if (_currentPage > 0) {
+          _previousPage();
+        } else {
+          _showExitDialog();
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: const Color(0xFFF8FAFC),
+            child: Stack(
+              children: [
+                // Main Content
+                Column(
+                  children: [
+                    // Topbar
+                    const SupTopbar(),
+                    // Page Content
+                    Expanded(
+                      child: PageView(
+                        controller: _pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        onPageChanged: (page) {
+                          setState(() => _currentPage = page);
+                        },
+                        children: [
+                          // Page 1
+                          CreateRoutePage1(
+                            formData: _formData,
+                            onNext: _nextPage,
+                            onBack: _previousPage,
+                          ),
 
-                  // Page Content
-                  Expanded(
-                    child: PageView(
-                      controller: _pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      onPageChanged: (page) {
-                        setState(() => _currentPage = page);
-                      },
-                      children: [
-                        // Page 1
-                        CreateRoutePage1(
-                          formData: _formData,
-                          onNext: _nextPage,
-                          onBack: _previousPage,
-                        ),
+                          // Page 2
+                          CreateRoutePage2(
+                            formData: _formData,
+                            onNext: _nextPage,
+                            onBack: _previousPage,
+                          ),
 
-                        // Page 2
-                        CreateRoutePage2(
-                          formData: _formData,
-                          onNext: _nextPage,
-                          onBack: _previousPage,
-                        ),
+                          // Page 3
+                          CreateRoutePage3(
+                            formData: _formData,
+                            onNext: _nextPage,
+                            onBack: _previousPage,
+                          ),
 
-                        // Page 3
-                        CreateRoutePage3(
-                          formData: _formData,
-                          onNext: _nextPage,
-                          onBack: _previousPage,
-                        ),
-
-                        // Page 4
-                        CreateRoutePage4(
-                          onFinish: _finishForm,
-                        ),
-                      ],
+                          // Page 4
+                          CreateRoutePage4(
+                            onFinish: _finishForm,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

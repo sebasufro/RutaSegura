@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/models/route_model.dart';
+import '/modules/supervisor/screens/route_details_screen.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
-import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/supervisor/widgets/routes_control_panel.dart';
 import '/modules/supervisor/widgets/route_card.dart';
 
@@ -67,8 +67,9 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
                                     return RouteCard(
                                       route: route,
                                       onViewPressed: () {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('Ver ruta ${route.id}')),
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const RouteDetailsScreen()),
                                         );
                                       },
                                     );
@@ -82,44 +83,6 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
                       ),
                     ),
                   ],
-                ),
-
-                // Floating Action Button
-                Positioned(
-                  bottom: 120,
-                  right: 24,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Crear nueva ruta')),
-                      );
-                    },
-                    shape: const CircleBorder(),
-                    backgroundColor: const Color(0xFF9ca3af),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.add, size: 28, color: Colors.white),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'AGREGAR',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Bottom Navigation
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: SupNavbar(),
                 ),
               ],
             ),
