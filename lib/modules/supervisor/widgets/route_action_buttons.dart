@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class RouteActionButtons extends StatelessWidget {
   final VoidCallback onEndRoute;
   final VoidCallback onEditRoute;
+  final VoidCallback onDeleteRoute;
 
   const RouteActionButtons({
     super.key,
     required this.onEndRoute,
     required this.onEditRoute,
+    required this.onDeleteRoute,
   });
 
   @override
@@ -83,6 +85,45 @@ class RouteActionButtons extends StatelessWidget {
                 ),
                 Text(
                   'Editar Ruta',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Delete Route Button
+        GestureDetector(
+          onTap: onDeleteRoute,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            decoration: BoxDecoration(
+              color: const Color(0xFFDC2626),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFDC2626).withAlpha((0.15 * 255).toInt()),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 12,
+              children: const [
+                Icon(
+                  Icons.delete_outline,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                Text(
+                  'Borrar Ruta',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
