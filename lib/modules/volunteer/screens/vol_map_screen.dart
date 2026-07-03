@@ -1,94 +1,119 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../widgets/map_bottom_panel.dart';
 import '../widgets/sos_button.dart';
 import '../widgets/vol_topbar.dart';
-
-// Pantalla principal del voluntario durante una ruta activa.
-// Muestra un mapa con la ubicación en tiempo real del usuario
-// y la de sus compañeros de equipo.
+import '/modules/global/services/location_service.dart';
+import '/modules/global/services/auth_service.dart';
 
 class VolMapScreen extends StatefulWidget {
-  const VolMapScreen({super.key});
+  final String? routeId;
+  final List<LatLng> routePoints;
+  final String? routeName;
+
+  const VolMapScreen({super.key, this.routeId, this.routePoints = const [], this.routeName});
 
   @override
   State<VolMapScreen> createState() => _VolMapScreenState();
 }
 
 class _VolMapScreenState extends State<VolMapScreen> {
-  // Canal de comunicación nativa para obtener la ubicación del dispositivo.
-  static const _channel = MethodChannel('com.tuapp/ubicacion');
-  
-  // Controlador del mapa para gestionar el zoom y la posición de la cámara.
   final MapController _mapController = MapController();
-  
-  // Indica si se está esperando la respuesta de hardware del GPS.
-  bool _cargandoUbicacion = false;
-  
-  // Almacena la última ubicación conocida del usuario.
+  final _locationService = LocationService();
+
   LatLng? _miUbicacion;
+  bool _cargandoUbicacion = false;
+  List<Map<String, dynamic>> _companeros = [];
+  Timer? _pollingTimer;
+  String? _miId;
 
-  // Lista simulada para pruebas con compañeros asignados a la misma ruta.
-  // TODO: Reemplazar con llamada real a la API.
-  final List<Map<String, dynamic>> _companerosFalsos = [
-    {
-      "id_user": 8,
-      "nombre": "MJ",
-      "latitude": -38.7710,
-      "longitude": -72.5990,
-      "sos_status": false,
-    },
-    {
-      "id_user": 12,
-      "nombre": "SK",
-      "latitude": -38.7680,
-      "longitude": -72.5950,
-      "sos_status": false,
-    },
-    {
-      "id_user": 15,
-      "nombre": "RP",
-      "latitude": -38.7720,
-      "longitude": -72.6010,
-      "sos_status": true,
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    AuthService.getUserId().then((id) => _miId = id);
+    _irAMiUbicacion();
+    if (widget.routeId != null) {
+      _iniciarPolling();
+    }
+    if (widget.routePoints.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mapController.move(widget.routePoints.first, 15.0);
+      });
+    }
+  }
 
-  // Solicitud de ubicación actual del dispositivo por el canal nativo.
-  // En caso de éxito, centra la cámara del mapa en las coordenadas obtenidas.
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
+  }
+
+  void _iniciarPolling() {
+    _cargarCompaneros();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+      _cargarCompaneros();
+      if (_miUbicacion != null) {
+        _locationService.sendLocation(
+          widget.routeId!,
+          _miUbicacion!.latitude,
+          _miUbicacion!.longitude,
+        );
+      }
+    });
+  }
+
+  Future<void> _cargarCompaneros() async {
+    if (widget.routeId == null) return;
+    final locs = await _locationService.getRouteLocations(widget.routeId!);
+    if (mounted) setState(() => _companeros = locs);
+  }
+
+  void _verRuta() {
+    if (widget.routePoints.length < 2) return;
+    final lats = widget.routePoints.map((p) => p.latitude);
+    final lngs = widget.routePoints.map((p) => p.longitude);
+    final bounds = LatLngBounds(
+      LatLng(lats.reduce((a, b) => a < b ? a : b), lngs.reduce((a, b) => a < b ? a : b)),
+      LatLng(lats.reduce((a, b) => a > b ? a : b), lngs.reduce((a, b) => a > b ? a : b)),
+    );
+    _mapController.fitCamera(CameraFit.bounds(bounds: bounds, padding: const EdgeInsets.all(40)));
+  }
+
   Future<void> _irAMiUbicacion() async {
     setState(() => _cargandoUbicacion = true);
     try {
-      final resultado = await _channel.invokeMapMethod<String, dynamic>(
-        'obtenerUbicacion',
-      );
-      if (resultado != null) {
-        final lat = resultado['lat'] as double;
-        final lng = resultado['lng'] as double;
-
-        if (lat.isNaN || lng.isNaN || lat == 0.0 && lng == 0.0) {
-          debugPrint('Ubicación inválida recibida');
-          return;
-        }
-
-        setState(() => _miUbicacion = LatLng(lat, lng));
-        _mapController.move(LatLng(lat, lng), 16.0);
-        _mapController.rotate(0.0);
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
       }
-    } on PlatformException catch (e) {
-      debugPrint('Error ubicación: ${e.message}');
+      if (permission == LocationPermission.deniedForever ||
+          permission == LocationPermission.denied) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Permiso de ubicación denegado.')),
+          );
+        }
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+      );
+
+      final latLng = LatLng(position.latitude, position.longitude);
+      setState(() => _miUbicacion = latLng);
+      _mapController.move(latLng, 16.0);
+    } catch (e) {
       if (mounted) {
-        final mensaje = e.code == 'PERMISO_DENEGADO'
-            ? 'Permiso de ubicación denegado.'
-            : 'GPS activo pero sin señal. Intenta en exterior.';
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(mensaje)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No se pudo obtener la ubicación.')),
+        );
       }
     } finally {
-      setState(() => _cargandoUbicacion = false);
+      if (mounted) setState(() => _cargandoUbicacion = false);
     }
   }
 
@@ -102,7 +127,6 @@ class _VolMapScreenState extends State<VolMapScreen> {
       appBar: const VolTopbar(),
       body: Stack(
         children: [
-          // Capa base del mapa interactivo
           FlutterMap(
             mapController: _mapController,
             options: const MapOptions(
@@ -117,56 +141,82 @@ class _VolMapScreenState extends State<VolMapScreen> {
                 userAgentPackageName: 'com.example.ruta_segura',
               ),
 
-              // Capa de marcadores de compañeros simulados
-              MarkerLayer(
-                markers: _companerosFalsos.map((c) {
-                  final tieneSos = c['sos_status'] as bool;
-                  return Marker(
-                    point: LatLng(
-                      c['latitude'] as double,
-                      c['longitude'] as double,
+              // Trazado de la ruta
+              if (widget.routePoints.length >= 2)
+                PolylineLayer(
+                  polylines: [
+                    Polyline(
+                      points: widget.routePoints,
+                      strokeWidth: 5.0,
+                      color: const Color(0xFF29B6F6),
                     ),
-                    width: 44,
-                    height: 44,
-                    rotate: true,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 28,
-                          height: 28,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: tieneSos
-                                ? const Color(0xFFEF5350)
-                                : const Color(0xFF4F46E5),
-                            border: Border.all(color: Colors.white, width: 2),
-                            boxShadow: [
-                              BoxShadow(
-                                color: (tieneSos ? Colors.red : Colors.indigo)
-                                    .withValues(alpha: 0.4),
-                                blurRadius: 6,
-                                spreadRadius: 2,
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child: Text(
-                              c['nombre'].toString().substring(0, 2),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 9,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  ],
+                ),
+
+              // Puntos de inicio y fin de la ruta
+              if (widget.routePoints.isNotEmpty)
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: widget.routePoints.first,
+                      width: 32,
+                      height: 32,
+                      child: const Icon(Icons.trip_origin, color: Color(0xFF10B981), size: 28),
+                    ),
+                    if (widget.routePoints.length > 1)
+                      Marker(
+                        point: widget.routePoints.last,
+                        width: 32,
+                        height: 32,
+                        child: const Icon(Icons.location_on, color: Color(0xFFEF4444), size: 30),
+                      ),
+                  ],
+                ),
+
+              // Marcadores de compañeros
+              if (_companeros.isNotEmpty)
+                MarkerLayer(
+                  markers: _companeros.where((c) => c['id_user'] != _miId).map((c) {
+                    final tieneSos = c['sos_active'] == true;
+                    final nombre = (c['full_name'] ?? '??').toString();
+                    final initials = nombre.length >= 2
+                        ? nombre.substring(0, 2).toUpperCase()
+                        : nombre.toUpperCase();
+                    return Marker(
+                      point: LatLng(
+                        (c['latitude'] as num).toDouble(),
+                        (c['longitude'] as num).toDouble(),
+                      ),
+                      width: 44,
+                      height: 44,
+                      rotate: true,
+                      child: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: tieneSos ? const Color(0xFFEF5350) : const Color(0xFF4F46E5),
+                          border: Border.all(color: Colors.white, width: 2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: (tieneSos ? Colors.red : Colors.indigo).withValues(alpha: 0.4),
+                              blurRadius: 6,
+                              spreadRadius: 2,
                             ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(
+                            initials,
+                            style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
+                      ),
+                    );
+                  }).toList(),
+                ),
 
-              // Capa de marcador de la ubicación actual del usuario
+              // Marcador de mi ubicación
               if (_miUbicacion != null)
                 MarkerLayer(
                   markers: [
@@ -182,9 +232,7 @@ class _VolMapScreenState extends State<VolMapScreen> {
                           border: Border.all(color: Colors.white, width: 3),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(
-                                0xFF1A73E8,
-                              ).withValues(alpha: 0.4),
+                              color: const Color(0xFF1A73E8).withValues(alpha: 0.4),
                               blurRadius: 8,
                               spreadRadius: 3,
                             ),
@@ -197,7 +245,31 @@ class _VolMapScreenState extends State<VolMapScreen> {
             ],
           ),
 
-          // Botón flotante para centrar la cámara en la ubicación actual
+          // Botón ver ruta completa
+          if (widget.routePoints.length >= 2)
+            Positioned(
+              bottom: 220 + espacioInferiorSeguro,
+              left: 20,
+              child: Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF29B6F6),
+                  shape: BoxShape.circle,
+                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))],
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(30),
+                    onTap: _verRuta,
+                    child: const Icon(Icons.route, color: Colors.white, size: 26),
+                  ),
+                ),
+              ),
+            ),
+
+          // Botón centrar ubicación
           Positioned(
             bottom: 305 + espacioInferiorSeguro,
             right: 20,
@@ -207,13 +279,7 @@ class _VolMapScreenState extends State<VolMapScreen> {
               decoration: BoxDecoration(
                 color: colorPrincipal,
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))],
               ),
               child: Material(
                 color: Colors.transparent,
@@ -221,38 +287,26 @@ class _VolMapScreenState extends State<VolMapScreen> {
                   borderRadius: BorderRadius.circular(30),
                   onTap: _irAMiUbicacion,
                   child: _cargandoUbicacion
-                      ? const Padding(
-                          padding: EdgeInsets.all(14),
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Icon(
-                          Icons.my_location,
-                          color: Colors.white,
-                          size: 26,
-                        ),
+                      ? const Padding(padding: EdgeInsets.all(14), child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : const Icon(Icons.my_location, color: Colors.white, size: 26),
                 ),
               ),
             ),
           ),
 
-          // Botón flotante para activar el protocolo de emergencia (SOS)
+          // Botón SOS
           Positioned(
             bottom: 220 + espacioInferiorSeguro,
             right: 20,
             child: const SosButton(),
           ),
 
-          // Panel inferior de información y búsqueda de compañeros
+          // Panel inferior
           Positioned(
             bottom: 20 + espacioInferiorSeguro,
             left: 20,
             right: 20,
-            child: MapBottomPanel(
-              cantidadCompaneros: _companerosFalsos.length,
-            ),
+            child: MapBottomPanel(companeros: _companeros, routeName: widget.routeName, miId: _miId),
           ),
         ],
       ),

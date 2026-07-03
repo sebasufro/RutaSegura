@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../screens/vol_route_details_screen.dart';
 
+enum _EstadoUnirse { activo, bloqueado }
+
 // Componente visual que representa una ruta a la que el usuario está inscrito.
 // Incluye información general, un menú de opciones para desinscribirse
 // y botones para unirse a la actividad o ver sus detalles.
@@ -11,6 +13,9 @@ class MyRoutesCard extends StatelessWidget {
   final int voluntariosActivos;
   final String imagenUrl;
   final VoidCallback onDesinscribir;
+  final VoidCallback? onUnirse;
+  final Map<String, dynamic> rutaDatos;
+  final String? startingDatetime;
 
   const MyRoutesCard({
     super.key,
@@ -20,7 +25,35 @@ class MyRoutesCard extends StatelessWidget {
     required this.voluntariosActivos,
     required this.imagenUrl,
     required this.onDesinscribir,
+    required this.rutaDatos,
+    this.onUnirse,
+    this.startingDatetime,
   });
+
+  _EstadoUnirse _calcularEstado() {
+    if (startingDatetime == null) return _EstadoUnirse.bloqueado;
+    final inicio = DateTime.tryParse(startingDatetime!);
+    if (inicio == null) return _EstadoUnirse.bloqueado;
+    final ahora = DateTime.now();
+    final diferencia = inicio.difference(ahora);
+    if (diferencia.isNegative && ahora.isBefore(inicio.add(const Duration(hours: 4)))) {
+      return _EstadoUnirse.activo; // ya comenzó y no ha pasado más de 4h
+    }
+    if (diferencia.inMinutes <= 15 && !diferencia.isNegative) {
+      return _EstadoUnirse.activo; // faltan ≤15 min
+    }
+    return _EstadoUnirse.bloqueado;
+  }
+
+  String _textoTiempoRestante() {
+    if (startingDatetime == null) return 'Unirse';
+    final inicio = DateTime.tryParse(startingDatetime!);
+    if (inicio == null) return 'Unirse';
+    final diff = inicio.difference(DateTime.now());
+    if (diff.isNegative) return 'En curso';
+    if (diff.inHours >= 1) return 'En ${diff.inHours}h ${diff.inMinutes % 60}min';
+    return 'En ${diff.inMinutes}min';
+  }
 
   // Cuadro de diálogo para confirmar la desinscripción de la ruta.
   void _mostrarPopupDesinscribir(BuildContext context) {
@@ -206,61 +239,35 @@ class MyRoutesCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Botón de unión inhabilitado hasta que falten 15 minutos.
-              ElevatedButton.icon(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Row(
-                        children: [
-                          Icon(Icons.info_outline, color: Colors.white, size: 20),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'Actividad aún no disponible. Puedes ingresar a la actividad desde 15 minutos antes de la hora establecida.',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                        ],
-                      ),
-                      backgroundColor: Colors.grey[800],
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      duration: const Duration(seconds: 3),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.schedule, size: 18),
-                label: const Text(
-                  'Unirse',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[200],
-                  foregroundColor: Colors.grey[500],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              Builder(builder: (_) {
+                final estado = _calcularEstado();
+                final activo = estado == _EstadoUnirse.activo;
+                return ElevatedButton.icon(
+                  onPressed: activo ? onUnirse : null,
+                  icon: Icon(activo ? Icons.directions_run : Icons.schedule, size: 18),
+                  label: Text(
+                    activo ? 'Unirse' : _textoTiempoRestante(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  elevation: 0,
-                ),
-              ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: activo ? const Color(0xFF10B981) : Colors.grey[200],
+                    foregroundColor: activo ? Colors.white : Colors.grey[500],
+                    disabledBackgroundColor: Colors.grey[200],
+                    disabledForegroundColor: Colors.grey[500],
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    elevation: 0,
+                  ),
+                );
+              }),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => VolRouteDetailsScreen(
-                        rutaDatos: {
-                          "route_name": titulo,
-                          "capacidad_maxima": voluntariosActivos + 5,
-                          "distancia_metros": 1250.0,
-                          "geometria_calle": [],
-                          "puntos_base": []
-                        },
+                        rutaDatos: rutaDatos,
+                        yaInscrito: true,
                       ),
                     ),
                   );

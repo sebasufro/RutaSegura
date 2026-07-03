@@ -1,8 +1,10 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '../widgets/route_details_map.dart';
 import '../widgets/route_details_label.dart';
 import '../widgets/vol_topbar.dart';
+import '/modules/global/services/routes_service.dart';
 
 // Pantalla que muestra los detalles completos de una ruta.
 // Incluye información sobre el supervisor, horario, mapa del trazado
@@ -10,46 +12,75 @@ import '../widgets/vol_topbar.dart';
 
 class VolRouteDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> rutaDatos;
+  final bool yaInscrito;
 
-  const VolRouteDetailsScreen({super.key, required this.rutaDatos});
+  const VolRouteDetailsScreen({super.key, required this.rutaDatos, this.yaInscrito = false});
 
   @override
   State<VolRouteDetailsScreen> createState() => _VolRouteDetailsScreenState();
 }
 
 class _VolRouteDetailsScreenState extends State<VolRouteDetailsScreen> {
-  /// Indica si el voluntario ya se ha inscrito en esta ruta.
-  bool _estaInscrito = false;
-  
+  late bool _estaInscrito;
+  bool _cargandoInscripcion = false;
+  final _routesService = RoutesService();
+
+  @override
+  void initState() {
+    super.initState();
+    _estaInscrito = widget.yaInscrito;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorPrincipal = const Color(0xFF1E3A8A);
     
     final titulo = widget.rutaDatos["route_name"] ?? "Ruta Sin Nombre";
-    final capacidad = widget.rutaDatos["capacidad_maxima"] ?? 0;
-    
-    final List<dynamic> geoData = widget.rutaDatos["geometria_calle"] ?? [];
-    final List<LatLng> lineaDeCalle = geoData.map((punto) {
-      return LatLng((punto["lat"] as num).toDouble(), (punto["lng"] as num).toDouble());
-    }).toList();
+    final descripcion = widget.rutaDatos["description"] ?? widget.rutaDatos["descripcion"] ?? "Sin descripción.";
+    final capacidad = widget.rutaDatos["spots_remaining"] ?? widget.rutaDatos["capacidad_maxima"] ?? 0;
+    final supervisor = widget.rutaDatos["supervisor"];
+    final supervisorNombre = supervisor != null ? (supervisor["full_name"] ?? "Sin supervisor") : "Sin supervisor";
+    final transporteTipo = widget.rutaDatos["transport_type"] ?? "A PIE";
 
-    final List<dynamic> baseData = widget.rutaDatos["puntos_base"] ?? [];
+    final List<dynamic> baseData = widget.rutaDatos["base_points"] ?? widget.rutaDatos["puntos_base"] ?? [];
     final List<LatLng> puntosBase = baseData.map((punto) {
       return LatLng((punto["lat"] as num).toDouble(), (punto["lng"] as num).toDouble());
     }).toList();
 
-    // Centro por defecto de la ciudad en caso de no haber trazado
+    final List<dynamic> geoData = widget.rutaDatos["street_geometry"] ?? widget.rutaDatos["geometria_calle"] ?? baseData;
+    final List<LatLng> lineaDeCalle = geoData.map((punto) {
+      return LatLng((punto["lat"] as num).toDouble(), (punto["lng"] as num).toDouble());
+    }).toList();
+
     final LatLng centroDeRespaldo = const LatLng(-38.769, -72.597);
 
-    final double distanciaTotalMetros = (widget.rutaDatos["distancia_metros"] ?? 0).toDouble();
+    final rawDistancia = widget.rutaDatos["distance_meters"] ?? widget.rutaDatos["distancia_metros"] ?? 0;
+    double distanciaTotalMetros = double.tryParse(rawDistancia.toString()) ?? 0.0;
+    if (distanciaTotalMetros == 0) {
+      final puntos = (widget.rutaDatos["street_geometry"] ?? widget.rutaDatos["base_points"] ?? widget.rutaDatos["geometria_calle"] ?? widget.rutaDatos["puntos_base"] ?? []) as List;
+      if (puntos.length >= 2) {
+        const r = 6371000.0;
+        double total = 0;
+        for (int i = 0; i < puntos.length - 1; i++) {
+          final lat1 = (puntos[i]['lat'] as num).toDouble() * pi / 180;
+          final lat2 = (puntos[i + 1]['lat'] as num).toDouble() * pi / 180;
+          final dLat = lat2 - lat1;
+          final dLng = ((puntos[i + 1]['lng'] as num) - (puntos[i]['lng'] as num)).toDouble() * pi / 180;
+          final a = sin(dLat / 2) * sin(dLat / 2) + cos(lat1) * cos(lat2) * sin(dLng / 2) * sin(dLng / 2);
+          total += r * 2 * atan2(sqrt(a), sqrt(1 - a));
+        }
+        distanciaTotalMetros = total;
+      }
+    }
     String textoDistancia = distanciaTotalMetros > 1000
         ? '${(distanciaTotalMetros / 1000).toStringAsFixed(1)} KM'
         : '${distanciaTotalMetros.toInt()} METROS';
 
-    String textoFecha = "25/05/2026 a las 20:00"; 
-    if (widget.rutaDatos["starting_date"] != null) {
+    final rawFecha = widget.rutaDatos["starting_datetime"] ?? widget.rutaDatos["starting_date"];
+    String textoFecha = "Sin fecha definida";
+    if (rawFecha != null) {
       try {
-        DateTime fecha = DateTime.parse(widget.rutaDatos["starting_date"]);
+        DateTime fecha = DateTime.parse(rawFecha);
         String dia = fecha.day.toString().padLeft(2, '0');
         String mes = fecha.month.toString().padLeft(2, '0');
         String hora = fecha.hour.toString().padLeft(2, '0');
@@ -78,19 +109,19 @@ class _VolRouteDetailsScreenState extends State<VolRouteDetailsScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(color: const Color(0xFF283593), borderRadius: BorderRadius.circular(20)),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.account_circle_outlined, color: Colors.white, size: 18),
-                    SizedBox(width: 6),
-                    Text('SUPERVISOR A CARGO: JOHN DOE', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                    const Icon(Icons.account_circle_outlined, color: Colors.white, size: 18),
+                    const SizedBox(width: 6),
+                    Text('SUPERVISOR: ${supervisorNombre.toUpperCase()}', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
                   ],
                 ),
               ),
               const SizedBox(height: 20),
 
               Text(
-                'Recorrido de monitoreo para la seguridad de la comunidad.',
+                descripcion,
                 style: TextStyle(fontSize: 16, color: Colors.grey[800], height: 1.4),
               ),
               const SizedBox(height: 20),
@@ -100,14 +131,14 @@ class _VolRouteDetailsScreenState extends State<VolRouteDetailsScreen> {
                 runSpacing: 10,
                 children: [
                   RouteDetailsLabel(
-                    icono: Icons.location_on,
-                    texto: 'ZONA CENTRO',
+                    icono: Icons.directions,
+                    texto: transporteTipo.toUpperCase(),
                     colorFondo: const Color(0xFFE8F5E9),
                     colorTexto: const Color(0xFF2E7D32),
                   ),
                   RouteDetailsLabel(
                     icono: Icons.access_time,
-                    texto: 'HORARIO NOCTURNO',
+                    texto: textoFecha,
                     colorFondo: const Color(0xFFE3F2FD),
                     colorTexto: const Color(0xFF1565C0),
                   ),
@@ -158,9 +189,19 @@ class _VolRouteDetailsScreenState extends State<VolRouteDetailsScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _estaInscrito ? null : () {
-                    setState(() { _estaInscrito = true; });
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('¡Te has inscrito con éxito en la ruta!'), backgroundColor: Colors.green));
+                  onPressed: (_estaInscrito || _cargandoInscripcion) ? null : () async {
+                    final routeId = widget.rutaDatos['id_route'] as String?;
+                    if (routeId == null) return;
+                    setState(() => _cargandoInscripcion = true);
+                    final token = await _routesService.enroll(routeId);
+                    if (!mounted) return;
+                    setState(() => _cargandoInscripcion = false);
+                    if (token) {
+                      setState(() => _estaInscrito = true);
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('¡Te has inscrito con éxito en la ruta!'), backgroundColor: Colors.green));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error al inscribirse. Intenta de nuevo.')));
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorPrincipal, 

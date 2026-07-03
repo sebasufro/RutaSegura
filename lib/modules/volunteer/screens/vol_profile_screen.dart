@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import '../widgets/vol_topbar.dart';
 import '../widgets/profile_info_card.dart';
 import '../widgets/profile_main_info.dart';
-import '../screens/vol_config_screen.dart'; 
+import '../screens/vol_config_screen.dart';
 import '../widgets/profile_edit_dialog.dart';
+import '/modules/global/services/profile_service.dart';
 
 class VolProfileScreen extends StatefulWidget {
   const VolProfileScreen({super.key});
@@ -13,56 +14,100 @@ class VolProfileScreen extends StatefulWidget {
 }
 
 class _VolProfileScreenState extends State<VolProfileScreen> {
-  String _telefono = '+56 9 3310 9203';
-  String _correo = 'juanperez@ejemplo.com';
+  final _profileService = ProfileService();
+  Map<String, dynamic>? _profile;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    final data = await _profileService.getProfile();
+    if (mounted) {
+      setState(() {
+        _profile = data;
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final colorPrincipal = const Color(0xFF1E3A8A); 
+    final colorPrincipal = const Color(0xFF1E3A8A);
+
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_profile == null) {
+      return const Scaffold(
+        body: Center(child: Text('No se pudo cargar el perfil')),
+      );
+    }
+
+    final nombre = _profile!['full_name'] ?? '';
+    final correo = _profile!['email'] ?? '';
+    final rut = _profile!['rut'] ?? '';
+    final telefono = _profile!['phone_number'] ?? 'Sin teléfono';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA), 
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: const VolTopbar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
         child: Column(
           children: [
             ProfileMainInfo(
-              nombre: 'Juan Perez',
-              correo: _correo,
+              nombre: nombre,
+              correo: correo,
               colorPrincipal: colorPrincipal,
             ),
             const SizedBox(height: 40),
 
-            const ProfileInfoCard(
+            ProfileInfoCard(
               etiqueta: 'NOMBRE COMPLETO',
-              valor: 'Juan Ignacio Perez Olivares',
+              valor: nombre,
               esEditable: false,
             ),
             const SizedBox(height: 15),
-            
-            const ProfileInfoCard(
+
+            ProfileInfoCard(
               etiqueta: 'RUT',
-              valor: '19.640.973-4',
+              valor: rut,
               esEditable: false,
             ),
             const SizedBox(height: 15),
 
             ProfileInfoCard(
               etiqueta: 'TELÉFONO',
-              valor: _telefono,
+              valor: telefono,
               esEditable: true,
               onEditar: () {
                 mostrarPopupEditarPerfil(
                   context,
                   titulo: 'Editar Teléfono',
                   labelCampo: 'NÚMERO DE TELÉFONO',
-                  valorInicial: _telefono,
+                  valorInicial: telefono,
                   hintText: '+56 9 XXXX XXXX',
                   keyboardType: TextInputType.phone,
-                  onGuardar: (nuevoValor) {
-                    setState(() => _telefono = nuevoValor);
-                    // TODO: llamar API PATCH
+                  onGuardar: (nuevoValor) async {
+                    final ok = await _profileService.updatePhoneNumber(nuevoValor);
+                    if (!mounted) return;
+                    if (ok) {
+                      setState(() => _profile!['phone_number'] = nuevoValor);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Teléfono actualizado correctamente')),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Error al actualizar el teléfono')),
+                      );
+                    }
                   },
                 );
               },
@@ -71,22 +116,8 @@ class _VolProfileScreenState extends State<VolProfileScreen> {
 
             ProfileInfoCard(
               etiqueta: 'CORREO ELECTRÓNICO',
-              valor: _correo,
-              esEditable: true,
-              onEditar: () {
-                mostrarPopupEditarPerfil(
-                  context,
-                  titulo: 'Editar Correo',
-                  labelCampo: 'CORREO ELECTRÓNICO',
-                  valorInicial: _correo,
-                  hintText: 'ejemplo@correo.com',
-                  keyboardType: TextInputType.emailAddress,
-                  onGuardar: (nuevoValor) {
-                    setState(() => _correo = nuevoValor);
-                    // TODO: llamar API PATCH
-                  },
-                );
-              },
+              valor: correo,
+              esEditable: false,
             ),
             const SizedBox(height: 40),
 

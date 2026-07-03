@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../screens/vol_route_details_screen.dart';
 
@@ -17,13 +18,26 @@ class TarjetaRuta extends StatelessWidget {
     const imagenUrl =
         'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop';
 
-    final double distanciaMetros =
-        (datosRuta["distancia_metros"] ?? 0).toDouble();
-    String textoDistancia = '0 M';
-    if (distanciaMetros > 0) {
-      textoDistancia = distanciaMetros > 1000
-          ? '${(distanciaMetros / 1000).toStringAsFixed(1)} KM'
-          : '${distanciaMetros.toInt()} M';
+    final rawDist = datosRuta["distancia_metros"] ?? datosRuta["distance_meters"] ?? 0;
+    double distanciaMetros = double.tryParse(rawDist.toString()) ?? 0.0;
+    if (distanciaMetros == 0) {
+      final puntos = (datosRuta["street_geometry"] ?? datosRuta["base_points"] ?? []) as List;
+      distanciaMetros = _calcularDistancia(puntos);
+    }
+    String textoDistancia = distanciaMetros > 1000
+        ? '${(distanciaMetros / 1000).toStringAsFixed(1)} KM'
+        : distanciaMetros > 0 ? '${distanciaMetros.toInt()} M' : 'Sin dato';
+
+    final transporteTipo = (datosRuta["transport_type"] ?? 'A PIE').toString();
+    final rawFecha = datosRuta["starting_datetime"] ?? datosRuta["starting_date"];
+    String textoHorario = 'SIN HORARIO';
+    if (rawFecha != null) {
+      final fecha = DateTime.tryParse(rawFecha.toString());
+      if (fecha != null) {
+        final h = fecha.hour.toString().padLeft(2, '0');
+        final m = fecha.minute.toString().padLeft(2, '0');
+        textoHorario = '$h:$m';
+      }
     }
 
     final int voluntariosActivos = (datosRuta["capacidad_maxima"] ?? 10) ~/ 2;
@@ -70,9 +84,9 @@ class TarjetaRuta extends StatelessWidget {
                   spacing: 10,
                   runSpacing: 10,
                   children: [
-                    _buildTag(Icons.location_on, 'ZONA CENTRO',
+                    _buildTag(Icons.directions, transporteTipo.toUpperCase(),
                         const Color(0xFFE8F5E9), const Color(0xFF2E7D32)),
-                    _buildTag(Icons.access_time, 'HORARIO NOCTURNO',
+                    _buildTag(Icons.access_time, textoHorario,
                         const Color(0xFFE3F2FD), const Color(0xFF1565C0)),
                   ],
                 ),
@@ -157,6 +171,21 @@ class TarjetaRuta extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  double _calcularDistancia(List puntos) {
+    if (puntos.length < 2) return 0;
+    const r = 6371000.0;
+    double total = 0;
+    for (int i = 0; i < puntos.length - 1; i++) {
+      final lat1 = (puntos[i]['lat'] as num).toDouble() * pi / 180;
+      final lat2 = (puntos[i + 1]['lat'] as num).toDouble() * pi / 180;
+      final dLat = lat2 - lat1;
+      final dLng = ((puntos[i + 1]['lng'] as num) - (puntos[i]['lng'] as num)).toDouble() * pi / 180;
+      final a = sin(dLat / 2) * sin(dLat / 2) + cos(lat1) * cos(lat2) * sin(dLng / 2) * sin(dLng / 2);
+      total += r * 2 * atan2(sqrt(a), sqrt(1 - a));
+    }
+    return total;
   }
 
   Widget _buildTag(

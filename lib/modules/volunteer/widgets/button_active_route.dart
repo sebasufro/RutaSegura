@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import '../screens/vol_map_screen.dart';
+import '/modules/global/services/routes_service.dart';
 
-/// Botón flotante animado que indica que hay una ruta actualmente activa.
-/// Al pulsarlo, redirige al usuario al mapa en tiempo real de la ruta.
 class ButtonActiveRoute extends StatefulWidget {
   const ButtonActiveRoute({super.key});
 
@@ -13,14 +13,14 @@ class ButtonActiveRoute extends StatefulWidget {
 class _ButtonActiveRouteState extends State<ButtonActiveRoute>
     with SingleTickerProviderStateMixin {
   late AnimationController _controlador;
+  Map<String, dynamic>? _rutaActiva;
+  bool _cargando = true;
 
   @override
   void initState() {
     super.initState();
-    _controlador = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat();
+    _controlador = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+    _verificarRutaActiva();
   }
 
   @override
@@ -29,17 +29,57 @@ class _ButtonActiveRouteState extends State<ButtonActiveRoute>
     super.dispose();
   }
 
+  Future<void> _verificarRutaActiva() async {
+    final enrollments = await RoutesService().getMyEnrollments();
+    if (!mounted) return;
+    final ahora = DateTime.now();
+    Map<String, dynamic>? activa;
+    for (final e in enrollments) {
+      final raw = e['route']?['starting_datetime'] as String?;
+      if (raw == null) continue;
+      final inicio = DateTime.tryParse(raw);
+      if (inicio == null) continue;
+      final diff = inicio.difference(ahora);
+      final dentroVentana = diff.inMinutes <= 15 &&
+          (diff.isNegative ? ahora.isBefore(inicio.add(const Duration(hours: 4))) : true);
+      if (dentroVentana) {
+        activa = e;
+        break;
+      }
+    }
+    setState(() {
+      _rutaActiva = activa;
+      _cargando = false;
+    });
+  }
+
+  void _irARuta() {
+    if (_rutaActiva == null) return;
+    final route = _rutaActiva!['route'] as Map<String, dynamic>;
+    final geo = route['street_geometry'] as List? ?? route['base_points'] as List? ?? [];
+    final puntos = geo.map<LatLng>((p) =>
+        LatLng((p['lat'] as num).toDouble(), (p['lng'] as num).toDouble())).toList();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => VolMapScreen(
+          routeId: _rutaActiva!['id_route'],
+          routePoints: puntos,
+          routeName: route['route_name'],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_cargando) return const SizedBox.shrink();
+    if (_rutaActiva == null) return const SizedBox.shrink();
+
     return CustomPaint(
       painter: _PintorOnda(_controlador),
       child: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const VolMapScreen()),
-          );
-        },
+        onPressed: _irARuta,
         backgroundColor: const Color(0xFF1E3A8A),
         elevation: 4,
         shape: const CircleBorder(),
@@ -49,8 +89,6 @@ class _ButtonActiveRouteState extends State<ButtonActiveRoute>
   }
 }
 
-/// CustomPainter privado encargado de dibujar las ondas expansivas
-/// detrás del botón principal.
 class _PintorOnda extends CustomPainter {
   final Animation<double> animacion;
 
