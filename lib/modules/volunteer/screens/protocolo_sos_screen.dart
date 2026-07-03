@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/sos_temporizador.dart';
 import '../widgets/sos_tarjeta.dart';
+import '/modules/global/services/location_service.dart';
 
 // Pantalla encargada de gestionar el protocolo de emergencia (SOS).
 // Muestra un temporizador regresivo que, al finalizar, simula una llamada
 // a los servicios de emergencia y alerta sobre la ubicación del usuario.
 
 class ProtocoloSosScreen extends StatefulWidget {
-  const ProtocoloSosScreen({super.key});
+  final String? routeId;
+
+  const ProtocoloSosScreen({super.key, this.routeId});
 
   @override
   State<ProtocoloSosScreen> createState() => _ProtocoloSosScreenState();
@@ -26,8 +29,8 @@ class _ProtocoloSosScreenState extends State<ProtocoloSosScreen>
   // Controlador de la animación del anillo del temporizador.
   late AnimationController _controladorAnimacion;
 
-  // Indica si la alerta ya fue enviada o si el temporizador sigue activo.
   bool _alertaEnviada = false;
+  final _locationService = LocationService();
 
   @override
   void initState() {
@@ -68,17 +71,24 @@ class _ProtocoloSosScreenState extends State<ProtocoloSosScreen>
         _controladorAnimacion.stop();
         _controladorAnimacion.value = 1.0;
 
-        debugPrint("ALERTA SOS ENVIADA");
-        // Simulación de llamada.
+        if (widget.routeId != null) {
+          _locationService.toggleSos(widget.routeId!, true);
+        }
         _simularLlamadaCarabineros();
       }
     });
   }
 
-  // Cancela el temporizador, detiene la animación y regresa a la pantalla anterior.
   void _cancelarAlerta() {
     _timer?.cancel();
     _controladorAnimacion.stop();
+    Navigator.pop(context);
+  }
+
+  void _desactivarSosYSalir() {
+    if (widget.routeId != null) {
+      _locationService.toggleSos(widget.routeId!, false);
+    }
     Navigator.pop(context);
   }
 
@@ -247,9 +257,7 @@ class _ProtocoloSosScreenState extends State<ProtocoloSosScreen>
                   width: double.infinity,
                   height: 60,
                   child: ElevatedButton(
-                    onPressed: _alertaEnviada
-                        ? () => Navigator.pop(context)
-                        : _cancelarAlerta,
+                    onPressed: _alertaEnviada ? _desactivarSosYSalir : _cancelarAlerta,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(

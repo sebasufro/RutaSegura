@@ -6,6 +6,7 @@ import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
 import '/modules/global/screens/register_account_page.dart';
+import '/modules/global/services/auth_service.dart';
 import '/modules/volunteer/widgets/vol_navbar.dart';
 import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 
@@ -19,17 +20,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Hardcoded test accounts
-  static const String volunteerEmail = 'volunteer@example.com';
-  static const String volunteerPassword = '1234';
-  static const String supervisorEmail = 'supervisor@example.com';
-  static const String supervisorPassword = '1234';
-
-  // Controladores con datos de prueba (Hardcoded)
-  final _emailController = TextEditingController(text: 'volunteer@example.com');
-  final _passwordController = TextEditingController(text: '1234');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  bool _isLoading = false;
+  final _authService = AuthService();
 
   @override
   void dispose() {
@@ -151,36 +147,46 @@ class _LoginPageState extends State<LoginPage> {
 
                         // Botón de Iniciar Sesión
                         PrimaryButton(
-                          label: 'Iniciar Sesión',
+                          label: _isLoading ? 'Cargando...' : 'Iniciar Sesión',
                           backgroundColor: const Color(0xFF002045),
-                          onPressed: () {
+                          onPressed: _isLoading ? null : () async {
                             final email = _emailController.text.trim();
                             final password = _passwordController.text.trim();
 
-                            // Validate volunteer account
-                            if (email == volunteerEmail && password == volunteerPassword) {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => const VolNavbar()),
-                                (route) => false,
+                            if (email.isEmpty || password.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Ingresa tu correo y contraseña')),
                               );
                               return;
                             }
 
-                            // Validate supervisor account
-                            if (email == supervisorEmail && password == supervisorPassword) {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => const SupNavbar()),
-                                (route) => false,
-                              );
-                              return;
-                            }
+                            setState(() => _isLoading = true);
 
-                            // Invalid credentials
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Correo o contraseña inválidos')),
-                            );
+                            final result = await _authService.login(email, password);
+
+                            if (!mounted) return;
+                            setState(() => _isLoading = false);
+
+                            if (result['success']) {
+                              final role = result['role'] as String;
+                              if (role == 'VOLUNTEER') {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const VolNavbar()),
+                                  (route) => false,
+                                );
+                              } else if (role == 'SUPERVISOR' || role == 'ADMIN') {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const SupNavbar()),
+                                  (route) => false,
+                                );
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(result['message'] ?? 'Error al iniciar sesión')),
+                              );
+                            }
                           },
                         ),
                         const SizedBox(height: 32),
