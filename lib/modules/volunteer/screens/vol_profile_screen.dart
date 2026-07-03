@@ -25,30 +25,24 @@ class _VolProfileScreenState extends State<VolProfileScreen> {
   }
 
   Future<void> _loadProfile() async {
+    setState(() => _isLoading = true);
     final data = await _profileService.getProfile();
-    if (mounted) {
-      setState(() {
-        _profile = data;
-        _isLoading = false;
-      });
-    }
+    if (mounted) setState(() { _profile = data; _isLoading = false; });
+  }
+
+  void _snack(String msg, {bool error = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+      backgroundColor: error ? Colors.redAccent : Colors.green,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     final colorPrincipal = const Color(0xFF1E3A8A);
 
-    if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (_profile == null) {
-      return const Scaffold(
-        body: Center(child: Text('No se pudo cargar el perfil')),
-      );
-    }
+    if (_isLoading) return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    if (_profile == null) return const Scaffold(body: Center(child: Text('No se pudo cargar el perfil')));
 
     final nombre = _profile!['full_name'] ?? '';
     final correo = _profile!['email'] ?? '';
@@ -61,28 +55,15 @@ class _VolProfileScreenState extends State<VolProfileScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ProfileMainInfo(
-              nombre: nombre,
-              correo: correo,
-              colorPrincipal: colorPrincipal,
-            ),
+            ProfileMainInfo(nombre: nombre, correo: correo, colorPrincipal: colorPrincipal),
             const SizedBox(height: 40),
 
-            ProfileInfoCard(
-              etiqueta: 'NOMBRE COMPLETO',
-              valor: nombre,
-              esEditable: false,
-            ),
+            ProfileInfoCard(etiqueta: 'NOMBRE COMPLETO', valor: nombre, esEditable: false),
             const SizedBox(height: 15),
-
-            ProfileInfoCard(
-              etiqueta: 'RUT',
-              valor: rut,
-              esEditable: false,
-            ),
+            ProfileInfoCard(etiqueta: 'RUT', valor: rut, esEditable: false),
             const SizedBox(height: 15),
-
             ProfileInfoCard(
               etiqueta: 'TELÉFONO',
               valor: telefono,
@@ -100,53 +81,34 @@ class _VolProfileScreenState extends State<VolProfileScreen> {
                     if (!mounted) return;
                     if (ok) {
                       setState(() => _profile!['phone_number'] = nuevoValor);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Teléfono actualizado correctamente')),
-                      );
+                      _snack('Teléfono actualizado correctamente');
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Error al actualizar el teléfono')),
-                      );
+                      _snack('Error al actualizar el teléfono', error: true);
                     }
                   },
                 );
               },
             ),
             const SizedBox(height: 15),
-
-            ProfileInfoCard(
-              etiqueta: 'CORREO ELECTRÓNICO',
-              valor: correo,
-              esEditable: false,
-            ),
-            const SizedBox(height: 40),
+            ProfileInfoCard(etiqueta: 'CORREO ELECTRÓNICO', valor: correo, esEditable: false),
+            const SizedBox(height: 35),
 
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const VolConfigScreen(),
-                    ),
-                  );
-                },
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const VolConfigScreen()),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF283593),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   elevation: 2,
                 ),
                 child: const Text(
                   'Configuración',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
             ),
@@ -157,3 +119,4 @@ class _VolProfileScreenState extends State<VolProfileScreen> {
     );
   }
 }
+
