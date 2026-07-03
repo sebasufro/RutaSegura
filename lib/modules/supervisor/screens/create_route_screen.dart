@@ -163,7 +163,7 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
       endingLongitude: endingPoint?.longitude,
       transportType: _formData['transporteIda'] as String?,
       basePoints: _latLngToBasePoints(rutaPoints),
-      status: 'PENDIENTE',
+      status: 'PUBLISHED',
     );
 
     try {
