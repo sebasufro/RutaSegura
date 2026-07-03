@@ -298,7 +298,7 @@ class _VolMapScreenState extends State<VolMapScreen> {
           Positioned(
             bottom: 220 + espacioInferiorSeguro,
             right: 20,
-            child: const SosButton(),
+            child: SosButton(routeId: widget.routeId),
           ),
 
           // Panel inferior

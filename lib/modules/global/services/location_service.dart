@@ -25,6 +25,22 @@ class LocationService {
     return response.statusCode == 201;
   }
 
+  Future<bool> toggleSos(String routeId, bool sosActive) async {
+    final token = await AuthService.getToken();
+    if (token == null) return false;
+
+    final response = await http.patch(
+      Uri.parse('$_baseUrl/api/volunteer/location/sos'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({'id_route': routeId, 'sos_active': sosActive}),
+    );
+
+    return response.statusCode == 200;
+  }
+
   Future<List<Map<String, dynamic>>> getRouteLocations(String routeId) async {
     final token = await AuthService.getToken();
     if (token == null) return [];
