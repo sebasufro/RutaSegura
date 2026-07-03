@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// Muestra un texto y opcionalmente un icono de flecha hacia adelante.
 class PrimaryButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool showArrow;
   final Color backgroundColor;
 
