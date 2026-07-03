@@ -8,7 +8,7 @@ void mostrarPopupEditarPerfil(
   required String valorInicial,
   required String hintText,
   required TextInputType keyboardType,
-  required void Function(String nuevoValor) onGuardar,
+  required Function(String nuevoValor) onGuardar,
 }) {
   showDialog(
     context: context,
@@ -30,7 +30,7 @@ class _EditarPerfilDialog extends StatefulWidget {
   final String valorInicial;
   final String hintText;
   final TextInputType keyboardType;
-  final void Function(String) onGuardar;
+  final Function(String) onGuardar;
 
   const _EditarPerfilDialog({
     required this.titulo,
