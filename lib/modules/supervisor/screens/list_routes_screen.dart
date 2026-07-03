@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/models/route_model.dart';
+import '/modules/supervisor/services/route_service.dart';
+import '/modules/global/services/auth_store.dart';
+import '/modules/supervisor/screens/route_details_screen.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
-import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/supervisor/widgets/routes_control_panel.dart';
 import '/modules/supervisor/widgets/route_card.dart';
 
@@ -13,17 +15,38 @@ class ListRoutesScreen extends StatefulWidget {
 }
 
 class _ListRoutesScreenState extends State<ListRoutesScreen> {
-  final List<RouteModel> allRoutes = List.generate(
-    10,
-    (index) => RouteModel(
-      id: index + 1,
-      title: 'Ruta Agrupación ${index + 1}',
-      sector: 'SECTOR DESIGNADO',
-      schedule: 'HORARIO DESIGNADO',
-    ),
-  );
+  final RouteService _routeService = RouteService(token: AuthStore.token);
 
+  List<RouteModel> _routes = [];
+  bool _isLoading = true;
+  String? _error;
   int _displayedRouteCount = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRoutes();
+  }
+
+  Future<void> _loadRoutes() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final routes = await _routeService.fetchRoutes();
+      setState(() {
+        _routes = routes;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,98 +56,86 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
           width: double.infinity,
           height: double.infinity,
           color: const Color(0xFFF8FAFC),
-          child: Stack(
-              children: [
-                // Main Content
-                Column(
-                  children: [
-                    // Topbar
-                    const SupTopbar(),
+          child: Column(
+            children: [
+              const SupTopbar(),
 
-                    // Content Wrapper
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                          child: Column(
-                            children: [
-                              // Control Panel
-                              RoutesControlPanel(
-                                onQuantityChanged: (quantity) {
-                                  setState(() => _displayedRouteCount = quantity);
-                                },
-                              ),
-
-                              // Routes List
-                              Column(
-                                spacing: 16,
-                                children: List.generate(
-                                  _displayedRouteCount > allRoutes.length
-                                      ? allRoutes.length
-                                      : _displayedRouteCount,
-                                  (index) {
-                                    final route = allRoutes[index];
-                                    return RouteCard(
-                                      route: route,
-                                      onViewPressed: () {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('Ver ruta ${route.id}')),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                              const SizedBox(height: 60), // Extra spacing for FAB
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                // Floating Action Button
-                Positioned(
-                  bottom: 120,
-                  right: 24,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Crear nueva ruta')),
-                      );
-                    },
-                    shape: const CircleBorder(),
-                    backgroundColor: const Color(0xFF9ca3af),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.add, size: 28, color: Colors.white),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'AGREGAR',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Bottom Navigation
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: SupNavbar(),
-                ),
-              ],
-            ),
+              Expanded(
+                child: _buildBody(),
+              ),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_error != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Error: $_error'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadRoutes,
+              child: const Text('Reintentar'),
+            ),
+          ],
         ),
       );
     }
+
+    if (_routes.isEmpty) {
+      return const Center(
+        child: Text('No hay rutas disponibles'),
+      );
+    }
+
+    final displayCount = _displayedRouteCount > _routes.length
+        ? _routes.length
+        : _displayedRouteCount;
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: Column(
+          children: [
+            RoutesControlPanel(
+              onQuantityChanged: (quantity) {
+                setState(() => _displayedRouteCount = quantity);
+              },
+            ),
+
+            Column(
+              spacing: 16,
+              children: List.generate(
+                displayCount,
+                (index) {
+                  final route = _routes[index];
+                  return RouteCard(
+                    route: route,
+                    onViewPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RouteDetailsScreen(route: route),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 60),
+          ],
+        ),
+      ),
+    );
   }
+}

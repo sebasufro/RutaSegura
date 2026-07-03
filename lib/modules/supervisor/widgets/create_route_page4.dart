@@ -4,9 +4,9 @@ class CreateRoutePage4 extends StatelessWidget {
   final VoidCallback onFinish;
 
   const CreateRoutePage4({
-    Key? key,
+    super.key,
     required this.onFinish,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

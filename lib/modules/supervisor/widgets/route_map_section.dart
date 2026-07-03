@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class RouteMapSection extends StatelessWidget {
   final VoidCallback onTrackingMapPressed;
   final VoidCallback onControlPointPressed;
+  final List<LatLng>? routePoints;
 
   const RouteMapSection({
     super.key,
     required this.onTrackingMapPressed,
     required this.onControlPointPressed,
+    this.routePoints,
   });
 
   @override
@@ -35,12 +39,35 @@ class RouteMapSection extends StatelessWidget {
       height: 380,
       child: Stack(
         children: [
-          // Map Placeholder
-          Center(
-            child: CustomPaint(
-              size: const Size(120, 120),
-              painter: _MapIconPainter(),
+          // Map
+          FlutterMap(
+            options: MapOptions(
+              initialCenter: routePoints?.isNotEmpty == true
+                  ? routePoints!.first
+                  : const LatLng(-38.769, -72.597),
+              initialZoom: 14.0,
+              maxZoom: 18.0,
+              minZoom: 3.0,
+              interactionOptions: const InteractionOptions(
+                flags: InteractiveFlag.none,
+              ),
             ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.ruta_segura',
+              ),
+              if (routePoints != null && routePoints!.length >= 2)
+                PolylineLayer(
+                  polylines: [
+                    Polyline(
+                      points: routePoints!,
+                      color: Colors.blueAccent,
+                      strokeWidth: 4.0,
+                    ),
+                  ],
+                ),
+            ],
           ),
 
           // Control Point Info (Bottom Left)
@@ -149,58 +176,3 @@ class RouteMapSection extends StatelessWidget {
   }
 }
 
-// Custom painter for map icon
-class _MapIconPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    const blue = Color.fromARGB(255, 0, 150, 255);
-
-    // Draw circles (radar effect)
-    for (int i = 3; i > 0; i--) {
-      final radius = 40.0 * i / 3;
-      final opacity = (255 * (3 - i + 1) / 4).toInt();
-      final paint = Paint()
-        ..color = blue.withAlpha((opacity * 0.4).toInt())
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = i == 3 ? 2 : 1.5;
-
-      canvas.drawCircle(center, radius, paint);
-    }
-
-    // Draw center dot
-    final dotPaint = Paint()
-      ..color = blue
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, 8, dotPaint);
-
-    // Draw crosshair lines
-    final linePaint = Paint()
-      ..color = blue.withAlpha((0.4 * 255).toInt())
-      ..strokeWidth = 1;
-
-    canvas.drawLine(
-      Offset(center.dx, center.dy - 40),
-      Offset(center.dx, center.dy - 20),
-      linePaint,
-    );
-    canvas.drawLine(
-      Offset(center.dx, center.dy + 20),
-      Offset(center.dx, center.dy + 40),
-      linePaint,
-    );
-    canvas.drawLine(
-      Offset(center.dx - 40, center.dy),
-      Offset(center.dx - 20, center.dy),
-      linePaint,
-    );
-    canvas.drawLine(
-      Offset(center.dx + 20, center.dy),
-      Offset(center.dx + 40, center.dy),
-      linePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_MapIconPainter oldDelegate) => false;
-}

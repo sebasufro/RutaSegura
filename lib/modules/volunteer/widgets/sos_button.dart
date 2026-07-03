@@ -3,7 +3,9 @@ import '../screens/protocolo_sos_screen.dart';
 
 // Botón flotante dedicado a activar el protocolo de emergencia (SOS).
 class SosButton extends StatelessWidget {
-  const SosButton({super.key});
+  final String? routeId;
+
+  const SosButton({super.key, this.routeId});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class SosButton extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ProtocoloSosScreen(),
+                builder: (context) => ProtocoloSosScreen(routeId: routeId),
               ),
             );
           },

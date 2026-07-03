@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ruta_segura/features/auth/presentation/pages/welcome_page.dart';
+import 'modules/global/screens/welcome_page.dart';
 
 void main() => runApp(const RutaSeguraApp());
 

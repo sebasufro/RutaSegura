@@ -71,7 +71,7 @@ class RouteCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            route.sector,
+                            route.sector ?? 'SECTOR',
                             style: const TextStyle(
                               fontSize: 9,
                               fontWeight: FontWeight.w700,
@@ -102,7 +102,7 @@ class RouteCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            route.schedule,
+                            route.schedule ?? 'HORARIO',
                             style: const TextStyle(
                               fontSize: 9,
                               fontWeight: FontWeight.w700,
