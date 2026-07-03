@@ -32,7 +32,7 @@ class TarjetaRuta extends StatelessWidget {
     final rawFecha = datosRuta["starting_datetime"] ?? datosRuta["starting_date"];
     String textoHorario = 'SIN HORARIO';
     if (rawFecha != null) {
-      final fecha = DateTime.tryParse(rawFecha.toString());
+      final fecha = DateTime.tryParse(rawFecha.toString())?.toLocal();
       if (fecha != null) {
         final h = fecha.hour.toString().padLeft(2, '0');
         final m = fecha.minute.toString().padLeft(2, '0');

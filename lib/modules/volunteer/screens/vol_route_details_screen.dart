@@ -80,7 +80,7 @@ class _VolRouteDetailsScreenState extends State<VolRouteDetailsScreen> {
     String textoFecha = "Sin fecha definida";
     if (rawFecha != null) {
       try {
-        DateTime fecha = DateTime.parse(rawFecha);
+        DateTime fecha = DateTime.parse(rawFecha).toLocal();
         String dia = fecha.day.toString().padLeft(2, '0');
         String mes = fecha.month.toString().padLeft(2, '0');
         String hora = fecha.hour.toString().padLeft(2, '0');

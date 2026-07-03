@@ -51,7 +51,7 @@ class _VolMyRoutesScreenState extends State<VolMyRoutesScreen> {
 
   String _determinarHorario(String? startingDatetime) {
     if (startingDatetime == null) return 'SIN HORARIO';
-    final hour = DateTime.tryParse(startingDatetime)?.hour ?? 12;
+    final hour = DateTime.tryParse(startingDatetime)?.toLocal().hour ?? 12;
     return hour >= 19 || hour < 6 ? 'NOCTURNO' : 'DIURNO';
   }
 

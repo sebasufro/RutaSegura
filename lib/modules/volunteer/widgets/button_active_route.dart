@@ -37,7 +37,7 @@ class _ButtonActiveRouteState extends State<ButtonActiveRoute>
     for (final e in enrollments) {
       final raw = e['route']?['starting_datetime'] as String?;
       if (raw == null) continue;
-      final inicio = DateTime.tryParse(raw);
+      final inicio = DateTime.tryParse(raw)?.toLocal();
       if (inicio == null) continue;
       final diff = inicio.difference(ahora);
       final dentroVentana = diff.inMinutes <= 15 &&

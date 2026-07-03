@@ -32,7 +32,7 @@ class MyRoutesCard extends StatelessWidget {
 
   _EstadoUnirse _calcularEstado() {
     if (startingDatetime == null) return _EstadoUnirse.bloqueado;
-    final inicio = DateTime.tryParse(startingDatetime!);
+    final inicio = DateTime.tryParse(startingDatetime!)?.toLocal();
     if (inicio == null) return _EstadoUnirse.bloqueado;
     final ahora = DateTime.now();
     final diferencia = inicio.difference(ahora);
@@ -47,7 +47,7 @@ class MyRoutesCard extends StatelessWidget {
 
   String _textoTiempoRestante() {
     if (startingDatetime == null) return 'Unirse';
-    final inicio = DateTime.tryParse(startingDatetime!);
+    final inicio = DateTime.tryParse(startingDatetime!)?.toLocal();
     if (inicio == null) return 'Unirse';
     final diff = inicio.difference(DateTime.now());
     if (diff.isNegative) return 'En curso';
