@@ -32,10 +32,18 @@ class _InteractiveMapWidgetState extends State<InteractiveMapWidget> {
         _calcularRuta();
       }
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) => _notifyParent());
+  }
+
+  void _notifyParent() {
+    widget.onRouteSaved(List.unmodifiable(_puntosDeRuta));
   }
 
   Future<void> _calcularRuta() async {
-    if (_puntosDeRuta.length < 2) return;
+    if (_puntosDeRuta.length < 2) {
+      setState(() => _lineaDeCalle.clear());
+      return;
+    }
     setState(() => _cargando = true);
 
     List<List<double>> coordenadasORS =
@@ -81,6 +89,7 @@ class _InteractiveMapWidgetState extends State<InteractiveMapWidget> {
       _puntosDeRuta.removeLast();
       if (_puntosDeRuta.length < 2) _lineaDeCalle.clear();
     });
+    _notifyParent();
     if (_puntosDeRuta.length >= 2) await _calcularRuta();
   }
 
@@ -89,6 +98,7 @@ class _InteractiveMapWidgetState extends State<InteractiveMapWidget> {
       _puntosDeRuta.clear();
       _lineaDeCalle.clear();
     });
+    _notifyParent();
   }
 
   List<Marker> _construirMarcadores() {
@@ -127,6 +137,7 @@ class _InteractiveMapWidgetState extends State<InteractiveMapWidget> {
             onTap: (tapPosition, point) async {
               if (!point.latitude.isFinite || !point.longitude.isFinite) return;
               setState(() => _puntosDeRuta.add(point));
+              _notifyParent();
               await _calcularRuta();
             },
           ),
@@ -137,6 +148,14 @@ class _InteractiveMapWidgetState extends State<InteractiveMapWidget> {
             ),
             PolylineLayer(
               polylines: [
+                // Direct line between tapped points (always visible)
+                if (_puntosDeRuta.length >= 2)
+                  Polyline(
+                    points: _puntosDeRuta,
+                    color: Colors.blueAccent.withOpacity(0.3),
+                    strokeWidth: 3.0,
+                  ),
+                // Street-following route from OpenRouteService
                 if (_lineaDeCalle.isNotEmpty)
                   Polyline(
                     points: _lineaDeCalle,
