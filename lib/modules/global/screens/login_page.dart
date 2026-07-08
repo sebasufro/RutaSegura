@@ -1,14 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/features/auth/presentation/pages/login_page.dart
-import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
-import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
-import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
-import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
-import 'package:ruta_segura/features/auth/presentation/pages/forgot_password_page.dart';
-import 'package:ruta_segura/features/auth/presentation/pages/register_account_page.dart';
-import 'package:ruta_segura/features/auth/presentation/pages/under_construction_page.dart';
-=======
 import '/modules/global/screens/forgot_password_page.dart';
 import '/modules/global/widgets/auth_header.dart';
 import '/modules/global/widgets/primary_button.dart';
@@ -19,7 +9,6 @@ import '/modules/global/screens/register_account_page.dart';
 import '/modules/global/services/auth_service.dart';
 import '/modules/volunteer/widgets/vol_navbar.dart';
 import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
->>>>>>> origin/integration:lib/modules/global/screens/login_page.dart
 
 /// Página de Iniciar Sesión.
 /// Permite a los usuarios registrados acceder a su cuenta mediante correo y contraseña.

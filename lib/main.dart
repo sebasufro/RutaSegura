@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'modules/global/screens/welcome_page.dart';
+import 'modules/global/services/auth_service.dart';
+import 'modules/global/services/auth_store.dart';
 
-void main() => runApp(const RutaSeguraApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  AuthStore.token = await AuthService.getToken();
+  runApp(const RutaSeguraApp());
+}
 
 class RutaSeguraApp extends StatelessWidget {
   const RutaSeguraApp({super.key});

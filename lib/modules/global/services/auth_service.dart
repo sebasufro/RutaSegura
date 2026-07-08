@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'auth_store.dart';
 
 class AuthService {
   static const String _baseUrl = 'http://200.13.4.209:3000';
@@ -17,11 +18,12 @@ class AuthService {
 
     final data = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
+if (response.statusCode == 200) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_tokenKey, data['token']);
       await prefs.setString(_roleKey, data['rol']);
-      await prefs.setString(_userIdKey, data['id_user']);
+      await prefs.setString(_userIdKey, data['id_user'].toString());
+      AuthStore.token = data['token'];
       return {'success': true, 'role': data['rol']};
     }
 
@@ -44,10 +46,11 @@ class AuthService {
     return prefs.getString(_userIdKey);
   }
 
-  static Future<void> logout() async {
+static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);
     await prefs.remove(_roleKey);
     await prefs.remove(_userIdKey);
+    AuthStore.token = null;
   }
 }

@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/features/auth/presentation/pages/reset_password_page.dart
-import 'package:ruta_segura/core/presentation/widgets/auth_header.dart';
-import 'package:ruta_segura/core/presentation/widgets/primary_button.dart';
-import 'package:ruta_segura/core/presentation/widgets/auth_card.dart';
-import 'package:ruta_segura/core/presentation/widgets/custom_text_field.dart';
-import 'package:ruta_segura/core/presentation/widgets/input_label.dart';
-=======
 import '/modules/global/widgets/auth_header.dart';
 import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
->>>>>>> origin/integration:lib/modules/global/screens/reset_password_page.dart
 
 /// Página para que el usuario establezca su nueva contraseña.
 class ResetPasswordPage extends StatefulWidget {
