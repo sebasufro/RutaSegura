@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 /// Cabecera estandarizada para pantallas de autenticación.
 /// Incluye un botón de retroceso y el logo de la aplicación centrado.
 class AuthHeader extends StatelessWidget {
-  const AuthHeader({super.key});
+  /// Acción al presionar la flecha. Si no se especifica, hace
+  /// Navigator.pop(context) (comportamiento por defecto).
+  final VoidCallback? onBack;
+
+  const AuthHeader({super.key, this.onBack});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +18,7 @@ class AuthHeader extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-            onPressed: () => Navigator.pop(context),
+            onPressed: onBack ?? () => Navigator.pop(context),
           ),
           Image.asset(
             "assets/images/logo_minimalista.png",

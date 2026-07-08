@@ -100,8 +100,15 @@ class _RegisterFlowScreenState extends State<RegisterFlowScreen> {
           children: [
             Column(
               children: [
-                const AuthHeader(),
-                Expanded(
+AuthHeader(
+                  onBack: () {
+                    if (_currentPage > 0) {
+                      _goToPage(_currentPage - 1);
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),                Expanded(
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
