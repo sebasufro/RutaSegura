@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_store.dart';
 
 class AuthService {
-  static const String _baseUrl = 'http://200.13.4.209:3000';
+static const String _baseUrl = 'http://localhost:3000';
   static const String _tokenKey = 'jwt_token';
   static const String _roleKey = 'user_role';
   static const String _userIdKey = 'user_id';
@@ -60,7 +60,12 @@ Future<Map<String, dynamic>> signIn(Map<String, dynamic> userData) async {
       return {'success': true, 'data': data['data']};
     }
 
-    final errorMsg = data['message'] ?? 'No se pudo completar el registro';
+    String errorMsg;
+    if (data['message'] is List) {
+      errorMsg = (data['message'] as List).join(', ');
+    } else {
+      errorMsg = data['message']?.toString() ?? 'No se pudo completar el registro';
+    }
     return {'success': false, 'message': errorMsg, 'errors': data['errors']};
   }
 
