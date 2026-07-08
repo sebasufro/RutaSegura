@@ -44,29 +44,50 @@ class _RegisterStepOrgState extends State<RegisterStepOrg> {
     _addressController.dispose();
     super.dispose();
   }
+static const int _maxCertificateBytes = 300 * 1024; // 300 KB
 
   Future<void> _pickCertificate() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'jpg', 'png'],
+      allowedExtensions: ['pdf'],
       withData: true,
     );
 
-    if (result != null && result.files.single.bytes != null) {
-      setState(() {
-        _fileName = result.files.single.name;
-      });
-      widget.formData['certificate_name'] = result.files.single.name;
-      widget.formData['certificate_content'] = base64Encode(result.files.single.bytes!);
-    }
-  }
+    if (result == null || result.files.single.bytes == null) return;
 
-  void _handleNext() {
+    final bytes = result.files.single.bytes!;
+
+    if (bytes.length > _maxCertificateBytes) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('El archivo debe pesar menos de 300 KB. Sube una versión más liviana.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _fileName = result.files.single.name;
+    });
+    widget.formData['certificate_name'] = result.files.single.name;
+    widget.formData['certificate_content'] = base64Encode(bytes);
+  }
+ 
+void _handleNext() {
     if (_orgNameController.text.isEmpty ||
         _pjNumberController.text.isEmpty ||
         _addressController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Por favor, completa todos los campos obligatorios'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    if (_fileName == null || (widget.formData['certificate_content'] as String?)?.isEmpty != false) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Debes subir el certificado de vigencia'), backgroundColor: Colors.red),
       );
       return;
     }
@@ -77,7 +98,6 @@ class _RegisterStepOrgState extends State<RegisterStepOrg> {
 
     widget.onNext();
   }
-
   @override
   Widget build(BuildContext context) {
     return Column(

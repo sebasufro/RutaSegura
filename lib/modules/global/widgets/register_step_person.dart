@@ -3,7 +3,8 @@ import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
-
+import '/modules/global/utils/validators.dart';
+import 'package:flutter/services.dart'; 
 class RegisterStepPerson extends StatefulWidget {
   final Map<String, dynamic> formData;
   final VoidCallback onNext;
@@ -41,14 +42,27 @@ class _RegisterStepPersonState extends State<RegisterStepPerson> {
     _addressController.dispose();
     super.dispose();
   }
-
-  void _handleNext() {
+void _handleNext() {
     if (_fullNameController.text.isEmpty ||
         _rutController.text.isEmpty ||
         _phoneController.text.isEmpty ||
         _addressController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Por favor, completa todos tus datos personales'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    if (!isValidRut(_rutController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('El RUT ingresado no es válido'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    if (!isValidClPhoneWithoutPrefix(_phoneController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('El teléfono debe tener 9 dígitos (ej: 9 1234 5678)'), backgroundColor: Colors.red),
       );
       return;
     }
@@ -61,6 +75,8 @@ class _RegisterStepPersonState extends State<RegisterStepPerson> {
     widget.onNext();
   }
 
+   
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -90,8 +106,13 @@ class _RegisterStepPersonState extends State<RegisterStepPerson> {
                   CustomTextField(controller: _fullNameController, hintText: 'Nombres y Apellidos', prefixIcon: Icons.person_outline),
                   const SizedBox(height: 20),
                   const InputLabel(text: 'RUT'),
-                  CustomTextField(controller: _rutController, hintText: '12.345.678-K', prefixIcon: Icons.badge_outlined),
-                  const SizedBox(height: 20),
+CustomTextField(
+                    controller: _rutController,
+                    hintText: '12.345.678-K',
+                    prefixIcon: Icons.badge_outlined,
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [RutInputFormatter()],
+                  ),                  const SizedBox(height: 20),
                   const InputLabel(text: 'NÚMERO DE TELÉFONO'),
                   Container(
                     decoration: BoxDecoration(color: const Color(0xFFF2F4F6), borderRadius: BorderRadius.circular(12)),
