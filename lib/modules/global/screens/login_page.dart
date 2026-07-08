@@ -5,7 +5,7 @@ import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
-import '/modules/global/screens/register_account_page.dart';
+import '/modules/global/screens/register_flow_screen.dart';
 import '/modules/global/services/auth_service.dart';
 import '/modules/volunteer/widgets/vol_navbar.dart';
 import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
@@ -197,8 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const RegisterAccountPage()),
-                              );
+MaterialPageRoute(builder: (context) => const RegisterFlowScreen()),                              );
                             },
                             child: RichText(
                               textAlign: TextAlign.center,

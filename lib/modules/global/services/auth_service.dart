@@ -46,6 +46,25 @@ if (response.statusCode == 200) {
     return prefs.getString(_userIdKey);
   }
 
+
+Future<Map<String, dynamic>> signIn(Map<String, dynamic> userData) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/signIn'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(userData),
+    );
+
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode == 201) {
+      return {'success': true, 'data': data['data']};
+    }
+
+    final errorMsg = data['message'] ?? 'No se pudo completar el registro';
+    return {'success': false, 'message': errorMsg, 'errors': data['errors']};
+  }
+
+
 static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);
