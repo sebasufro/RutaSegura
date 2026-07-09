@@ -5,6 +5,7 @@ import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
+import '/modules/global/utils/validators.dart';
 
 class RegisterStepOrg extends StatefulWidget {
   final Map<String, dynamic> formData;
@@ -24,6 +25,7 @@ class _RegisterStepOrgState extends State<RegisterStepOrg> {
   late TextEditingController _orgNameController;
   late TextEditingController _pjNumberController;
   late TextEditingController _addressController;
+  final _pjNumberFocusNode = FocusNode();
   String? _fileName;
 
   @override
@@ -35,6 +37,15 @@ class _RegisterStepOrgState extends State<RegisterStepOrg> {
     _fileName = widget.formData['certificate_name']?.toString().isEmpty ?? true
         ? null
         : widget.formData['certificate_name'];
+        _pjNumberFocusNode.addListener(() {
+      if (!_pjNumberFocusNode.hasFocus && _pjNumberController.text.isNotEmpty) {
+        if (!isValidRut(_pjNumberController.text)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('El número de persona jurídica no es válido'), backgroundColor: Colors.red),
+          );
+        }
+      }
+    });
   }
 
   @override
@@ -42,6 +53,7 @@ class _RegisterStepOrgState extends State<RegisterStepOrg> {
     _orgNameController.dispose();
     _pjNumberController.dispose();
     _addressController.dispose();
+    _pjNumberFocusNode.dispose();
     super.dispose();
   }
 static const int _maxCertificateBytes = 300 * 1024; // 300 KB
@@ -127,8 +139,13 @@ void _handleNext() {
                   CustomTextField(controller: _orgNameController, hintText: 'Ej: Ruta Segura ONG'),
                   const SizedBox(height: 20),
                   const InputLabel(text: 'NÚMERO PERSONA JURÍDICA'),
-                  CustomTextField(controller: _pjNumberController, hintText: 'PJ-12.345.674-0'),
-                  const SizedBox(height: 20),
+CustomTextField(
+                    controller: _pjNumberController,
+                    hintText: '12.345.674-0',
+                    inputFormatters: [RutInputFormatter()],
+                                        focusNode: _pjNumberFocusNode,
+
+                  ),                  const SizedBox(height: 20),
                   const InputLabel(text: 'CERTIFICADO DE VIGENCIA'),
                   SizedBox(
                     width: double.infinity,
