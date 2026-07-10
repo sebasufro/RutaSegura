@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Cabecera estandarizada para pantallas de autenticación.
-/// Incluye un botón de retroceso y el logo de la aplicación centrado.
+/// Cabecera reutilizable para pantallas de autenticación con botón de retroceso y logo.
 class AuthHeader extends StatelessWidget {
   /// Acción al presionar la flecha. Si no se especifica, hace
   /// Navigator.pop(context) (comportamiento por defecto).

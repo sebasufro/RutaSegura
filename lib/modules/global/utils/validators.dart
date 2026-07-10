@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 
-/// Valida un RUT chileno, incluyendo el dígito verificador (módulo 11).
+/// Valida un RUT chileno, incluyendo su dígito verificador, usando el algoritmo del módulo 11.
 /// Acepta formatos con o sin puntos, con guión antes del verificador.
-/// Ej: "12.345.678-5", "12345678-5", "12345678-K".
+/// Ejemplo: "12.345.678-5", "12345678-5" o "12345678-K".
 bool isValidRut(String rawRut) {
   final rut = rawRut.replaceAll('.', '').replaceAll(' ', '').toUpperCase();
 
@@ -29,18 +29,16 @@ bool isValidRut(String rawRut) {
   return verifier == expectedVerifier;
 }
 
-/// Valida un número de teléfono chileno sin el prefijo "+56"
-/// (el que se ingresa en el campo de texto, ej: "9 1234 5678").
-/// Debe tener exactamente 9 dígitos y empezar con 9, una vez
-/// removidos los espacios.
+/// Valida un número de teléfono chileno sin el prefijo "+56", como el que ingresa el usuario en pantalla.
+/// Espera exactamente 9 dígitos y que empiece con 9 una vez quitados los espacios.
 bool isValidClPhoneWithoutPrefix(String rawPhone) {
   final digits = rawPhone.replaceAll(' ', '');
   return RegExp(r'^9\d{8}$').hasMatch(digits);
 }
 
-/// Formatea el RUT chileno mientras el usuario escribe: solo permite
-/// dígitos y una "K" final, y agrega puntos y guión automáticamente.
-/// Ej: escribiendo "123456785" se muestra "12.345.678-5".
+/// Formatea el RUT mientras el usuario escribe para que quede en un formato legible y consistente.
+/// Solo permite dígitos y una "K" final, y agrega puntos y guión automáticamente.
+/// Ejemplo: "123456785" se muestra como "12.345.678-5".
 class RutInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

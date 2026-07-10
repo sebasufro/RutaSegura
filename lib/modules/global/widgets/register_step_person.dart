@@ -5,6 +5,8 @@ import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
 import '/modules/global/utils/validators.dart';
 import 'package:flutter/services.dart'; 
+
+/// Paso del registro para recopilar los datos personales del usuario y validar su RUT y teléfono.
 class RegisterStepPerson extends StatefulWidget {
   final Map<String, dynamic> formData;
   final VoidCallback onNext;

@@ -5,6 +5,8 @@ import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
 import '/modules/global/services/auth_service.dart';
 import '/modules/global/utils/validators.dart'; 
+
+/// Paso final del registro para ingresar un contacto de emergencia y enviar el payload completo.
 class RegisterStepEmergency extends StatefulWidget {
   final Map<String, dynamic> formData;
   final Future<void> Function(Map<String, dynamic> payload) onFinish;

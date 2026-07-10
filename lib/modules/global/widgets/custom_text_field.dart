@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Campo de texto personalizado con el diseño institucional.
-/// Soporta iconos, manejo de contraseñas y diferentes tipos de teclado.
+/// Campo de texto visualmente consistente con soporte para iconos, contraseñas y formateo de entrada.
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;

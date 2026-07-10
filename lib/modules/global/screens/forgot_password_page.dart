@@ -6,7 +6,7 @@ import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
 import '/modules/global/screens/verify_code_page.dart';
 
-/// Página para que el usuario solicite la recuperación de su contraseña.
+/// Página para solicitar el código de recuperación de contraseña.
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
@@ -50,7 +50,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         letterSpacing: 0.35,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 30),
 
                     AuthCard(
@@ -82,7 +82,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                           ),
                           const SizedBox(height: 32),
-                          
+
                           const InputLabel(text: 'Correo electrónico'),
                           CustomTextField(
                             controller: _emailController,
@@ -91,7 +91,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 24),
-                          
+
                           PrimaryButton(
                             label: 'Enviar código',
                             backgroundColor: const Color(0xFF1E40AF),
@@ -99,7 +99,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               if (_emailController.text.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Por favor, ingresa tu correo electrónico'),
+                                    content: Text(
+                                      'Por favor, ingresa tu correo electrónico',
+                                    ),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -108,14 +110,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               // Simulación de envío de código y navegación
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Código enviado satisfactoriamente'),
+                                  content: Text(
+                                    'Código enviado satisfactoriamente',
+                                  ),
                                   backgroundColor: Colors.green,
                                 ),
                               );
 
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const VerifyCodePage()),
+                                MaterialPageRoute(
+                                  builder: (context) => const VerifyCodePage(),
+                                ),
                               );
                             },
                           ),

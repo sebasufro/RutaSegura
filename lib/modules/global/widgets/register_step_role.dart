@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/widgets/auth_card.dart';
 
+/// Paso del registro donde el usuario elige si participa como voluntario o supervisor.
 class RegisterStepRole extends StatefulWidget {
   final Map<String, dynamic> formData;
   final void Function(String backendRole) onNext;

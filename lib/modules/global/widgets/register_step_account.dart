@@ -5,6 +5,7 @@ import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
 import '/modules/global/screens/login_page.dart';
 
+/// Paso inicial del registro para crear la cuenta con correo y contraseña.
 class RegisterStepAccount extends StatefulWidget {
   final Map<String, dynamic> formData;
   final VoidCallback onNext;

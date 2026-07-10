@@ -9,6 +9,7 @@ import '/modules/global/services/auth_service.dart';
 import '/modules/supervisor/widgets/supervisor_bottom_nav.dart';
 import '/modules/volunteer/widgets/vol_navbar.dart';
 
+/// Flujo completo de registro multi-paso que reúne los datos del usuario y envía el formulario final.
 class RegisterFlowScreen extends StatefulWidget {
   const RegisterFlowScreen({super.key});
 
@@ -78,7 +79,9 @@ class _RegisterFlowScreenState extends State<RegisterFlowScreen> {
     setState(() => _isSaving = false);
 
     if (result['success'] == true) {
-      Widget landingPage = _formData['role'] == 'SUPERVISOR' ? const SupNavbar() : const VolNavbar();
+      Widget landingPage = _formData['role'] == 'SUPERVISOR'
+          ? const SupNavbar()
+          : const VolNavbar();
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => landingPage),
@@ -86,7 +89,12 @@ class _RegisterFlowScreenState extends State<RegisterFlowScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result['message'] ?? 'No se pudo completar el registro'), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text(
+            result['message'] ?? 'No se pudo completar el registro',
+          ),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -100,7 +108,7 @@ class _RegisterFlowScreenState extends State<RegisterFlowScreen> {
           children: [
             Column(
               children: [
-AuthHeader(
+                AuthHeader(
                   onBack: () {
                     if (_currentPage > 0) {
                       _goToPage(_currentPage - 1);
@@ -108,7 +116,8 @@ AuthHeader(
                       Navigator.pop(context);
                     }
                   },
-                ),                Expanded(
+                ),
+                Expanded(
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
