@@ -56,7 +56,9 @@ class _TarjetaRutaState extends State<TarjetaRuta> {
     final rawFecha = datosRuta["starting_datetime"] ?? datosRuta["starting_date"];
     String textoHorario = 'SIN HORARIO';
     if (rawFecha != null) {
-      final fecha = DateTime.tryParse(rawFecha.toString())?.toLocal();
+      final rawStr = rawFecha.toString();
+      final normFecha = (rawStr.endsWith('Z') || rawStr.contains('+')) ? rawStr : '${rawStr}Z';
+      final fecha = DateTime.tryParse(normFecha)?.toLocal();
       if (fecha != null) {
         final h = fecha.hour.toString().padLeft(2, '0');
         final m = fecha.minute.toString().padLeft(2, '0');

@@ -53,7 +53,9 @@ class _MyRoutesCardState extends State<MyRoutesCard> {
 
   _EstadoUnirse _calcularEstado() {
     if (widget.startingDatetime == null) return _EstadoUnirse.bloqueado;
-    final inicio = DateTime.tryParse(widget.startingDatetime!)?.toLocal();
+    final raw = widget.startingDatetime!;
+    final normCalc = (raw.endsWith('Z') || raw.contains('+')) ? raw : '${raw}Z';
+    final inicio = DateTime.tryParse(normCalc)?.toLocal();
     if (inicio == null) return _EstadoUnirse.bloqueado;
     final ahora = DateTime.now();
     final diferencia = inicio.difference(ahora);
@@ -68,7 +70,9 @@ class _MyRoutesCardState extends State<MyRoutesCard> {
 
   String _textoTiempoRestante() {
     if (widget.startingDatetime == null) return 'Unirse';
-    final inicio = DateTime.tryParse(widget.startingDatetime!)?.toLocal();
+    final rawStr = widget.startingDatetime!;
+    final normStr = (rawStr.endsWith('Z') || rawStr.contains('+')) ? rawStr : '${rawStr}Z';
+    final inicio = DateTime.tryParse(normStr)?.toLocal();
     if (inicio == null) return 'Unirse';
     final diff = inicio.difference(DateTime.now());
     if (diff.isNegative) return 'En curso';

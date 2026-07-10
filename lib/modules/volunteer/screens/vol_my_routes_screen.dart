@@ -51,7 +51,8 @@ class _VolMyRoutesScreenState extends State<VolMyRoutesScreen> {
 
   String _determinarHorario(String? startingDatetime) {
     if (startingDatetime == null) return 'SIN HORARIO';
-    final hour = DateTime.tryParse(startingDatetime)?.toLocal().hour ?? 12;
+    final normalized = (startingDatetime.endsWith('Z') || startingDatetime.contains('+')) ? startingDatetime : '${startingDatetime}Z';
+    final hour = DateTime.tryParse(normalized)?.toLocal().hour ?? 12;
     return hour >= 19 || hour < 6 ? 'NOCTURNO' : 'DIURNO';
   }
 
@@ -124,6 +125,8 @@ class _VolMyRoutesScreenState extends State<VolMyRoutesScreen> {
                             'street_geometry': route['street_geometry'],
                             'base_points': route['base_points'],
                             'supervisor': route['supervisor'],
+                            'spots_remaining': route['spots_remaining'],
+                            'capacidad_maxima': route['spots_remaining'] ?? route['max_volunteers'] ?? route['capacidad_maxima'],
                           },
                           startingDatetime: route['starting_datetime'],
                           onDesinscribir: () => _desinscribir(enrollment['id_route']),
