@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '/config/env_config.dart';
 import 'auth_store.dart';
 
 /// Servicio de autenticación para iniciar sesión, registrar usuarios y manejar la sesión local.
 class AuthService {
-static const String _baseUrl = 'http://localhost:3000';
+  static String get _baseUrl => EnvConfig.baseUrl;
   static const String _tokenKey = 'jwt_token';
   static const String _roleKey = 'user_role';
   static const String _userIdKey = 'user_id';
@@ -13,7 +14,7 @@ static const String _baseUrl = 'http://localhost:3000';
   /// Envía las credenciales al backend y guarda el token y rol si la autenticación es válida.
   Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/api/login'),
+      Uri.parse('$_baseUrl/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
@@ -52,7 +53,7 @@ if (response.statusCode == 200) {
   /// Registra un nuevo usuario en el backend y devuelve el mensaje de error cuando el servidor lo rechaza.
   Future<Map<String, dynamic>> signIn(Map<String, dynamic> userData) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/api/signIn'),
+      Uri.parse('$_baseUrl/signIn'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(userData),
     );

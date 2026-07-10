@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '/config/env_config.dart';
 import 'auth_service.dart';
 
 class LocationService {
-  static const String _baseUrl = 'http://localhost:3000';
+  static String get _baseUrl => EnvConfig.baseUrl;
 
   Future<bool> sendLocation(String routeId, double latitude, double longitude) async {
     final token = await AuthService.getToken();
     if (token == null) return false;
 
     final response = await http.post(
-      Uri.parse('$_baseUrl/api/volunteer/location'),
+      Uri.parse('$_baseUrl/volunteer/location'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -30,7 +31,7 @@ class LocationService {
     if (token == null) return false;
 
     final response = await http.patch(
-      Uri.parse('$_baseUrl/api/volunteer/location/sos'),
+      Uri.parse('$_baseUrl/volunteer/location/sos'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -46,7 +47,7 @@ class LocationService {
     if (token == null) return [];
 
     final response = await http.get(
-      Uri.parse('$_baseUrl/api/volunteer/location/$routeId'),
+      Uri.parse('$_baseUrl/volunteer/location/$routeId'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

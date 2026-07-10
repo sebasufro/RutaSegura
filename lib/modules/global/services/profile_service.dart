@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '/config/env_config.dart';
 import 'auth_service.dart';
 
 class ProfileService {
-  static const String _baseUrl = 'http://localhost:3000';
+  static String get _baseUrl => EnvConfig.baseUrl;
 
   Future<Map<String, dynamic>?> getProfile() async {
     final token = await AuthService.getToken();
     if (token == null) return null;
 
     final response = await http.get(
-      Uri.parse('$_baseUrl/api/profile'),
+      Uri.parse('$_baseUrl/profile'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -29,7 +30,7 @@ class ProfileService {
     if (token == null) return false;
 
     final response = await http.patch(
-      Uri.parse('$_baseUrl/api/profile'),
+      Uri.parse('$_baseUrl/profile'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
       body: jsonEncode({'phone_number': phoneNumber}),
     );
@@ -42,7 +43,7 @@ class ProfileService {
     final token = await AuthService.getToken();
     if (token == null) return [];
     final response = await http.get(
-      Uri.parse('$_baseUrl/api/volunteer/emergency-contact'),
+      Uri.parse('$_baseUrl/volunteer/emergency-contact'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {
@@ -56,7 +57,7 @@ class ProfileService {
     final token = await AuthService.getToken();
     if (token == null) return null;
     final response = await http.post(
-      Uri.parse('$_baseUrl/api/volunteer/emergency-contact'),
+      Uri.parse('$_baseUrl/volunteer/emergency-contact'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
       body: jsonEncode({'contact_name': name, 'contact_number': number}),
     );
@@ -68,7 +69,7 @@ class ProfileService {
     final token = await AuthService.getToken();
     if (token == null) return false;
     final response = await http.patch(
-      Uri.parse('$_baseUrl/api/volunteer/emergency-contact/$id'),
+      Uri.parse('$_baseUrl/volunteer/emergency-contact/$id'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
       body: jsonEncode({'contact_name': name, 'contact_number': number}),
     );
@@ -79,7 +80,7 @@ class ProfileService {
     final token = await AuthService.getToken();
     if (token == null) return false;
     final response = await http.delete(
-      Uri.parse('$_baseUrl/api/volunteer/emergency-contact/$id'),
+      Uri.parse('$_baseUrl/volunteer/emergency-contact/$id'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
     return response.statusCode == 200;
@@ -91,7 +92,7 @@ class ProfileService {
     final token = await AuthService.getToken();
     if (token == null) return [];
     final response = await http.get(
-      Uri.parse('$_baseUrl/api/user/address'),
+      Uri.parse('$_baseUrl/user/address'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {
@@ -105,7 +106,7 @@ class ProfileService {
     final token = await AuthService.getToken();
     if (token == null) return null;
     final response = await http.post(
-      Uri.parse('$_baseUrl/api/user/address'),
+      Uri.parse('$_baseUrl/user/address'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
       body: jsonEncode({'alias': alias, 'full_address': fullAddress}),
     );
@@ -117,7 +118,7 @@ class ProfileService {
     final token = await AuthService.getToken();
     if (token == null) return false;
     final response = await http.patch(
-      Uri.parse('$_baseUrl/api/user/address/$id'),
+      Uri.parse('$_baseUrl/user/address/$id'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
       body: jsonEncode({'alias': alias, 'full_address': fullAddress}),
     );
@@ -128,7 +129,7 @@ class ProfileService {
     final token = await AuthService.getToken();
     if (token == null) return false;
     final response = await http.delete(
-      Uri.parse('$_baseUrl/api/user/address/$id'),
+      Uri.parse('$_baseUrl/user/address/$id'),
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
     return response.statusCode == 200;

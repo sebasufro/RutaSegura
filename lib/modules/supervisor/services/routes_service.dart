@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '/config/env_config.dart';
 import '/modules/global/services/auth_service.dart';
 import '../models/route_model.dart';
 
 class RouteService {
-  static const String _baseUrl = 'http://192.168.1.10:3000/api';
+  static String get _baseUrl => EnvConfig.baseUrl;
 
   Future<List<RouteModel>> fetchRoutes() async {
     final token = await AuthService.getToken();

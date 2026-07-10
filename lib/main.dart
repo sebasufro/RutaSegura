@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'modules/global/screens/welcome_page.dart';
 import 'modules/global/services/auth_service.dart';
 import 'modules/global/services/auth_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   AuthStore.token = await AuthService.getToken();
   runApp(const RutaSeguraApp());
 }

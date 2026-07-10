@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '/config/env_config.dart';
 import 'auth_service.dart';
 
 class RoutesService {
-  static const String _baseUrl = 'http://localhost:3000';
+  static String get _baseUrl => EnvConfig.baseUrl;
 
   Future<List<Map<String, dynamic>>> getMyEnrollments() async {
     final token = await AuthService.getToken();
     if (token == null) return [];
 
     final response = await http.get(
-      Uri.parse('$_baseUrl/api/volunteer/routes/my-enrollments'),
+      Uri.parse('$_baseUrl/volunteer/routes/my-enrollments'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -30,7 +31,7 @@ class RoutesService {
     if (token == null) return false;
 
     final response = await http.post(
-      Uri.parse('$_baseUrl/api/volunteer/enroll/$routeId'),
+      Uri.parse('$_baseUrl/volunteer/enroll/$routeId'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -50,7 +51,7 @@ class RoutesService {
     if (token == null) return false;
 
     final response = await http.delete(
-      Uri.parse('$_baseUrl/api/volunteer/enroll/$routeId'),
+      Uri.parse('$_baseUrl/volunteer/enroll/$routeId'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -65,7 +66,7 @@ class RoutesService {
     if (token == null) return [];
 
     final response = await http.get(
-      Uri.parse('$_baseUrl/api/volunteer/routes/available'),
+      Uri.parse('$_baseUrl/volunteer/routes/available'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

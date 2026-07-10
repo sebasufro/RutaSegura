@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '/config/env_config.dart';
 import '/modules/global/services/auth_store.dart';
 
 class EnrolledVolunteersService {
-  static const String _baseUrl = 'http://localhost:3000/api';
+  static String get _baseUrl => EnvConfig.baseUrl;
 
   static Map<String, String> _headers() {
     return {
