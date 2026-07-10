@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '/modules/supervisor/models/route_model.dart';
-import '/modules/supervisor/services/route_service.dart';
-import '/modules/global/services/auth_store.dart';
+import '../services/route_service.dart';
 import '/modules/supervisor/screens/route_details_screen.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
 import '/modules/supervisor/widgets/routes_control_panel.dart';
@@ -15,7 +14,7 @@ class ListRoutesScreen extends StatefulWidget {
 }
 
 class _ListRoutesScreenState extends State<ListRoutesScreen> {
-  final RouteService _routeService = RouteService(token: AuthStore.token);
+  final RouteService _routeService = RouteService();
 
   List<RouteModel> _routes = [];
   bool _isLoading = true;

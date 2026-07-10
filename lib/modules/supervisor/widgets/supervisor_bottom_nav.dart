@@ -26,53 +26,55 @@ class _NavbarContainerState extends State<SupNavbar> {
   Widget build(BuildContext context) {
     final colorPrincipal = Theme.of(context).primaryColor;
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _indiceActivo,
-        children: _pantallas,
-      ),
-      // Hide navbar when creating a route (_indiceActivo == 1)
-      bottomNavigationBar: _indiceActivo == 1
-          ? null
-          : Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, -3),
-                  ),
-                ],
-              ),
-              child: BottomNavigationBar(
-                currentIndex: _indiceActivo,
-                onTap: (int nuevoIndice) {
-                  setState(() {
-                    _indiceActivo = nuevoIndice;
-                  });
-                },
-                selectedItemColor: colorPrincipal,
-                unselectedItemColor: Colors.grey,
-                showUnselectedLabels: true,
-                selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                unselectedLabelStyle: const TextStyle(fontSize: 12),
-                type: BottomNavigationBarType.fixed, 
-                items: const [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.route),
-                    label: 'MIS RUTAS',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.add), 
-                    label: 'CREAR RUTA',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline),
-                    label: 'PERFIL',
-                  ),
-                ],
-              ),
+    return Column(
+      children: [
+        Expanded(
+          child: IndexedStack(
+            index: _indiceActivo,
+            children: _pantallas,
+          ),
+        ),
+        if (_indiceActivo != 1)
+          Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, -3),
+                ),
+              ],
             ),
+            child: BottomNavigationBar(
+              currentIndex: _indiceActivo,
+              onTap: (int nuevoIndice) {
+                setState(() {
+                  _indiceActivo = nuevoIndice;
+                });
+              },
+              selectedItemColor: colorPrincipal,
+              unselectedItemColor: Colors.grey,
+              showUnselectedLabels: true,
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+              unselectedLabelStyle: const TextStyle(fontSize: 12),
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.route),
+                  label: 'MIS RUTAS',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.add),
+                  label: 'CREAR RUTA',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outline),
+                  label: 'PERFIL',
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

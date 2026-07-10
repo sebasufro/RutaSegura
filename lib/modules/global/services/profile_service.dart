@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'auth_service.dart';
 
 class ProfileService {
-  static const String _baseUrl = 'http://200.13.4.209:3000';
+  static const String _baseUrl = 'http://192.168.1.10:3000';
 
   Future<Map<String, dynamic>?> getProfile() async {
     final token = await AuthService.getToken();

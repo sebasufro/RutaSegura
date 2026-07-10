@@ -1,25 +1,19 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '/modules/global/services/auth_service.dart';
 import '../models/route_model.dart';
 
 class RouteService {
-  static const String _baseUrl = 'http://200.13.4.209:3000/api';
-  final String? token;
-
-  RouteService({this.token});
-
-  Map<String, String> _headers() {
-    final headers = <String, String>{'Content-Type': 'application/json'};
-    if (token != null) {
-      headers['Authorization'] = 'Bearer $token';
-    }
-    return headers;
-  }
+  static const String _baseUrl = 'http://192.168.1.10:3000/api';
 
   Future<List<RouteModel>> fetchRoutes() async {
+    final token = await AuthService.getToken();
     final response = await http.get(
       Uri.parse('$_baseUrl/routes'),
-      headers: _headers(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
     );
 
     if (response.statusCode == 200) {
@@ -33,10 +27,14 @@ class RouteService {
   }
 
   Future<RouteModel> createRoute(RouteModel route) async {
+    final token = await AuthService.getToken();
     final body = route.toJson()..['status'] = 'PUBLISHED';
     final response = await http.post(
       Uri.parse('$_baseUrl/routes'),
-      headers: _headers(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
       body: jsonEncode(body),
     );
 
@@ -49,10 +47,14 @@ class RouteService {
   }
 
   Future<void> updateRoute(RouteModel route) async {
+    final token = await AuthService.getToken();
     final body = route.toJson()..['status'] = 'PUBLISHED';
     final response = await http.patch(
       Uri.parse('$_baseUrl/routes/${route.id}'),
-      headers: _headers(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
       body: jsonEncode(body),
     );
 
@@ -62,9 +64,13 @@ class RouteService {
   }
 
   Future<void> deleteRoute(String routeId) async {
+    final token = await AuthService.getToken();
     final response = await http.delete(
       Uri.parse('$_baseUrl/routes/$routeId'),
-      headers: _headers(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
     );
 
     if (response.statusCode != 200 && response.statusCode != 204) {
@@ -73,9 +79,13 @@ class RouteService {
   }
 
   Future<void> finishRoute(String routeId) async {
+    final token = await AuthService.getToken();
     final response = await http.patch(
       Uri.parse('$_baseUrl/routes/$routeId'),
-      headers: _headers(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
       body: jsonEncode({'status': 'FINISHED'}),
     );
 

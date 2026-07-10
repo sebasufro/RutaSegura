@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '/modules/global/services/auth_store.dart';
 
 class EnrolledVolunteersService {
-  static const String _baseUrl = 'http://200.13.4.209:3000/api';
+  static const String _baseUrl = 'http://192.168.1.10:3000/api';
 
   static Map<String, String> _headers() {
     return {

@@ -5,7 +5,7 @@ import 'auth_store.dart';
 
 /// Servicio de autenticación para iniciar sesión, registrar usuarios y manejar la sesión local.
 class AuthService {
-static const String _baseUrl = 'http://localhost:3000';
+static const String _baseUrl = 'http://192.168.1.10:3000';
   static const String _tokenKey = 'jwt_token';
   static const String _roleKey = 'user_role';
   static const String _userIdKey = 'user_id';

@@ -17,26 +17,24 @@ class EditRoutePage1 extends StatefulWidget {
 }
 
 class _EditRoutePage1State extends State<EditRoutePage1> {
-  late TextEditingController _nombreRutaController;
-  late TextEditingController _fechaController;
-  late TextEditingController _horarioInicioController;
-  late TextEditingController _horarioTerminoController;
-  late TextEditingController _voluntariosMinController;
-  late TextEditingController _voluntariosMaxController;
+  final _nombreRutaController = TextEditingController();
+  final _fechaController = TextEditingController();
+  final _horarioInicioController = TextEditingController();
+  final _horarioTerminoController = TextEditingController();
+  final _fechaTerminoController = TextEditingController();
+  final _voluntariosMinController = TextEditingController();
+  final _voluntariosMaxController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _nombreRutaController = TextEditingController(text: widget.formData['nombreRuta'] ?? '');
-    _fechaController = TextEditingController(text: widget.formData['fecha'] ?? '');
-    _horarioInicioController =
-        TextEditingController(text: widget.formData['horarioInicio'] ?? '');
-    _horarioTerminoController =
-        TextEditingController(text: widget.formData['horarioTermino'] ?? '');
-    _voluntariosMinController =
-        TextEditingController(text: widget.formData['voluntariosMin']?.toString() ?? '0');
-    _voluntariosMaxController =
-        TextEditingController(text: widget.formData['voluntariosMax']?.toString() ?? '0');
+    _nombreRutaController.text = widget.formData['nombreRuta'] ?? '';
+    _fechaController.text = widget.formData['fecha'] ?? '';
+    _horarioInicioController.text = widget.formData['horarioInicio'] ?? '';
+    _horarioTerminoController.text = widget.formData['horarioTermino'] ?? '';
+    _fechaTerminoController.text = widget.formData['fechaTermino'] ?? '';
+    _voluntariosMinController.text = widget.formData['voluntariosMin']?.toString() ?? '0';
+    _voluntariosMaxController.text = widget.formData['voluntariosMax']?.toString() ?? '0';
   }
 
   @override
@@ -45,6 +43,7 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
     _fechaController.dispose();
     _horarioInicioController.dispose();
     _horarioTerminoController.dispose();
+    _fechaTerminoController.dispose();
     _voluntariosMinController.dispose();
     _voluntariosMaxController.dispose();
     super.dispose();
@@ -53,6 +52,7 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
   void _saveData() {
     widget.formData['nombreRuta'] = _nombreRutaController.text;
     widget.formData['fecha'] = _fechaController.text;
+    widget.formData['fechaTermino'] = _fechaTerminoController.text;
     widget.formData['horarioInicio'] = _horarioInicioController.text;
     widget.formData['horarioTermino'] = _horarioTerminoController.text;
     widget.formData['voluntariosMin'] = int.tryParse(_voluntariosMinController.text) ?? 0;
@@ -160,7 +160,7 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
                         spacing: 8,
                         children: [
                           const Text(
-                            'FECHA',
+                            'FECHA INICIO',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -184,7 +184,38 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
                           ),
                         ],
                       ),
-    
+
+                      // Fecha Termino
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 8,
+                        children: [
+                          const Text(
+                            'FECHA TÉRMINO',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF74777F),
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                          TextField(
+                            controller: _fechaTerminoController,
+                            decoration: InputDecoration(
+                              hintText: 'DD-MM-AAAA',
+                              filled: true,
+                              fillColor: const Color(0xFFF2F4F6),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                            ),
+                          ),
+                        ],
+                      ),
+
                       // Horario Inicio and Termino
                       Column(
                         spacing: 16,
