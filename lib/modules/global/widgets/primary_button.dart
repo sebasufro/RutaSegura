@@ -7,6 +7,7 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool showArrow;
   final Color backgroundColor;
+  final bool isLoading;
 
   const PrimaryButton({
     super.key,
@@ -14,6 +15,7 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.showArrow = true,
     this.backgroundColor = const Color(0xFF1E40AF),
+    this.isLoading = false,
   });
 
   @override
@@ -34,17 +36,28 @@ class PrimaryButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+            if (isLoading)
+              const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: Colors.white,
+                ),
+              )
+            else ...[
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            if (showArrow) ...[
-              const SizedBox(width: 8),
-              const Icon(Icons.arrow_forward, color: Colors.white),
+              if (showArrow) ...[
+                const SizedBox(width: 8),
+                const Icon(Icons.arrow_forward, color: Colors.white),
+              ],
             ],
           ],
         ),

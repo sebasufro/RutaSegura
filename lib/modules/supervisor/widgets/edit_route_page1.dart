@@ -17,6 +17,7 @@ class EditRoutePage1 extends StatefulWidget {
 }
 
 class _EditRoutePage1State extends State<EditRoutePage1> {
+  late TextEditingController _nombreRutaController;
   late TextEditingController _fechaController;
   late TextEditingController _horarioInicioController;
   late TextEditingController _horarioTerminoController;
@@ -26,6 +27,7 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
   @override
   void initState() {
     super.initState();
+    _nombreRutaController = TextEditingController(text: widget.formData['nombreRuta'] ?? '');
     _fechaController = TextEditingController(text: widget.formData['fecha'] ?? '');
     _horarioInicioController =
         TextEditingController(text: widget.formData['horarioInicio'] ?? '');
@@ -39,6 +41,7 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
 
   @override
   void dispose() {
+    _nombreRutaController.dispose();
     _fechaController.dispose();
     _horarioInicioController.dispose();
     _horarioTerminoController.dispose();
@@ -48,6 +51,7 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
   }
 
   void _saveData() {
+    widget.formData['nombreRuta'] = _nombreRutaController.text;
     widget.formData['fecha'] = _fechaController.text;
     widget.formData['horarioInicio'] = _horarioInicioController.text;
     widget.formData['horarioTermino'] = _horarioTerminoController.text;
@@ -64,7 +68,7 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
             // Page Title
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
-              child: const Text(
+              child: Text(
                 'Editar Ruta Social',
                 style: TextStyle(
                   fontSize: 30,
@@ -118,7 +122,38 @@ class _EditRoutePage1State extends State<EditRoutePage1> {
                           color: Color(0xFF43474E),
                         ),
                       ),
-    
+
+                      // Nombre de la ruta
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 8,
+                        children: [
+                          const Text(
+                            'NOMBRE DE LA RUTA',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF74777F),
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                          TextField(
+                            controller: _nombreRutaController,
+                            decoration: InputDecoration(
+                              hintText: 'Ej: Ruta Centro - Norte',
+                              filled: true,
+                              fillColor: const Color(0xFFF2F4F6),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                            ),
+                          ),
+                        ],
+                      ),
+
                       // Fecha
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
