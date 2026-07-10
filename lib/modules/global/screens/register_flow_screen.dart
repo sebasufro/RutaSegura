@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/modules/global/screens/login_page.dart';
 import '/modules/global/widgets/auth_header.dart';
 import '/modules/global/widgets/register_step_account.dart';
 import '/modules/global/widgets/register_step_role.dart';
@@ -70,15 +71,38 @@ class _RegisterFlowScreenState extends State<RegisterFlowScreen> {
     }
   }
 
-  Future<void> _handleFinish(Map<String, dynamic> payload) async {
+Future<void> _handleFinish(Map<String, dynamic> payload) async {
     setState(() => _isSaving = true);
 
     final result = await _authService.signIn(payload);
 
     if (!mounted) return;
+
+    if (result['success'] != true) {
+      setState(() => _isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            result['message'] ?? 'No se pudo completar el registro',
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // El registro (signIn) no entrega token: hacemos login automático
+    // con las mismas credenciales para dejar la sesión activa antes
+    // de entrar a las vistas protegidas.
+    final loginResult = await _authService.login(
+      _formData['email'],
+      _formData['password'],
+    );
+
+    if (!mounted) return;
     setState(() => _isSaving = false);
 
-    if (result['success'] == true) {
+    if (loginResult['success'] == true) {
       Widget landingPage = _formData['role'] == 'SUPERVISOR'
           ? const SupNavbar()
           : const VolNavbar();
@@ -88,17 +112,18 @@ class _RegisterFlowScreenState extends State<RegisterFlowScreen> {
         (route) => false,
       );
     } else {
+      // El registro sí se completó; si el login automático falla,
+      // igual dejamos avanzar al usuario en vez de bloquearlo.
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            result['message'] ?? 'No se pudo completar el registro',
-          ),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text('Registro exitoso. Por favor inicia sesión.')),
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+        (route) => false,
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
