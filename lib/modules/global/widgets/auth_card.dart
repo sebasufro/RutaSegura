@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Contenedor en forma de tarjeta blanca con bordes redondeados y sombra.
-/// Se utiliza para agrupar campos de formulario en las páginas de auth.
+/// Tarjeta visual reutilizable para agrupar formularios y contenido de autenticación.
 class AuthCard extends StatelessWidget {
   final Widget child;
   final Color? backgroundColor;

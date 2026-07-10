@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Etiqueta de texto para campos de formulario.
-/// Estilo en mayúsculas, negrita y color gris suave.
+/// Etiqueta reutilizable para los títulos de los campos de formulario.
 class InputLabel extends StatelessWidget {
   final String text;
   final Color? color;

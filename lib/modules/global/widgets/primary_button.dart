@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Botón principal de acción con el estilo visual institucional.
-/// Muestra un texto y opcionalmente un icono de flecha hacia adelante.
+/// Botón principal de acción con el estilo visual de la app y soporte para carga en proceso.
 class PrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
