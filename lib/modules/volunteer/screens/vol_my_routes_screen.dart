@@ -110,7 +110,6 @@ class _VolMyRoutesScreenState extends State<VolMyRoutesScreen> {
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: MyRoutesCard(
                           titulo: route['route_name'] ?? 'Sin nombre',
-                          zona: route['transport_type'] ?? 'SIN ZONA',
                           horario: _determinarHorario(route['starting_datetime']),
                           voluntariosActivos: 0,
                           imagenUrl: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=400&auto=format&fit=crop',

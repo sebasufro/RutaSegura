@@ -1,17 +1,41 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../screens/vol_route_details_screen.dart';
+import '/modules/global/services/geocoding_service.dart';
 
 // Componente visual que representa una ruta disponible en la plataforma.
 // Muestra información clave como el nombre, descripción, capacidad,
 // distancia y permite navegar a los detalles de la ruta.
-class TarjetaRuta extends StatelessWidget {
+class TarjetaRuta extends StatefulWidget {
   final Map<String, dynamic> datosRuta;
 
   const TarjetaRuta({super.key, required this.datosRuta});
 
   @override
+  State<TarjetaRuta> createState() => _TarjetaRutaState();
+}
+
+class _TarjetaRutaState extends State<TarjetaRuta> {
+  String? _comuna;
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarComuna();
+  }
+
+  Future<void> _cargarComuna() async {
+    final puntos = (widget.datosRuta["base_points"] ?? widget.datosRuta["street_geometry"] ?? []) as List;
+    if (puntos.isEmpty) return;
+    final lat = (puntos.first['lat'] as num).toDouble();
+    final lng = (puntos.first['lng'] as num).toDouble();
+    final comuna = await GeocodingService.getComuna(lat, lng);
+    if (mounted && comuna != null) setState(() => _comuna = comuna);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final datosRuta = widget.datosRuta;
     final titulo = datosRuta["route_name"] ?? "Ruta Desconocida";
     final descripcion = datosRuta["descripcion"] ??
         "Breve descripción del trayecto y puntos de control a lo largo del perímetro monitoreado.";
@@ -84,8 +108,7 @@ class TarjetaRuta extends StatelessWidget {
                   spacing: 10,
                   runSpacing: 10,
                   children: [
-                    _buildTag(Icons.directions, transporteTipo.toUpperCase(),
-                        const Color(0xFFE8F5E9), const Color(0xFF2E7D32)),
+                    _buildTag(Icons.location_on, _comuna ?? '...'),
                     _buildTag(Icons.access_time, textoHorario,
                         const Color(0xFFE3F2FD), const Color(0xFF1565C0)),
                   ],
@@ -188,8 +211,8 @@ class TarjetaRuta extends StatelessWidget {
     return total;
   }
 
-  Widget _buildTag(
-      IconData icon, String text, Color bgColor, Color textColor) {
+  Widget _buildTag(IconData icon, String text,
+      [Color bgColor = const Color(0xFFE8F5E9), Color textColor = const Color(0xFF2E7D32)]) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(

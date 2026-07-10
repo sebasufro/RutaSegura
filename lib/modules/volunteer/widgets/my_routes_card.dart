@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../screens/vol_route_details_screen.dart';
+import '/modules/global/services/geocoding_service.dart';
 
 enum _EstadoUnirse { activo, bloqueado }
 
 // Componente visual que representa una ruta a la que el usuario está inscrito.
 // Incluye información general, un menú de opciones para desinscribirse
 // y botones para unirse a la actividad o ver sus detalles.
-class MyRoutesCard extends StatelessWidget {
+class MyRoutesCard extends StatefulWidget {
   final String titulo;
-  final String zona;
   final String horario;
   final int voluntariosActivos;
   final String imagenUrl;
@@ -20,7 +20,6 @@ class MyRoutesCard extends StatelessWidget {
   const MyRoutesCard({
     super.key,
     required this.titulo,
-    required this.zona,
     required this.horario,
     required this.voluntariosActivos,
     required this.imagenUrl,
@@ -30,9 +29,31 @@ class MyRoutesCard extends StatelessWidget {
     this.startingDatetime,
   });
 
+  @override
+  State<MyRoutesCard> createState() => _MyRoutesCardState();
+}
+
+class _MyRoutesCardState extends State<MyRoutesCard> {
+  String? _comuna;
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarComuna();
+  }
+
+  Future<void> _cargarComuna() async {
+    final puntos = (widget.rutaDatos["base_points"] ?? widget.rutaDatos["street_geometry"] ?? []) as List;
+    if (puntos.isEmpty) return;
+    final lat = (puntos.first['lat'] as num).toDouble();
+    final lng = (puntos.first['lng'] as num).toDouble();
+    final comuna = await GeocodingService.getComuna(lat, lng);
+    if (mounted && comuna != null) setState(() => _comuna = comuna);
+  }
+
   _EstadoUnirse _calcularEstado() {
-    if (startingDatetime == null) return _EstadoUnirse.bloqueado;
-    final inicio = DateTime.tryParse(startingDatetime!)?.toLocal();
+    if (widget.startingDatetime == null) return _EstadoUnirse.bloqueado;
+    final inicio = DateTime.tryParse(widget.startingDatetime!)?.toLocal();
     if (inicio == null) return _EstadoUnirse.bloqueado;
     final ahora = DateTime.now();
     final diferencia = inicio.difference(ahora);
@@ -46,8 +67,8 @@ class MyRoutesCard extends StatelessWidget {
   }
 
   String _textoTiempoRestante() {
-    if (startingDatetime == null) return 'Unirse';
-    final inicio = DateTime.tryParse(startingDatetime!)?.toLocal();
+    if (widget.startingDatetime == null) return 'Unirse';
+    final inicio = DateTime.tryParse(widget.startingDatetime!)?.toLocal();
     if (inicio == null) return 'Unirse';
     final diff = inicio.difference(DateTime.now());
     if (diff.isNegative) return 'En curso';
@@ -55,7 +76,6 @@ class MyRoutesCard extends StatelessWidget {
     return 'En ${diff.inMinutes}min';
   }
 
-  // Cuadro de diálogo para confirmar la desinscripción de la ruta.
   void _mostrarPopupDesinscribir(BuildContext context) {
     showDialog(
       context: context,
@@ -73,7 +93,7 @@ class MyRoutesCard extends StatelessWidget {
             ],
           ),
           content: Text(
-            '¿Estás seguro de que deseas desinscribirte de "$titulo"? Ya no aparecerás en la lista de asistencia de esta actividad.',
+            '¿Estás seguro de que deseas desinscribirte de "${widget.titulo}"? Ya no aparecerás en la lista de asistencia de esta actividad.',
             style: const TextStyle(fontSize: 15),
           ),
           actions: [
@@ -90,7 +110,7 @@ class MyRoutesCard extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                onDesinscribir();
+                widget.onDesinscribir();
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -142,7 +162,7 @@ class MyRoutesCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.network(
-                  imagenUrl,
+                  widget.imagenUrl,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
@@ -154,7 +174,7 @@ class MyRoutesCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      titulo,
+                      widget.titulo,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -169,13 +189,13 @@ class MyRoutesCard extends StatelessWidget {
                       children: [
                         _buildTag(
                           Icons.location_on,
-                          zona,
+                          _comuna ?? '...',
                           const Color(0xFFE8F5E9),
                           const Color(0xFF2E7D32),
                         ),
                         _buildTag(
                           Icons.access_time,
-                          horario,
+                          widget.horario,
                           const Color(0xFFE3F2FD),
                           const Color(0xFF1565C0),
                         ),
@@ -186,9 +206,7 @@ class MyRoutesCard extends StatelessWidget {
               ),
               PopupMenuButton<String>(
                 onSelected: (value) {
-                  if (value == 'desinscribir') {
-                    _mostrarPopupDesinscribir(context);
-                  }
+                  if (value == 'desinscribir') _mostrarPopupDesinscribir(context);
                 },
                 icon: const Icon(Icons.more_vert, color: Colors.grey),
                 shape: RoundedRectangleBorder(
@@ -221,7 +239,7 @@ class MyRoutesCard extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Voluntarios inscritos: $voluntariosActivos',
+                  'Voluntarios inscritos: ${widget.voluntariosActivos}',
                   style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.grey,
@@ -243,7 +261,7 @@ class MyRoutesCard extends StatelessWidget {
                 final estado = _calcularEstado();
                 final activo = estado == _EstadoUnirse.activo;
                 return ElevatedButton.icon(
-                  onPressed: activo ? onUnirse : null,
+                  onPressed: activo ? widget.onUnirse : null,
                   icon: Icon(activo ? Icons.directions_run : Icons.schedule, size: 18),
                   label: Text(
                     activo ? 'Unirse' : _textoTiempoRestante(),
@@ -266,7 +284,7 @@ class MyRoutesCard extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => VolRouteDetailsScreen(
-                        rutaDatos: rutaDatos,
+                        rutaDatos: widget.rutaDatos,
                         yaInscrito: true,
                       ),
                     ),
@@ -363,7 +381,7 @@ class MyRoutesCard extends StatelessWidget {
               radius: 14,
               backgroundColor: Colors.grey[300],
               child: Text(
-                '+${voluntariosActivos > 2 ? voluntariosActivos - 2 : 0}',
+                '+${widget.voluntariosActivos > 2 ? widget.voluntariosActivos - 2 : 0}',
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,

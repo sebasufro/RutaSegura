@@ -5,6 +5,7 @@ import '../widgets/route_details_map.dart';
 import '../widgets/route_details_label.dart';
 import '../widgets/vol_topbar.dart';
 import '../../global/services/route_service.dart';
+import '../../global/services/geocoding_service.dart';
 
 // Pantalla que muestra los detalles completos de una ruta.
 // Incluye información sobre el supervisor, horario, mapa del trazado
@@ -23,12 +24,23 @@ class VolRouteDetailsScreen extends StatefulWidget {
 class _VolRouteDetailsScreenState extends State<VolRouteDetailsScreen> {
   late bool _estaInscrito;
   bool _cargandoInscripcion = false;
+  String? _comuna;
   final _routesService = RoutesService();
 
   @override
   void initState() {
     super.initState();
     _estaInscrito = widget.yaInscrito;
+    _cargarComuna();
+  }
+
+  Future<void> _cargarComuna() async {
+    final puntos = (widget.rutaDatos["base_points"] ?? widget.rutaDatos["street_geometry"] ?? []) as List;
+    if (puntos.isEmpty) return;
+    final lat = (puntos.first['lat'] as num).toDouble();
+    final lng = (puntos.first['lng'] as num).toDouble();
+    final comuna = await GeocodingService.getComuna(lat, lng);
+    if (mounted && comuna != null) setState(() => _comuna = comuna);
   }
 
   @override
@@ -131,8 +143,8 @@ class _VolRouteDetailsScreenState extends State<VolRouteDetailsScreen> {
                 runSpacing: 10,
                 children: [
                   RouteDetailsLabel(
-                    icono: Icons.directions,
-                    texto: transporteTipo.toUpperCase(),
+                    icono: Icons.location_on,
+                    texto: _comuna ?? '...',
                     colorFondo: const Color(0xFFE8F5E9),
                     colorTexto: const Color(0xFF2E7D32),
                   ),
