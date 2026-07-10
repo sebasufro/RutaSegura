@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '../screens/vol_map_screen.dart';
-import '/modules/global/services/routes_service.dart';
+import '../../global/services/route_service.dart';
 
 class ButtonActiveRoute extends StatefulWidget {
   const ButtonActiveRoute({super.key});
