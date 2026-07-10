@@ -8,6 +8,7 @@ import '../widgets/sos_button.dart';
 import '../widgets/vol_topbar.dart';
 import '/modules/global/services/location_service.dart';
 import '/modules/global/services/auth_service.dart';
+import '/modules/global/services/route_service.dart';
 
 class VolMapScreen extends StatefulWidget {
   final String? routeId;
@@ -23,6 +24,7 @@ class VolMapScreen extends StatefulWidget {
 class _VolMapScreenState extends State<VolMapScreen> {
   final MapController _mapController = MapController();
   final _locationService = LocationService();
+  final _routesService = RoutesService();
 
   LatLng? _miUbicacion;
   bool _cargandoUbicacion = false;
@@ -63,6 +65,14 @@ class _VolMapScreenState extends State<VolMapScreen> {
         );
       }
     });
+  }
+
+  Future<void> _finalizarYDesinscribir() async {
+    _pollingTimer?.cancel();
+    if (widget.routeId != null) {
+      await _routesService.unenroll(widget.routeId!);
+    }
+    if (mounted) Navigator.pop(context);
   }
 
   Future<void> _cargarCompaneros() async {
@@ -306,7 +316,7 @@ class _VolMapScreenState extends State<VolMapScreen> {
             bottom: 20 + espacioInferiorSeguro,
             left: 20,
             right: 20,
-            child: MapBottomPanel(companeros: _companeros, routeName: widget.routeName, miId: _miId),
+            child: MapBottomPanel(companeros: _companeros, routeName: widget.routeName, miId: _miId, onFinalizar: _finalizarYDesinscribir),
           ),
         ],
       ),

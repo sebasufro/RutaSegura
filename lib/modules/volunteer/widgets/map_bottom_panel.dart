@@ -4,8 +4,9 @@ class MapBottomPanel extends StatefulWidget {
   final List<Map<String, dynamic>> companeros;
   final String? routeName;
   final String? miId;
+  final Future<void> Function()? onFinalizar;
 
-  const MapBottomPanel({super.key, required this.companeros, this.routeName, this.miId});
+  const MapBottomPanel({super.key, required this.companeros, this.routeName, this.miId, this.onFinalizar});
 
   @override
   State<MapBottomPanel> createState() => _MapBottomPanelState();
@@ -29,67 +30,69 @@ class _MapBottomPanelState extends State<MapBottomPanel> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.location_off, color: Colors.redAccent, size: 28),
-              SizedBox(width: 10),
-              Text('Finalizar Rastreo', style: TextStyle(fontWeight: FontWeight.bold)),
-            ],
-          ),
-          content: const Text(
-            'Recuerda desactivar siempre el rastreo GPS en un área segura.',
-            style: TextStyle(fontSize: 15, height: 1.4),
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: Row(
+      builder: (BuildContext dialogContext) {
+        bool _cargando = false;
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              title: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: Colors.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        'Cancelar',
-                        style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Cierra el diálogo
-                        Navigator.pop(context); // Sale de la pantalla del mapa
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[700],
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        'Finalizar',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                  Icon(Icons.location_off, color: Colors.redAccent, size: 28),
+                  SizedBox(width: 10),
+                  Text('Finalizar Rastreo', style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
-            ),
-          ],
+              content: const Text(
+                'Recuerda desactivar siempre el rastreo GPS en un área segura. Se te desinscribirá de la ruta automáticamente.',
+                style: TextStyle(fontSize: 15, height: 1.4),
+                textAlign: TextAlign.center,
+              ),
+              actions: [
+                Padding(
+                  padding: EdgeInsets.zero,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: _cargando ? null : () => Navigator.pop(dialogContext),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            side: const BorderSide(color: Colors.grey),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: const Text('Cancelar', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: _cargando ? null : () async {
+                            setStateDialog(() => _cargando = true);
+                            Navigator.pop(dialogContext);
+                            if (widget.onFinalizar != null) {
+                              await widget.onFinalizar!();
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[700],
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: _cargando
+                              ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                              : const Text('Finalizar', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
