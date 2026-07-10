@@ -191,66 +191,55 @@ class _CreateRouteScreenState extends State<CreateRouteScreen>
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        if (_currentPage > 0) {
-          _previousPage();
-        } else {
-          _showExitDialog();
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: const Color(0xFFF8FAFC),
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    const SupTopbar(),
-                    Expanded(
-                      child: PageView(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        onPageChanged: (page) {
-                          setState(() => _currentPage = page);
-                        },
-                        children: [
-                          CreateRoutePage1(
-                            formData: _formData,
-                            onNext: _nextPage,
-                            onBack: _previousPage,
-                          ),
-                          CreateRoutePage2(
-                            formData: _formData,
-                            onNext: _nextPage,
-                            onBack: _previousPage,
-                          ),
-                          CreateRoutePage3(
-                            formData: _formData,
-                            onNext: _nextPage,
-                            onBack: _previousPage,
-                          ),
-                          CreateRoutePage4(
-                            onFinish: _finishForm,
-                          ),
-                        ],
-                      ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: const Color(0xFFF8FAFC),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  const SupTopbar(),
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      onPageChanged: (page) {
+                        setState(() => _currentPage = page);
+                      },
+                      children: [
+                        CreateRoutePage1(
+                          formData: _formData,
+                          onNext: _nextPage,
+                          onBack: _previousPage,
+                        ),
+                        CreateRoutePage2(
+                          formData: _formData,
+                          onNext: _nextPage,
+                          onBack: _previousPage,
+                        ),
+                        CreateRoutePage3(
+                          formData: _formData,
+                          onNext: _nextPage,
+                          onBack: _previousPage,
+                        ),
+                        CreateRoutePage4(
+                          onFinish: _finishForm,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                if (_isSaving)
-                  Container(
-                    color: Colors.black26,
-                    child: const Center(child: CircularProgressIndicator()),
                   ),
-              ],
-            ),
+                ],
+              ),
+              if (_isSaving)
+                Container(
+                  color: Colors.black26,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+            ],
           ),
         ),
       ),

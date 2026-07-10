@@ -20,6 +20,17 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
   bool _isLoading = true;
   String? _error;
   int _displayedRouteCount = 3;
+  int _currentPage = 0;
+
+  int get _perPage => _displayedRouteCount >= _routes.length ? _routes.length : _displayedRouteCount;
+
+  int get _totalPages => _perPage == 0 ? 1 : (_routes.length / _perPage).ceil();
+
+  int get _startIndex => _currentPage * _perPage;
+
+  int get _endIndex => (_startIndex + _perPage > _routes.length) ? _routes.length : _startIndex + _perPage;
+
+  List<RouteModel> get _visibleRoutes => _routes.sublist(_startIndex, _endIndex);
 
   @override
   void initState() {
@@ -38,6 +49,7 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
       setState(() {
         _routes = routes;
         _isLoading = false;
+        _currentPage = 0;
       });
     } catch (e) {
       setState(() {
@@ -45,6 +57,13 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  void _setQuantity(int quantity) {
+    setState(() {
+      _displayedRouteCount = quantity;
+      _currentPage = 0;
+    });
   }
 
   @override
@@ -96,45 +115,93 @@ class _ListRoutesScreenState extends State<ListRoutesScreen> {
       );
     }
 
-    final displayCount = _displayedRouteCount > _routes.length
-        ? _routes.length
-        : _displayedRouteCount;
-
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         child: Column(
           children: [
             RoutesControlPanel(
-              onQuantityChanged: (quantity) {
-                setState(() => _displayedRouteCount = quantity);
-              },
+              onQuantityChanged: _setQuantity,
             ),
 
             Column(
               spacing: 16,
-              children: List.generate(
-                displayCount,
-                (index) {
-                  final route = _routes[index];
-                  return RouteCard(
-                    route: route,
-                    onViewPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RouteDetailsScreen(route: route),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+              children: _visibleRoutes.map((route) {
+                return RouteCard(
+                  route: route,
+                  onViewPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RouteDetailsScreen(route: route),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
             ),
+
+            if (_totalPages > 1) ...[
+              const SizedBox(height: 16),
+              _buildPaginationBar(),
+            ],
+
             const SizedBox(height: 60),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPaginationBar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.chevron_left),
+          onPressed: _currentPage > 0
+              ? () => setState(() => _currentPage--)
+              : null,
+          style: IconButton.styleFrom(
+            foregroundColor: _currentPage > 0 ? const Color(0xFF1e40af) : Colors.grey,
+          ),
+        ),
+
+        ...List.generate(_totalPages, (i) {
+          final isActive = i == _currentPage;
+          return GestureDetector(
+            onTap: () => setState(() => _currentPage = i),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: isActive ? const Color(0xFF1e40af) : Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                '${i + 1}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: isActive ? Colors.white : const Color(0xFF43474E),
+                ),
+              ),
+            ),
+          );
+        }),
+
+        IconButton(
+          icon: const Icon(Icons.chevron_right),
+          onPressed: _currentPage < _totalPages - 1
+              ? () => setState(() => _currentPage++)
+              : null,
+          style: IconButton.styleFrom(
+            foregroundColor: _currentPage < _totalPages - 1 ? const Color(0xFF1e40af) : Colors.grey,
+          ),
+        ),
+      ],
     );
   }
 }

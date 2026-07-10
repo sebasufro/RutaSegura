@@ -121,7 +121,17 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const SupNavbar()),
+          (route) => false,
+        );
+      },
+      child: Scaffold(
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -148,7 +158,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                               routeTitle: 'Supervisión de Ruta: ${widget.route.title}',
                               description:
                                   'Monitorización en tiempo real de la ruta segura asignada. Verifique el estado de los voluntarios y los puntos de control.',
-                              status: 'RUTA ACTIVA',
+                              status: widget.route.status ?? 'PUBLISHED',
                             ),
 
                             // Map Section
@@ -196,6 +206,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               ),
           ),
         ),
-      );
+      ),
+    );
     }
   }

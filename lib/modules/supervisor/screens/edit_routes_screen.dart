@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '/modules/supervisor/models/route_model.dart';
 import '../services/routes_service.dart';
-import '/modules/supervisor/screens/list_routes_screen.dart';
 import '/modules/supervisor/screens/route_details_screen.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
 import '/modules/supervisor/widgets/edit_route_page1.dart';
@@ -124,22 +123,23 @@ class _EditRouteScreenState extends State<EditRouteScreen>
   }
 
   void _showExitDialog() {
+    final outerContext = context;
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         title: const Text('Abandonar formulario'),
         content: const Text('¿Deseas abandonar la edición?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(ctx),
             child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const ListRoutesScreen()),
-                (route) => false,
+              Navigator.pop(ctx);
+              Navigator.pushReplacement(
+                outerContext,
+                MaterialPageRoute(builder: (_) => RouteDetailsScreen(route: widget.route!)),
               );
             },
             child: const Text('Sí, abandonar'),
@@ -206,12 +206,11 @@ class _EditRouteScreenState extends State<EditRouteScreen>
 
   void _finishForm() {
     final route = _savedRoute ?? widget.route!;
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => RouteDetailsScreen(route: route),
       ),
-      (path) => false,
     );
   }
 

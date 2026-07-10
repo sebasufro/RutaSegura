@@ -14,6 +14,18 @@ class RouteHeaderCard extends StatelessWidget {
     required this.status,
   });
 
+  bool get _isCompleted => status == 'FINISHED';
+
+  String get _statusLabel => _isCompleted ? 'RUTA FINALIZADA' : 'RUTA ACTIVA';
+
+  Color get _badgeColor => _isCompleted ? const Color(0xFFFEF3C7) : const Color(0xFFDCFCE7);
+
+  Color get _dotColor => _isCompleted ? const Color(0xFF92400E) : const Color(0xFF15803D);
+
+  Color get _labelColor => _isCompleted ? const Color(0xFF78350F) : const Color(0xFF166534);
+
+  IconData get _icon => _isCompleted ? Icons.check_circle : Icons.check;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +45,6 @@ class RouteHeaderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 16,
         children: [
-          // Route ID Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
@@ -50,8 +61,6 @@ class RouteHeaderCard extends StatelessWidget {
               ),
             ),
           ),
-
-          // Route Title
           Text(
             routeTitle,
             style: const TextStyle(
@@ -62,8 +71,6 @@ class RouteHeaderCard extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-
-          // Description
           Text(
             description,
             style: const TextStyle(
@@ -73,12 +80,10 @@ class RouteHeaderCard extends StatelessWidget {
               height: 1.42,
             ),
           ),
-
-          // Status Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFFDCFCE7),
+              color: _badgeColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -88,13 +93,13 @@ class RouteHeaderCard extends StatelessWidget {
                 Container(
                   width: 24,
                   height: 24,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xFF15803D),
+                    color: _dotColor,
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Icon(
-                      Icons.check,
+                      _icon,
                       size: 16,
                       color: Colors.white,
                     ),
@@ -113,12 +118,12 @@ class RouteHeaderCard extends StatelessWidget {
                         letterSpacing: 0.3,
                       ),
                     ),
-                    const Text(
-                      'RUTA ACTIVA',
+                    Text(
+                      _statusLabel,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF166534),
+                        color: _labelColor,
                       ),
                     ),
                   ],

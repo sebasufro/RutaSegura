@@ -23,32 +23,6 @@ class _NavbarContainerState extends State<SupNavbar> {
     const SupervisorProfileScreen(),
   ];
 
-  void _showExitDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Abandonar formulario'),
-        content: const Text('¿Deseas abandonar el formulario?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const SupNavbar()),
-                (route) => false,
-              );
-            },
-            child: const Text('Sí, abandonar'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showCloseAppDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -71,6 +45,29 @@ class _NavbarContainerState extends State<SupNavbar> {
     );
   }
 
+  void _showCreateRouteExitDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Abandonar formulario'),
+        content: const Text('¿Deseas abandonar el formulario?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() => _indiceActivo = 0);
+            },
+            child: const Text('Sí, abandonar'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorPrincipal = Theme.of(context).primaryColor;
@@ -80,7 +77,7 @@ class _NavbarContainerState extends State<SupNavbar> {
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
         if (_indiceActivo == 1) {
-          _showExitDialog(context);
+          _showCreateRouteExitDialog(context);
         } else {
           _showCloseAppDialog(context);
         }

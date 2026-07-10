@@ -11,6 +11,19 @@ class RouteCard extends StatelessWidget {
     required this.onViewPressed,
   });
 
+  String _formatDate(DateTime dt) =>
+      '${dt.day.toString().padLeft(2, '0')}-${dt.month.toString().padLeft(2, '0')}-${dt.year}';
+
+  String _formatDateTameRange() {
+    final start = route.startingDatetime;
+    final end = route.endingDatetime;
+    if (start != null && end != null) {
+      return '${_formatDate(start)} - ${_formatDate(end)}';
+    }
+    if (start != null) return _formatDate(start);
+    return route.schedule ?? 'FECHA';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,73 +61,34 @@ class RouteCard extends StatelessWidget {
                 const SizedBox(height: 12),
 
                 // Tags Container
-                Wrap(
-                  spacing: 4,
-                  runSpacing: 4,
-                  children: [
-                    // Sector Tag
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFdcfce7),
-                        borderRadius: BorderRadius.circular(9999),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CustomPaint(
-                              painter: _CircleWithCrossPainter(),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            route.sector ?? 'SECTOR',
-                            style: const TextStyle(
-                              fontSize: 9,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF166534),
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                        ],
-                      ),
+                  // Date Tag
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFdbeafe),
+                      borderRadius: BorderRadius.circular(9999),
                     ),
-
-                    // Schedule Tag
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFdbeafe),
-                        borderRadius: BorderRadius.circular(9999),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CustomPaint(
-                              painter: _CircleWithDotPainter(),
-                            ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.calendar_month,
+                          size: 18,
+                          color: Color(0xFF1e40af),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _formatDateTameRange(),
+                          style: const TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF1e40af),
+                            letterSpacing: 0.3,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            route.schedule ?? 'HORARIO',
-                            style: const TextStyle(
-                              fontSize: 9,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF1e40af),
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
               ],
             ),
           ),
@@ -160,60 +134,3 @@ class RouteCard extends StatelessWidget {
   }
 }
 
-// Custom Painters for icons
-class _CircleWithCrossPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF166534)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-
-    final centerX = size.width / 2;
-    final centerY = size.height / 2;
-    final radius = size.width / 2 - 0.75;
-
-    // Circle
-    canvas.drawCircle(Offset(centerX, centerY), radius, paint);
-
-    // Cross
-    paint.strokeWidth = 1;
-    canvas.drawLine(
-      Offset(centerX, centerY - radius + 2),
-      Offset(centerX, centerY + radius - 2),
-      paint,
-    );
-    canvas.drawLine(
-      Offset(centerX - radius + 2, centerY),
-      Offset(centerX + radius - 2, centerY),
-      paint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
-
-class _CircleWithDotPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF1e40af)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-
-    final centerX = size.width / 2;
-    final centerY = size.height / 2;
-    final radius = size.width / 2 - 0.75;
-
-    // Circle
-    canvas.drawCircle(Offset(centerX, centerY), radius, paint);
-
-    // Dot
-    paint.style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(centerX, centerY), 1.5, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
