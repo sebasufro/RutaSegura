@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '../widgets/my_routes_card.dart';
 import '../widgets/vol_topbar.dart';
-import '/modules/global/services/routes_service.dart';
+import '../../global/services/route_service.dart';
 import '../screens/vol_map_screen.dart';
 
 class VolMyRoutesScreen extends StatefulWidget {

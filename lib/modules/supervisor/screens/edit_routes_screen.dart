@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '/modules/supervisor/models/route_model.dart';
-import '/modules/supervisor/services/route_service.dart';
-import '/modules/global/services/auth_store.dart';
+import '../services/routes_service.dart';
 import '/modules/supervisor/screens/list_routes_screen.dart';
 import '/modules/supervisor/screens/route_details_screen.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
@@ -22,7 +21,7 @@ class EditRouteScreen extends StatefulWidget {
 
 class _EditRouteScreenState extends State<EditRouteScreen>
     with SingleTickerProviderStateMixin {
-  final RouteService _routeService = RouteService(token: AuthStore.token);
+  final RouteService _routeService = RouteService();
   int _currentPage = 0;
   bool _isSaving = false;
   RouteModel? _savedRoute;

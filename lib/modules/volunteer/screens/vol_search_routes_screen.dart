@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/route_card.dart';
 import '../widgets/button_active_route.dart';
-import '/modules/global/services/routes_service.dart';
+import '../../global/services/route_service.dart';
 
 class VolSearchRoutesScreen extends StatefulWidget {
   const VolSearchRoutesScreen({super.key});

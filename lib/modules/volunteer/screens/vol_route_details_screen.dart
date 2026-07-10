@@ -4,7 +4,7 @@ import 'package:latlong2/latlong.dart';
 import '../widgets/route_details_map.dart';
 import '../widgets/route_details_label.dart';
 import '../widgets/vol_topbar.dart';
-import '/modules/global/services/routes_service.dart';
+import '../../global/services/route_service.dart';
 
 // Pantalla que muestra los detalles completos de una ruta.
 // Incluye información sobre el supervisor, horario, mapa del trazado

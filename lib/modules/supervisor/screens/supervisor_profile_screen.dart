@@ -4,7 +4,7 @@ import '/modules/supervisor/widgets/profile_info_card.dart';
 import '/modules/supervisor/widgets/profile_main_info.dart';
 import '/modules/supervisor/screens/supervisor_config_screen.dart';
 import '/modules/supervisor/widgets/profile_edit_dialog.dart';
-import '/modules/supervisor/services/profile_service.dart';
+import '/modules/global/services/profile_service.dart';
 
 class SupervisorProfileScreen extends StatefulWidget {
   const SupervisorProfileScreen({super.key});
@@ -15,6 +15,7 @@ class SupervisorProfileScreen extends StatefulWidget {
 }
 
 class _SupervisorProfileScreenState extends State<SupervisorProfileScreen> {
+  final _profileService = ProfileService();
   Map<String, dynamic>? _profile;
   bool _isLoading = true;
   String? _error;
@@ -31,7 +32,7 @@ class _SupervisorProfileScreenState extends State<SupervisorProfileScreen> {
       _error = null;
     });
     try {
-      final data = await ProfileService.getProfile();
+      final data = await _profileService.getProfile();
       if (mounted) setState(() { _profile = data; _isLoading = false; });
     } catch (e) {
       if (mounted) setState(() { _error = e.toString(); _isLoading = false; });
@@ -40,7 +41,7 @@ class _SupervisorProfileScreenState extends State<SupervisorProfileScreen> {
 
   Future<void> _updatePhone(String phone) async {
     try {
-      await ProfileService.updateProfile({'phone_number': phone});
+      await _profileService.updatePhoneNumber(phone);
       if (mounted) _loadProfile();
     } catch (e) {
       if (mounted) {

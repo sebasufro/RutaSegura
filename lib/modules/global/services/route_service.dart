@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'auth_service.dart';
 
 class RoutesService {
-  static const String _baseUrl = 'http://200.13.4.209:3000';
+  static const String _baseUrl = 'http://localhost:3000';
 
   Future<List<Map<String, dynamic>>> getMyEnrollments() async {
     final token = await AuthService.getToken();

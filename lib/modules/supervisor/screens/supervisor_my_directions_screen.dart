@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '/modules/supervisor/widgets/supervisor_topbar.dart';
 import '/modules/supervisor/widgets/direction_card.dart';
 import '/modules/supervisor/widgets/direction_dialog.dart';
-import '/modules/supervisor/services/address_service.dart';
+import '/modules/global/services/profile_service.dart';
 
 class VolMyDirectionsScreen extends StatefulWidget {
   const VolMyDirectionsScreen({super.key});
@@ -12,6 +12,7 @@ class VolMyDirectionsScreen extends StatefulWidget {
 }
 
 class _VolMyDirectionsScreenState extends State<VolMyDirectionsScreen> {
+  final _profileService = ProfileService();
   List<Map<String, dynamic>> _addresses = [];
   bool _isLoading = true;
   String? _error;
@@ -28,7 +29,7 @@ class _VolMyDirectionsScreenState extends State<VolMyDirectionsScreen> {
       _error = null;
     });
     try {
-      final data = await AddressService.getAddresses();
+      final data = await _profileService.getAddresses();
       if (mounted) setState(() { _addresses = data; _isLoading = false; });
     } catch (e) {
       if (mounted) setState(() { _error = e.toString(); _isLoading = false; });
@@ -37,7 +38,7 @@ class _VolMyDirectionsScreenState extends State<VolMyDirectionsScreen> {
 
   Future<void> _addAddress(String alias, String direccion) async {
     try {
-      await AddressService.createAddress(alias, direccion);
+      await _profileService.createAddress(alias, direccion);
       if (mounted) _loadAddresses();
     } catch (e) {
       if (mounted) {
@@ -51,7 +52,7 @@ class _VolMyDirectionsScreenState extends State<VolMyDirectionsScreen> {
   Future<void> _editAddress(
       String id, String alias, String direccion) async {
     try {
-      await AddressService.updateAddress(id, alias, direccion);
+      await _profileService.updateAddress(id, alias, direccion);
       if (mounted) _loadAddresses();
     } catch (e) {
       if (mounted) {
@@ -64,7 +65,7 @@ class _VolMyDirectionsScreenState extends State<VolMyDirectionsScreen> {
 
   Future<void> _deleteAddress(String id) async {
     try {
-      await AddressService.deleteAddress(id);
+      await _profileService.deleteAddress(id);
       if (mounted) _loadAddresses();
     } catch (e) {
       if (mounted) {
