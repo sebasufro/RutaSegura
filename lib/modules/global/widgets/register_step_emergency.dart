@@ -4,7 +4,7 @@ import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
 import '/modules/global/services/auth_service.dart';
-
+import '/modules/global/utils/validators.dart'; 
 class RegisterStepEmergency extends StatefulWidget {
   final Map<String, dynamic> formData;
   final Future<void> Function(Map<String, dynamic> payload) onFinish;
@@ -140,10 +140,16 @@ class _RegisterStepEmergencyState extends State<RegisterStepEmergency> {
               const SizedBox(height: 8),
               PrimaryButton(
                 label: 'Finalizar Registro',
-                onPressed: () {
+              onPressed: () {
                   if (_emergencyNameController.text.isEmpty || _emergencyPhoneController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Por favor, completa los datos de contacto o presiona "Omitir"'), backgroundColor: Colors.red),
+                    );
+                    return;
+                  }
+                  if (!isValidClPhoneWithoutPrefix(_emergencyPhoneController.text)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('El teléfono debe tener 9 dígitos y empezar con 9 (ej: 9 1234 5678)'), backgroundColor: Colors.red),
                     );
                     return;
                   }
