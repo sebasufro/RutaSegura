@@ -5,7 +5,7 @@ import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/widgets/custom_text_field.dart';
 import '/modules/global/widgets/input_label.dart';
 
-/// Página para que el usuario establezca su nueva contraseña.
+/// Pantalla para definir una nueva contraseña tras la verificación del código de recuperación.
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});
 
@@ -53,7 +53,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         letterSpacing: 0.35,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 30),
 
                     AuthCard(
@@ -74,7 +74,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             ),
                           ),
                           const SizedBox(height: 32),
-                          
+
                           const InputLabel(text: 'Nueva contraseña'),
                           CustomTextField(
                             controller: _passwordController,
@@ -83,15 +83,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             obscureText: _obscurePassword,
                             suffixIcon: IconButton(
                               icon: Icon(
-                                _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                _obscurePassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
                                 color: const Color(0xFF74777F),
                               ),
-                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                              onPressed: () => setState(
+                                () => _obscurePassword = !_obscurePassword,
+                              ),
                             ),
                           ),
-                          
+
                           const SizedBox(height: 24),
-                          
+
                           const InputLabel(text: 'Confirmar contraseña'),
                           CustomTextField(
                             controller: _confirmPasswordController,
@@ -100,38 +104,50 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             obscureText: _obscureConfirmPassword,
                             suffixIcon: IconButton(
                               icon: Icon(
-                                _obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                _obscureConfirmPassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
                                 color: const Color(0xFF74777F),
                               ),
-                              onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                              onPressed: () => setState(
+                                () => _obscureConfirmPassword =
+                                    !_obscureConfirmPassword,
+                              ),
                             ),
                           ),
-                          
+
                           const SizedBox(height: 32),
-                          
+
                           PrimaryButton(
                             label: 'Actualizar contraseña',
                             onPressed: () {
-                              if (_passwordController.text != _confirmPasswordController.text) {
+                              if (_passwordController.text !=
+                                  _confirmPasswordController.text) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Las contraseñas no coinciden'),
+                                    content: Text(
+                                      'Las contraseñas no coinciden',
+                                    ),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
                                 return;
                               }
-                              
+
                               // Lógica de actualización
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Contraseña actualizada correctamente'),
+                                  content: Text(
+                                    'Contraseña actualizada correctamente',
+                                  ),
                                   backgroundColor: Colors.green,
                                 ),
                               );
-                              
+
                               // Volver al login o inicio
-                              Navigator.of(context).popUntil((route) => route.isFirst);
+                              Navigator.of(
+                                context,
+                              ).popUntil((route) => route.isFirst);
                             },
                           ),
                         ],

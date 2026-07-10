@@ -5,7 +5,7 @@ import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/widgets/auth_card.dart';
 import '/modules/global/screens/reset_password_page.dart';
 
-/// Página para que el usuario verifique su identidad ingresando el código enviado.
+/// Pantalla para validar el código de seguridad enviado al correo del usuario.
 class VerifyCodePage extends StatefulWidget {
   const VerifyCodePage({super.key});
 

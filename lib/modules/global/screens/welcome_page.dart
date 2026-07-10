@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '/modules/global/widgets/primary_button.dart';
 import '/modules/global/screens/login_page.dart';
-import '/modules/global/screens/register_account_page.dart';
-
+import '/modules/global/screens/register_flow_screen.dart';
 /// Página de bienvenida y entrada principal a la aplicación.
 /// Ofrece las opciones iniciales de Iniciar Sesión o Crear una Cuenta.
 class WelcomePage extends StatelessWidget {
@@ -51,8 +50,7 @@ class WelcomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const RegisterAccountPage()),
-                      );
+MaterialPageRoute(builder: (context) => const RegisterFlowScreen()),                      );
                     },
                   ),
                 ),

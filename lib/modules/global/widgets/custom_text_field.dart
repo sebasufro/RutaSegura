@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-/// Campo de texto personalizado con el diseño institucional.
-/// Soporta iconos, manejo de contraseñas y diferentes tipos de teclado.
+/// Campo de texto visualmente consistente con soporte para iconos, contraseñas y formateo de entrada.
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
@@ -9,6 +9,8 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final bool obscureText;
   final TextInputType keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final FocusNode? focusNode;
 
   const CustomTextField({
     super.key,
@@ -18,14 +20,18 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
+    this.inputFormatters,
+    this.focusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      focusNode: focusNode,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(color: Color(0xFF6B7280)),
