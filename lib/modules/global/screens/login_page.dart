@@ -201,8 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                         (route) => false,
                                       );
-                                    } else if (role == 'SUPERVISOR' ||
-                                        role == 'ADMIN') {
+                                    } else if (role == 'SUPERVISOR') {
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
@@ -210,6 +209,13 @@ class _LoginPageState extends State<LoginPage> {
                                               const SupNavbar(),
                                         ),
                                         (route) => false,
+                                      );
+                                    } else if (role == 'ADMIN') {
+                                      SnackBar(
+                                        content: Text(
+                                          result['message'] ??
+                                              'No es posible iniciar sesión como admin',
+                                        ),
                                       );
                                     }
                                   } else {

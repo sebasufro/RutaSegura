@@ -70,65 +70,6 @@ class RouteMapSection extends StatelessWidget {
             ],
           ),
 
-          // Control Point Info (Bottom Left)
-          Positioned(
-            bottom: 24,
-            left: 24,
-            right: 80,
-            child: GestureDetector(
-              onTap: onControlPointPressed,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  spacing: 8,
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      color: Color(0xFF1E3A8A),
-                      size: 24,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 2,
-                        children: [
-                          Text(
-                            'Próximo Punto de Control',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey[600],
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                          const Text(
-                            'Plaza Mayor - 400m',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
           // Tracking Map Button (Bottom Right)
           Positioned(
             bottom: 24,
